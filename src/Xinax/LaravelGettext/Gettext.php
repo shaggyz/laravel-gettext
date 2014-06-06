@@ -46,6 +46,7 @@ class Gettext{
 		}
 
 		$this->setLocale($locale);
+		$this->filesystemStructure();
 
 	}
 
@@ -65,6 +66,11 @@ class Gettext{
 
             	$domain = $this->configuration->getDomain();
             	$gettextLocale = $locale . "." . $this->encoding;
+
+            	// var_dump($domain);
+            	// var_dump($gettextLocale);
+            	// var_dump($this->getDomainPath());
+            	// die;
 
 	            putenv("LC_ALL=$gettextLocale");
 				setlocale(LC_ALL, $gettextLocale);
@@ -99,13 +105,17 @@ class Gettext{
 	 * translaition files 
 	 * @return String
 	 */	
-	protected function getDomainPath(){
+	protected function getDomainPath($append=null){
 		
 		$path = array(
 			app_path(),
 			$this->configuration->getTranslationsPath(),
 			"i18n"
 		);
+
+		if(!is_null($append)){
+			array_push($path, $append);
+		}
 
 		return implode(DIRECTORY_SEPARATOR, $path);
 
@@ -118,6 +128,31 @@ class Gettext{
      */
     protected function isLocaleSupported($locale){
         return in_array($locale, $this->configuration->getSupportedLocales());
+    }
+
+
+    /**
+     * Checks the needed directory structure
+     */
+    protected function filesystemStructure(){
+
+    	$domainPath = $this->getDomainPath();
+
+    	// Translation files base path
+    	if(!file_exists($domainPath)){
+    		throw new Exceptions\DirectoryNotFoundException(
+    			"Missing base required directory: $domainPath");
+    		
+    	}
+
+    	foreach ($this->configuration->getSupportedLocales() as $locale) {
+    		$localePath = $this->getDomainPath($locale);
+    		if(!file_exists($localePath)){
+    			throw new Exceptions\DirectoryNotFoundException(
+    				"Missing locale required directory: $localePath");
+    		}
+    	}
+
     }
     
     /**

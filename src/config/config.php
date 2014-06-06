@@ -33,7 +33,8 @@ return array(
 
 	/**
 	 * Base translations path 
+	 * (don't use slash at end)
 	 */
-	'translations-path' => 'lang/'
+	'translations-path' => 'lang'
 
 );
