@@ -66,7 +66,7 @@ class CreateDirectories extends Command {
 	    	if(!file_exists($domainPath)){
 	    		if(!@mkdir($domainPath)){
 	    			throw new FileCreationException(
-	    				"I can't create directories on $domainPath");	
+	    				"I can't create the directory: $domainPath");	
 	    		} 
 
 	    		$dirCount++;
@@ -75,17 +75,41 @@ class CreateDirectories extends Command {
 	    	}
 
 	    	foreach ($this->configuration->getSupportedLocales() as $locale){
+
+	    		// We don't want a locale folder for the default language
+	    		if($locale == $this->configuration->getLocale()){
+	    			continue;
+	    		}
 	    		
 	    		$localePath = $this->getDomainPath($locale);
-	    		
+
 	    		if(!file_exists($localePath)){
 	    			if(!@mkdir($localePath)){
 		    			throw new FileCreationException(
-		    				"I can't create directories on: $localePath");
+		    				"I can't create the directory: $localePath");
+		    		}
+
+		    		$localeGettext = $localePath . 
+		    				DIRECTORY_SEPARATOR . 
+		    				"LC_MESSAGES";
+
+					if(!@mkdir($localeGettext)){
+		    			throw new FileCreationException(
+		    				"I can't create the directory: $localeGettext");
+		    		}		    		
+
+		    		$poPath = $localeGettext . 
+	    				  	DIRECTORY_SEPARATOR . 
+	    				 	$this->configuration->getDomain() . 
+	    				 	".po";
+
+		    		if(!$this->createPOFile($poPath)){
+		    			throw new FileCreationException(
+		    				"I can't create the file: $poPath");	
 		    		}
 
 		    		$dirCount++;
-		    		$this->comment("Directory for $locale created ($localePath)");
+		    		$this->comment("Directory for $locale created ($localeGettext)");
 
 	    		}
 	    	}   
@@ -100,6 +124,43 @@ class CreateDirectories extends Command {
     	} catch(\Exception $e){
     		$this->error($e->getMessage());
     	}
+
+    }
+
+    /**
+     * Creates an configured .po file on $path
+     * @return Integer
+     */
+    protected function createPOFile($path){
+
+    	$project = $this->configuration->getProject();
+    	$timestamp = date("Y-m-d H:iO");
+    	$translator = $this->configuration->getTranslator();
+    	$encoding = $this->configuration->getEncoding();
+
+    	$template = 'msgid ""'."\n";
+		$template .= 'msgstr ""'."\n";
+		$template .= '"Project-Id-Version: '.$project.'\n'."\"\n";
+		$template .= '"POT-Creation-Date: '.$timestamp.'\n'."\"\n";
+		$template .= '"PO-Revision-Date: '.$timestamp.'\n'."\"\n";
+		$template .= '"Last-Translator: '.$translator.'\n'."\"\n";
+		$template .= '"Language-Team: '.$translator.'\n'."\"\n";
+		$template .= '"MIME-Version: 1.0'.'\n'."\"\n";
+		$template .= '"Content-Type: text/plain; charset='.$encoding.'\n'."\"\n";
+		$template .= '"Content-Transfer-Encoding: 8bit'.'\n'."\"\n";
+		$template .= '"X-Generator: Poedit 1.5.4'.'\n'."\"\n";
+		$template .= '"X-Poedit-KeywordsList: _'.'\n'."\"\n";
+		$template .= '"X-Poedit-Basepath:'.app_path().'\n'."\"\n";
+		$template .= '"X-Poedit-SourceCharset: '.$encoding.'\n'."\"\n";
+		$template .= '"X-Poedit-SearchPath-0: controllers'.'\n'."\"\n";
+		$template .= '"X-Poedit-SearchPath-1: views'.'\n'."\"\n";
+		//$template .= '"X-Poedit-SearchPath-2: views/layouts'.'\n'."\"\n";
+
+		$file = fopen($path, "w");
+		$result = fwrite($file, $template);
+		fclose($file);
+		
+		return $result;
 
     }
 

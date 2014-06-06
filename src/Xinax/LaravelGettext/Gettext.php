@@ -146,6 +146,12 @@ class Gettext{
     	}
 
     	foreach ($this->configuration->getSupportedLocales() as $locale) {
+
+    		// Default locale is not needed
+    		if($locale == $this->configuration->getLocale()){
+    			continue;
+    		}
+
     		$localePath = $this->getDomainPath($locale);
     		if(!file_exists($localePath)){
     			throw new Exceptions\DirectoryNotFoundException(

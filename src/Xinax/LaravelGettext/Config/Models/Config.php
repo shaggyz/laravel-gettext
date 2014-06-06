@@ -41,6 +41,18 @@ class Config{
     protected $translationsPath;
 
     /**
+     * Project identificator
+     * @type String
+     */
+    protected $project;
+    
+    /**
+     * Translator contact data
+     * @type String
+     */
+    protected $translator;
+
+    /**
      * Gets the Charset encoding for files (UTF-8).
      * @return mixed
      */
@@ -148,4 +160,39 @@ class Config{
         return $this;
     }
 
+    /**
+     * Gets the Project identificator.
+     * @return mixed
+     */
+    public function getProject(){
+        return $this->project;
+    }
+
+    /**
+     * Sets the Project identificator.
+     * @param mixed $project the project
+     * @return self
+     */
+    public function setProject($project){
+        $this->project = $project;
+        return $this;
+    }
+
+    /**
+     * Gets the Translator contact data.
+     * @return mixed
+     */
+    public function getTranslator(){
+        return $this->translator;
+    }
+
+    /**
+     * Sets the Translator contact data.
+     * @param mixed $translator the translator
+     * @return self
+     */
+    public function setTranslator($translator){
+        $this->translator = $translator;
+        return $this;
+    }
 }
