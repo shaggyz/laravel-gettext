@@ -25,4 +25,15 @@ return array(
 		'en_US',
 	),
 
+	/**
+	 * Domain used for translations:
+	 * It is the file name for .po and .mo files
+	 */
+	'domain' => 'messages',
+
+	/**
+	 * Base translations path 
+	 */
+	'translations-path' => 'lang/'
+
 );

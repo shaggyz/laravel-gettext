@@ -62,7 +62,9 @@ class ConfigManager{
 		$container->setLocale($config['locale'])
 			->setEncoding($config['encoding'])
 			->setFallbackLocale($config['fallback-locale'])
-			->setSupportedLocales($config['supported-locales']);
+			->setSupportedLocales($config['supported-locales'])
+			->setDomain($config['domain'])
+			->setTranslationsPath($config['translations-path']);
 
 		return $container;
 

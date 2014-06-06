@@ -30,7 +30,8 @@ class LaravelGettextServiceProvider extends ServiceProvider {
 		
 		// Main class register
 		$this->app['laravel-gettext'] = $this->app->share(function($app){
-			return new LaravelGettext(new Config\ConfigManager);
+			$gettext = new Gettext(new Config\ConfigManager);
+			return new LaravelGettext($gettext);
 		});
 
 		// Auto alias :D

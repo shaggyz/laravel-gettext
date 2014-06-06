@@ -29,6 +29,18 @@ class Config{
     protected $supportedLocales = array();
 
     /**
+     * Gettext domain
+     * @type String
+     */
+    protected $domain;
+
+    /**
+     * Path to translation files
+     * @type String
+     */
+    protected $translationsPath;
+
+    /**
      * Gets the Charset encoding for files (UTF-8).
      * @return mixed
      */
@@ -98,16 +110,42 @@ class Config{
     public function setSupportedLocales($supportedLocales){
         $this->supportedLocales = $supportedLocales;
         return $this;
-    }    
+    }
 
     /**
-     * Return the current locale
+     * Gets the Gettext domain.
+     * @return mixed
      */
-    public function __toString(){
-    	return implode(array(
-    		$this->locale,
-    		$this->encoding
-		), ".");
+    public function getDomain(){
+        return $this->domain;
+    }
+
+    /**
+     * Sets the Gettext domain.
+     * @param mixed $domain the domain
+     * @return self
+     */
+    public function setDomain($domain){
+        $this->domain = $domain;
+        return $this;
+    }
+
+    /**
+     * Gets the Path to translation files.
+     * @return mixed
+     */
+    public function getTranslationsPath(){
+        return $this->translationsPath;
+    }
+
+    /**
+     * Sets the Path to translation files.
+     * @param mixed $translationsPath the translations path
+     * @return self
+     */
+    public function setTranslationsPath($translationsPath){
+        $this->translationsPath = $translationsPath;
+        return $this;
     }
 
 }

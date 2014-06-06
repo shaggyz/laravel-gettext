@@ -5,38 +5,16 @@ namespace Xinax\LaravelGettext;
 class LaravelGettext{
 
 	/**
-	 * Config container
-	 * @type Xinax\LaravelGettext\Config\Models\Config
-	 */
-	protected $config;
-
-	/**
-	 * Current encoding
-	 * @type String
-	 */
-	protected $encoding;
-
-	/**
-	 * Current locale
-	 * @type String
-	 */
-	protected $locale;
-
-	/**
 	 * Check dependencies
 	 */
-	public function __construct(Config\ConfigManager $configManager){
+	public function __construct(Gettext $gettext){
 
 		// Dependencies will be checked 
 		// on first package call
 		$this->checkDependencies();
 
-		// Sets the locale config
-		$this->config = $configManager->get();
-
-        // Default values
-        $this->locale = $this->config->getLocale();
-        $this->encoding = $this->config->getEncoding();
+        // Gettext dependency
+        $this->gettext = $gettext;
 
 	}
 
@@ -78,7 +56,7 @@ class LaravelGettext{
      * @return mixed
      */
     public function getLocale(){
-        return $this->locale;
+        return $this->gettext->getLocale();
     }
 
     /**
@@ -88,21 +66,8 @@ class LaravelGettext{
      */
     public function setLocale($locale){
 
-        if($locale){
-            if(!$this->isLocaleSupported($locale)){
-                throw new Exceptions\LocaleNotSupportedException("Locale $locale is not supported");
-            }
-            $this->locale = $locale;
-        }
-        
+        $this->gettext->setLocale($locale);
         return $this;
     }
 
-    /**
-     * Returns a boolean that indicates if $locale 
-     * is supported by configuration
-     */
-    protected function isLocaleSupported($locale){
-        return in_array($locale, $this->config->getSupportedLocales());
-    }
 }
