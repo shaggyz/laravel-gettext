@@ -27,7 +27,7 @@ class LaravelGettext{
 		// Php module check
 		if(!function_exists('gettext')){
 			throw new Exceptions\MissingPhpGettextModuleException(
-				"You need to install the php-gettext module to use LaravelGettext."
+				"You need to install the php-gettext module for this package."
 			);
 		}
 		

@@ -34,11 +34,20 @@ class LaravelGettextServiceProvider extends ServiceProvider {
 			return new LaravelGettext($gettext);
 		});
 
-		// Auto alias :D
+		// Auto alias 
 		$this->app->booting(function(){
 			$loader = \Illuminate\Foundation\AliasLoader::getInstance();
-			$loader->alias('LaravelGettext', 'Xinax\LaravelGettext\Facades\LaravelGettext');
+			$loader->alias('LaravelGettext', 
+				'Xinax\LaravelGettext\Facades\LaravelGettext');
 		});
+
+		// Package commands
+		$this->app->bind('xinax::laravel-gettext.directories', function($app) {
+		    return new Commands\CreateDirectories();
+		});
+		$this->commands(array(
+		    'xinax::laravel-gettext.directories'
+		));
 	}
 
 	/**

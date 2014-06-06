@@ -21,3 +21,8 @@ Current package repo: apu:/home/git/laravel-gettext
 
 7. Publish package configuration (to change default values): 
 		php artisan config:publish --path="workbench/xinax/laravel-gettext/src/config" xinax/laravel-gettext
+
+8. Create directories:
+		./artisan laravel-gettext:directories
+
+		
