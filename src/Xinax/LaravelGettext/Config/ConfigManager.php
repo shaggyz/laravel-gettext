@@ -1,9 +1,10 @@
 <?php
 
 namespace Xinax\LaravelGettext\Config;
-use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationFileException;
-use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationKeyException;
-use \Config;
+
+use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationFileException,
+	\Xinax\LaravelGettext\Exceptions\RequiredConfigurationKeyException,
+	\Config;
 
 class ConfigManager{
 
@@ -60,7 +61,8 @@ class ConfigManager{
 		$container = new Models\Config();
 		$container->setLocale($config['locale'])
 			->setEncoding($config['encoding'])
-			->setFallbackLocale($config['fallback-locale']);
+			->setFallbackLocale($config['fallback-locale'])
+			->setSupportedLocales($config['supported-locales']);
 
 		return $container;
 

@@ -23,6 +23,12 @@ class Config{
 	protected $fallbackLocale;
 
     /**
+     * Supported locales
+     * @type Array
+     */
+    protected $supportedLocales = array();
+
+    /**
      * Gets the Charset encoding for files (UTF-8).
      * @return mixed
      */
@@ -77,6 +83,24 @@ class Config{
     }
 
     /**
+     * Gets the Supported locales.
+     * @return mixed
+     */
+    public function getSupportedLocales(){
+        return $this->supportedLocales;
+    }
+
+    /**
+     * Sets the Supported locales.
+     * @param mixed $supportedLocales the supported locales
+     * @return self
+     */
+    public function setSupportedLocales($supportedLocales){
+        $this->supportedLocales = $supportedLocales;
+        return $this;
+    }    
+
+    /**
      * Return the current locale
      */
     public function __toString(){
@@ -85,4 +109,5 @@ class Config{
     		$this->encoding
 		), ".");
     }
+
 }

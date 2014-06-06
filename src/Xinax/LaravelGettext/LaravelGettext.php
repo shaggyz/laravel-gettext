@@ -34,6 +34,10 @@ class LaravelGettext{
 		// Sets the locale config
 		$this->config = $configManager->get();
 
+        // Default values
+        $this->locale = $this->config->getLocale();
+        $this->encoding = $this->config->getEncoding();
+
 	}
 
 	/**
@@ -50,24 +54,6 @@ class LaravelGettext{
 		}
 		
 	}
-
-    /**
-     * Gets the Config container.
-     * @return mixed
-     */
-    public function getConfig(){
-        return $this->config;
-    }
-
-    /**
-     * Sets the Config container.
-     * @param mixed $config the config
-     * @return self
-     */
-    public function setConfig($config){
-        $this->config = $config;
-        return $this;
-    }
 
     /**
      * Gets the Current encoding.
@@ -101,7 +87,22 @@ class LaravelGettext{
      * @return self
      */
     public function setLocale($locale){
-        $this->locale = $locale;
+
+        if($locale){
+            if(!$this->isLocaleSupported($locale)){
+                throw new Exceptions\LocaleNotSupportedException("Locale $locale is not supported");
+            }
+            $this->locale = $locale;
+        }
+        
         return $this;
+    }
+
+    /**
+     * Returns a boolean that indicates if $locale 
+     * is supported by configuration
+     */
+    protected function isLocaleSupported($locale){
+        return in_array($locale, $this->config->getSupportedLocales());
     }
 }
