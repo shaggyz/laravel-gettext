@@ -1,0 +1,23 @@
+
+Development deploy:
+------------------
+
+Current package repo: apu:/home/git/laravel-gettext
+
+
+1. Create the laravel project to contain the package
+
+2. Edit workbench.php with your data
+
+3. ./artisan workbench xinax/laravel-gettext
+
+4. Remove the generated files: 
+		rm -Rf workbench/*
+
+5. cd workbench/ && git clone <package-repo>
+
+6. Add ServiceProvider to config/app.php:
+		'Xinax\LaravelGettext\LaravelGettextServiceProvider',
+
+7. Publish package configuration (to change default values): 
+		php artisan config:publish --path="workbench/xinax/laravel-gettext/src/config" xinax/laravel-gettext

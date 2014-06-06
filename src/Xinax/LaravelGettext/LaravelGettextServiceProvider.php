@@ -1,5 +1,6 @@
-<?php namespace Xinax\LaravelGettext;
+<?php 
 
+namespace Xinax\LaravelGettext;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -26,9 +27,13 @@ class LaravelGettextServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function register(){
+		
+		// Main class register
 		$this->app['laravel-gettext'] = $this->app->share(function($app){
-			return new LaravelGettext;
+			return new LaravelGettext(new Config\ConfigManager);
 		});
+
+		// Auto alias :D
 		$this->app->booting(function(){
 			$loader = \Illuminate\Foundation\AliasLoader::getInstance();
 			$loader->alias('LaravelGettext', 'Xinax\LaravelGettext\Facades\LaravelGettext');
