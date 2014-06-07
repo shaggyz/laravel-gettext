@@ -33,7 +33,7 @@ class Gettext{
 	 */
 	public function __construct(Config\ConfigManager $configurationManager){
 		
-		// Sets the locale configuration
+		// Sets the package configuration
 		$this->configuration = $configurationManager->get();
 
 		// Encoding is set on configuration
@@ -51,7 +51,7 @@ class Gettext{
 	}
 
 	/**
-	 * Sets the current locale
+	 * Sets the current locale code
 	 */
 	public function setLocale($locale){
 

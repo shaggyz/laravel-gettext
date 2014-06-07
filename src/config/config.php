@@ -14,6 +14,7 @@ return array(
 	'supported-locales' => array(
 		'es_ES',
 		'en_US',
+		'it_IT',
 	),	
 
 	/**
