@@ -66,7 +66,8 @@ class ConfigManager{
 			->setDomain($config['domain'])
 			->setTranslationsPath($config['translations-path'])
 			->setProject($config['project'])
-			->setTranslator($config['translator']);
+			->setTranslator($config['translator'])
+			->setSourcePaths($config['source-paths']);
 
 		return $container;
 

@@ -42,11 +42,15 @@ class LaravelGettextServiceProvider extends ServiceProvider {
 		});
 
 		// Package commands
-		$this->app->bind('xinax::laravel-gettext.directories', function($app) {
-		    return new Commands\CreateDirectories();
+		$this->app->bind('xinax::gettext.create', function($app) {
+		    return new Commands\GettextCreate();
+		});
+		$this->app->bind('xinax::gettext.update', function($app) {
+		    return new Commands\GettextUpdate();
 		});
 		$this->commands(array(
-		    'xinax::laravel-gettext.directories'
+		    'xinax::gettext.create',
+		    'xinax::gettext.update',
 		));
 	}
 

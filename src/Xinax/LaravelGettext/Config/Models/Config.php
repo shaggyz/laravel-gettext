@@ -53,6 +53,12 @@ class Config{
     protected $translator;
 
     /**
+     * Source paths
+     * @type Array
+     */
+    protected $sourcePaths = array();
+
+    /**
      * Gets the Charset encoding for files (UTF-8).
      * @return mixed
      */
@@ -193,6 +199,24 @@ class Config{
      */
     public function setTranslator($translator){
         $this->translator = $translator;
+        return $this;
+    }
+
+    /**
+     * Gets the Source paths.
+     * @return mixed
+     */
+    public function getSourcePaths(){
+        return $this->sourcePaths;
+    }
+
+    /**
+     * Sets the Source paths.
+     * @param mixed $sourcePaths the source paths
+     * @return self
+     */
+    public function setSourcePaths($sourcePaths){
+        $this->sourcePaths = $sourcePaths;
         return $this;
     }
 }

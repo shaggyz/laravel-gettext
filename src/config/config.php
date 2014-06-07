@@ -15,6 +15,7 @@ return array(
 		'es_ES',
 		'en_US',
 		'it_IT',
+		'es_AR',
 	),	
 
 	/**
@@ -25,7 +26,7 @@ return array(
 	/**
 	 * -----------------------------------------------------------------------
 	 * Every normal configuration work would ends here. 
-	 * Te following values are for special cases.
+	 * The following values are only for special cases.
 	 * -----------------------------------------------------------------------
 	 **/
 
@@ -42,7 +43,7 @@ return array(
 
 	/**
 	 * Base translations path 
-	 * (don't use slash at end)
+	 * (don't use trailing slash)
 	 */
 	'translations-path' => 'lang',
 
@@ -55,5 +56,17 @@ return array(
 	 * Translator contact data (used on .po headers too)
 	 */
 	'translator' => 'James Translator <james@translations.colm>',
+
+	/**
+	 * Paths where PoEdit will search recursively for strings to translate. 
+	 * All paths are relative to app/ (don't use trailing slash).
+	 *
+	 * If you have already .po files with translations and need to add
+	 * another directory remember to call artisan gettext:update after do this.
+	 */
+	'source-paths' => array(
+		'controllers',
+		'views',
+	),
 
 );
