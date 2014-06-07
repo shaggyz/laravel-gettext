@@ -67,7 +67,8 @@ class ConfigManager{
 			->setTranslationsPath($config['translations-path'])
 			->setProject($config['project'])
 			->setTranslator($config['translator'])
-			->setSourcePaths($config['source-paths']);
+			->setSourcePaths($config['source-paths'])
+			->setSyncLaravel($config['sync-laravel']);
 
 		return $container;
 

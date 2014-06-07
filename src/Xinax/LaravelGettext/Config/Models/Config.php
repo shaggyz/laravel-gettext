@@ -59,6 +59,12 @@ class Config{
     protected $sourcePaths = array();
 
     /**
+     * Sync with laravel locale
+     * @type Boolean
+     */
+    protected $syncLaravel;
+
+    /**
      * Gets the Charset encoding for files (UTF-8).
      * @return mixed
      */
@@ -217,6 +223,24 @@ class Config{
      */
     public function setSourcePaths($sourcePaths){
         $this->sourcePaths = $sourcePaths;
+        return $this;
+    }
+
+    /**
+     * Gets the Sync with laravel locale.
+     * @return mixed
+     */
+    public function getSyncLaravel(){
+        return $this->syncLaravel;
+    }
+
+    /**
+     * Sets the Sync with laravel locale.
+     * @param mixed $syncLaravel the sync laravel
+     * @return self
+     */
+    public function setSyncLaravel($syncLaravel){
+        $this->syncLaravel = $syncLaravel;
         return $this;
     }
 }

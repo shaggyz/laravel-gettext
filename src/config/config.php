@@ -69,4 +69,10 @@ return array(
 		'views',
 	),
 
+	/**
+	 * Sync laravel: A flag that determines if the laravel built-in locale
+	 * must be changed when you call LaravelGettext::setLocale.
+	 */
+	'sync-laravel' => true,
+
 );

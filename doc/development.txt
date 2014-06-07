@@ -19,10 +19,12 @@ Current package repo: apu:/home/git/laravel-gettext
 6. Add ServiceProvider to config/app.php:
 		'Xinax\LaravelGettext\LaravelGettextServiceProvider',
 
-7. Publish package configuration (to change default values): 
+7. Publish package configuration (and change the needed values): 
 		php artisan config:publish --path="workbench/xinax/laravel-gettext/src/config" xinax/laravel-gettext
 
-8. Create directories:
-		./artisan laravel-gettext:directories
+8. Create directories (set config before!):
+		./artisan gettext:create
 
+9. If you need to update your configuration:
+		./artisan gettext:update
 		

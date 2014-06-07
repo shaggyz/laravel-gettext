@@ -67,11 +67,6 @@ class Gettext{
             	$domain = $this->configuration->getDomain();
             	$gettextLocale = $locale . "." . $this->encoding;
 
-            	// var_dump($domain);
-            	// var_dump($gettextLocale);
-            	// var_dump($this->getDomainPath());
-            	// die;
-
 	            putenv("LC_ALL=$gettextLocale");
 				setlocale(LC_ALL, $gettextLocale);
 				bindtextdomain($domain, $this->getDomainPath());
@@ -79,6 +74,11 @@ class Gettext{
 
 				$this->locale = $locale;	
 				Session::set(self::SESSION_IDENTIFIER, $locale);
+
+				// Laravel built-in locale
+				if($this->configuration->getSyncLaravel()){
+					\App::setLocale(substr($locale, 0, 2)); 
+				}
 
             } catch (\Exception $e) {
 		        
