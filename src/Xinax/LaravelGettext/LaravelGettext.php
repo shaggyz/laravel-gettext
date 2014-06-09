@@ -21,6 +21,7 @@ class LaravelGettext{
 	/**
 	 * Checks the php and system dependencies 
 	 * to implement gettext safely
+     * @return Boolean
 	 */
 	public function checkDependencies(){
 
@@ -30,6 +31,8 @@ class LaravelGettext{
 				"You need to install the php-gettext module for this package."
 			);
 		}
+
+        return true;
 		
 	}
 
@@ -38,7 +41,7 @@ class LaravelGettext{
      * @return mixed
      */
     public function getEncoding(){
-        return $this->encoding;
+        return $this->gettext->getEncoding();
     }
 
     /**

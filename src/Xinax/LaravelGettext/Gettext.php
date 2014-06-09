@@ -168,4 +168,22 @@ class Gettext{
     	return $this->getLocale();
     }
 
+
+    /**
+     * Gets the Current encoding.
+     * @return mixed
+     */
+    public function getEncoding(){
+        return $this->encoding;
+    }
+
+    /**
+     * Sets the Current encoding.
+     * @param mixed $encoding the encoding
+     * @return self
+     */
+    public function setEncoding($encoding){
+        $this->encoding = $encoding;
+        return $this;
+    }
 }
