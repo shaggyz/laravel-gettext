@@ -39,7 +39,7 @@ class Gettext{
 		$this->encoding = $this->configuration->getEncoding();
 
 		// Sets defaults for boot
-		$locale = $this->session->set($this->configuration->getLocale());
+		$locale = $this->session->get($this->configuration->getLocale());
 
 		$this->setLocale($locale);
 
