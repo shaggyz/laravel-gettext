@@ -4,6 +4,8 @@ namespace Xinax\LaravelGettext;
 
 use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Session\SessionHandler;
+use Xinax\LaravelGettext\Adapters\AdapterInterface;
+
 use \Session;
 
 class Gettext{
@@ -27,13 +29,22 @@ class Gettext{
 	protected $locale;	
 
 	/**
+	 * Framework adapter
+	 * @type Xinax\Adapters\LaravelAdapter
+	 */
+	protected $adapter;
+
+	/**
 	 * Sets the configuration and session manager
 	 */	
-	public function __construct(ConfigManager $configMan, SessionHandler $sessionHandler){
+	public function __construct(ConfigManager $configMan, 
+											SessionHandler $sessionHandler,
+											AdapterInterface $adapter){
 		
 		// Sets the package configuration and session handler
 		$this->configuration = $configMan->get();
 		$this->session = $sessionHandler;
+		$this->adapter = $adapter;
 
 		// Encoding is set on configuration
 		$this->encoding = $this->configuration->getEncoding();
@@ -72,13 +83,14 @@ class Gettext{
 
 				// Laravel built-in locale
 				if($this->configuration->getSyncLaravel()){
-					\App::setLocale(substr($locale, 0, 2)); 
+					$this->adapter->setLocale($locale);
 				}
 
             } catch (\Exception $e) {
 		        
 		        $this->locale = $this->configuration->getFallbackLocale();
-		        throw new \Exception($e->getMessage());
+		        $a = $e->getFile() . ":" . $e->getLine();
+		        throw new \Exception($a.$e->getMessage());
 
             }
 
@@ -103,7 +115,7 @@ class Gettext{
 	protected function getDomainPath($append=null){
 		
 		$path = array(
-			app_path(),
+			$this->adapter->getApplicationPath(),
 			$this->configuration->getTranslationsPath(),
 			"i18n"
 		);
@@ -137,7 +149,6 @@ class Gettext{
     	if(!file_exists($domainPath)){
     		throw new Exceptions\DirectoryNotFoundException(
     			"Missing base required directory: $domainPath");
-    		
     	}
 
     	foreach ($this->configuration->getSupportedLocales() as $locale) {
@@ -152,6 +163,7 @@ class Gettext{
     			throw new Exceptions\DirectoryNotFoundException(
     				"Missing locale required directory: $localePath");
     		}
+
     	}
 
     }
