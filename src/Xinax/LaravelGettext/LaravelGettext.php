@@ -11,29 +11,16 @@ class LaravelGettext{
 
 		// Dependencies will be checked 
 		// on first package call
-		$this->checkDependencies();
+        if(!function_exists('gettext')){
+            throw new Exceptions\MissingPhpGettextModuleException(
+                "You need to install the php-gettext module for this package."
+            );
+        }
 
         // Gettext dependency
         $this->gettext = $gettext;
+        $this->gettext->filesystemStructure();
 
-	}
-
-	/**
-	 * Checks the php and system dependencies 
-	 * to implement gettext safely
-     * @return Boolean
-	 */
-	public function checkDependencies(){
-
-		// Php module check
-		if(!function_exists('gettext')){
-			throw new Exceptions\MissingPhpGettextModuleException(
-				"You need to install the php-gettext module for this package."
-			);
-		}
-
-        return true;
-		
 	}
 
     /**

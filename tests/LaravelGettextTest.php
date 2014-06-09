@@ -1,6 +1,8 @@
 <?php
 
+namespace Xinax\LaravelGettext\Test;
 use \Mockery as m;
+use \Xinax\LaravelGettext\LaravelGettext;
 
 class LaravelGettextTest extends \PHPUnit_Framework_TestCase {
 
@@ -14,8 +16,11 @@ class LaravelGettextTest extends \PHPUnit_Framework_TestCase {
 		$gettext->shouldReceive('setEncoding')->with('UTF-8');
 		$gettext->shouldReceive('getLocale')->andReturn('en_US');
 		$gettext->shouldReceive('setLocale')->with('en_US');
+		$gettext->shouldReceive('filesystemStructure')->andReturn(true);
 
-		$this->laravelGettext = new Xinax\LaravelGettext\LaravelGettext($gettext);
+		$this->laravelGettext = new LaravelGettext($gettext);
+
+		parent::setUp();
 
 	}
 
@@ -25,10 +30,6 @@ class LaravelGettextTest extends \PHPUnit_Framework_TestCase {
 
 	public function testLaravelGettextInstance(){
 		$this->assertInstanceOf('Xinax\LaravelGettext\LaravelGettext', $this->laravelGettext);
-	}
-
-	public function testCheckDependencies(){
-		$this->assertTrue($this->laravelGettext->checkDependencies());
 	}
 
 	public function testGetEncoding(){

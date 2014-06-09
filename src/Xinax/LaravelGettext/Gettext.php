@@ -1,6 +1,9 @@
 <?php
 
 namespace Xinax\LaravelGettext;
+
+use Xinax\LaravelGettext\Config\ConfigManager;
+use Xinax\LaravelGettext\Session\SessionHandler;
 use \Session;
 
 class Gettext{
@@ -24,29 +27,21 @@ class Gettext{
 	protected $locale;	
 
 	/**
-	 * Session identifier to store active locale 
-	 */
-	const SESSION_IDENTIFIER = "laravel-gettext-locale";
-
-	/**
-	 * Sets the configuration dependency injection
-	 */
-	public function __construct(Config\ConfigManager $configurationManager){
+	 * Sets the configuration and session manager
+	 */	
+	public function __construct(ConfigManager $configMan, SessionHandler $sessionHandler){
 		
-		// Sets the package configuration
-		$this->configuration = $configurationManager->get();
+		// Sets the package configuration and session handler
+		$this->configuration = $configMan->get();
+		$this->session = $sessionHandler;
 
 		// Encoding is set on configuration
 		$this->encoding = $this->configuration->getEncoding();
 
 		// Sets defaults for boot
-		$locale = $this->configuration->getLocale();
-		if(Session::has(self::SESSION_IDENTIFIER)){
-			$locale = Session::get(self::SESSION_IDENTIFIER);
-		}
+		$locale = $this->session->set($this->configuration->getLocale());
 
 		$this->setLocale($locale);
-		$this->filesystemStructure();
 
 	}
 
@@ -73,7 +68,7 @@ class Gettext{
 				textdomain($domain);
 
 				$this->locale = $locale;	
-				Session::set(self::SESSION_IDENTIFIER, $locale);
+				$this->session->set($locale);
 
 				// Laravel built-in locale
 				if($this->configuration->getSyncLaravel()){
@@ -134,7 +129,7 @@ class Gettext{
     /**
      * Checks the needed directory structure
      */
-    protected function filesystemStructure(){
+    public function filesystemStructure(){
 
     	$domainPath = $this->getDomainPath();
 

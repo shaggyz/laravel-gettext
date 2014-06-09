@@ -30,7 +30,7 @@ class LaravelGettextServiceProvider extends ServiceProvider {
 		
 		// Main class register
 		$this->app['laravel-gettext'] = $this->app->share(function($app){
-			$gettext = new Gettext(new Config\ConfigManager);
+			$gettext = new Gettext(new Config\ConfigManager, new Session\SessionHandler);
 			return new LaravelGettext($gettext);
 		});
 
