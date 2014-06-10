@@ -15,7 +15,7 @@
 Add the composer repository to your *composer.json* file:
 
 ```json
-	"xinax/laravel-gettext": "dev-master"
+    "xinax/laravel-gettext": "dev-master"
 ```
 
 And run composer update. Once it's installed, you can register the service provider in app/config/app.php in the providers array:
@@ -29,7 +29,7 @@ And run composer update. Once it's installed, you can register the service provi
 Now you need to publish the configuration file in order to set your own application values:
 
 ```bash
-	php artisan config:publish xinax/laravel-gettext
+    php artisan config:publish xinax/laravel-gettext
 ```
 
 This command set the package configuration file in: *app/config/packages/xinax/laravel-getttext/config.php*.
@@ -39,12 +39,12 @@ This command set the package configuration file in: *app/config/packages/xinax/l
 At this time your application have full gettext support. Now you need to set some configuration values in *config.php*.
 
 ```php
-	/**
-	 * Default locale: this will be the default for your application all 
-	 * localized strings. Is to be supposed that all strings are written 
-	 * on this language.
-	 */
-	'locale' => 'es_ES', 
+    /**
+     * Default locale: this will be the default for your application all 
+     * localized strings. Is to be supposed that all strings are written 
+     * on this language.
+     */
+    'locale' => 'es_ES', 
 ```
 
 ```php
@@ -52,25 +52,25 @@ At this time your application have full gettext support. Now you need to set som
      * Default locale: this will be the default for your application. 
      * Is to be supposed that all strings are written in this language.
      */
-	'supported-locales' => array(
-		'es_ES',
-		'en_US',
-		'it_IT',
-		'es_AR',
-	),	
+    'supported-locales' => array(
+        'es_ES',
+        'en_US',
+        'it_IT',
+        'es_AR',
+    ),  
 ```
 
 ```php
-	/**
-	 * Default charset encoding.
-	 */
-	'encoding' => 'UTF-8',
+    /**
+     * Default charset encoding.
+     */
+    'encoding' => 'UTF-8',
 ```
 
 Ok, now is configured. Is time to generate the directory structure and translation files for first time:
 
 ```bash
-	php artisan gettext:create
+    php artisan gettext:create
 ```
 
 With this command the needed directories and files are created on *app/lang/i18n*
@@ -82,7 +82,7 @@ With this command the needed directories and files are created on *app/lang/i18n
 By default *LaravelGettext* looks on app/controllers and app/views recursively searching for translations. Translations are all texts printed with the *_()* function. Let's look a simple view example:
 
 ```php
-	// an example view file
+    // an example view file
     echo 'Non translated string';
     echo _('Translated string');
     echo _('Another translated string');
@@ -95,7 +95,7 @@ Important Note: on blade templates you should use *<?= _('Foo') ?>* instead of *
 Open the PO file for the language that you want to translate with PoEdit. The PO files are located by default in *app/lang/i18n/lang_to_be_translated/LC_MESSAGES/messages.po*. 
 
 ```python
-	# POEDIT images with the view example strings loaded
+    # POEDIT images with the view example strings loaded
 ```
 
 Once PoEdit is loaded press the Update button to load all localized strings. You can repeat this step anytime you add a new localized string. 
@@ -116,11 +116,11 @@ No route files included with this package. To change configuration on runtime yo
      * @param mixed $locale the locale
      * @return LaravelGettext
      */
-	LaravelGettext::setLocale($locale);
+    LaravelGettext::setLocale($locale);
 ```
 
 ```php
-	/**
+    /**
      * Gets the Current locale.
      * Example returned value: 'es_ES'
      * @return String
@@ -129,7 +129,7 @@ No route files included with this package. To change configuration on runtime yo
 ```
 
 ```php
-	/**
+    /**
      * Sets the Current encoding.
      * Example param value: 'UTF-8'     
      * @param mixed $encoding the encoding
@@ -149,9 +149,77 @@ No route files included with this package. To change configuration on runtime yo
 
 ### 5. Extra notes
 
-TODO
+##### A. Route and controller implementation example:
+
+app/routes.php
+
+```php
+    Route::get('/lang/{locale?}', [
+        'as'=>'lang', 
+        'uses'=>'HomeController@changeLang'
+    ]);
+```
+
+app/controllers/HomeController.php
+```php
+    /**
+     * Changes the current language and returns to previous page
+     * @return Redirect
+     */
+    public function changeLang($locale=null){
+        
+        LaravelGettext::setLocale($locale);
+        return Redirect::to(URL::previous());
+
+    }
+```
+
+##### B. A basic language selector example:
+
+```php
+  <ul>
+      @foreach(Config::get('laravel-gettext::config.supported-locales') as $locale)
+            <li><a href="/lang/{{$locale}}">{{$locale}}</a></li>
+      @endforeach
+  </ul>
+```
+
+##### C. Adding directories to search translations
+
+You can achieve this editing the *source-paths* configuration array. By default app/views and app/controlles are set.
+
+```php
+    /**
+     * Paths where PoEdit will search recursively for strings to translate. 
+     * All paths are relative to app/ (don't use trailing slash).
+     *
+     * If you have already .po files with translations and the need to add 
+     * another directory remember to call artisan gettext:update after do this.
+     */
+    'source-paths' => array(
+        'controllers',
+        'views',
+    ),
+```
+
+Remember update your gettext files:
+
+```bash
+    php artisan gettext:update
+```
+
+This command will update your PO files and will keep the current translations intact. After this you can open PoEdit and click on update button to add the new text strings in the new paths.
+
+##### D. About gettext cache
+
+Sometimes when you edit/add translations on PO files the changes does not appear instantly. This is because the gettext cache system holds content. The most quick fix is restart your web server.
 
 ### 6. Contributing
 
-TODO
+If you want to help with the development of this package, you can:
 
+- Warn about errors that you find, in issues section 
+- Send me a pull request with your patch
+- Fix my disastrous English in the documentation/comments ;-)
+- Make a fork and create your own version of laravel-gettext
+- Give a star to project!
