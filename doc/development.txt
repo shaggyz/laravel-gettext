@@ -28,3 +28,5 @@ Current package repo: apu:/home/git/laravel-gettext
 9. If you need to update your configuration:
 		./artisan gettext:update
 		
+10. If you want run the unit tests:
+		cd workbench/xinax/laravel-gettext/test && phpunit
