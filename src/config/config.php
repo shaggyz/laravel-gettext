@@ -7,16 +7,13 @@ return array(
 	 * localized strings. Is to be supposed that all strings are written 
 	 * on this language.
 	 */
-	'locale' => 'es_ES',
+	'locale' => 'en_US',
 
 	/**
-	 * Supported locales: An array containing all allowed locales 
+	 * Supported locales: An array containing all allowed languages
 	 */
 	'supported-locales' => array(
-		'es_ES',
 		'en_US',
-		'it_IT',
-		'es_AR',
 	),	
 
 	/**
