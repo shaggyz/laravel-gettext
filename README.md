@@ -48,9 +48,10 @@ At this time your application have full gettext support. Now you need to set som
 ```
 
 ```php
-	/**
-	 * Supported locales: An array containing all allowed locales 
-	 */
+    /**
+     * Default locale: this will be the default for your application. 
+     * Is to be supposed that all strings are written in this language.
+     */
 	'supported-locales' => array(
 		'es_ES',
 		'en_US',

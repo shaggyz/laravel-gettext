@@ -3,9 +3,8 @@
 return array(
 
 	/**
-	 * Default locale: this will be the default for your application all 
-	 * localized strings. Is to be supposed that all strings are written 
-	 * on this language.
+	 * Default locale: this will be the default for your application. 
+	 * Is to be supposed that all strings are written in this language.
 	 */
 	'locale' => 'en_US',
 
