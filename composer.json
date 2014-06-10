@@ -1,6 +1,6 @@
 {
     "name": "xinax/laravel-gettext",
-    "description": "",
+    "description": "Adds localization support to laravel applications in an easy way using PoEdit and GNU-Gettext.",
     "authors": [
         {
             "name": "Nicolás Daniel Palumbo",
