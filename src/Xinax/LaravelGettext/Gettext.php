@@ -86,6 +86,8 @@ class Gettext{
 					$this->adapter->setLocale($locale);
 				}
 
+				return $this->getLocale();
+
             } catch (\Exception $e) {
 		        
 		        $this->locale = $this->configuration->getFallbackLocale();
@@ -133,7 +135,7 @@ class Gettext{
      * is supported by configuration
      * @return Boolean
      */
-    protected function isLocaleSupported($locale){
+    public function isLocaleSupported($locale){
         return in_array($locale, $this->configuration->getSupportedLocales());
     }
 
@@ -165,6 +167,8 @@ class Gettext{
     		}
 
     	}
+
+    	return true;
 
     }
     

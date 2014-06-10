@@ -43,7 +43,50 @@ class GettextTest extends \PHPUnit_Framework_TestCase  {
 	}
 
 	public function testSetLocale(){
-		// $this->gettext->setLocale('en_US');
+		$response = $this->gettext->setLocale('en_US');
+		$this->assertNotEmpty($response);
+		$this->assertTrue($response != 'en_US');
+		$this->assertTrue($response != '.');
+		$this->assertTrue($response != '.UTF-8');
+		$this->assertEquals('en_US.UTF-8', $response);
+	}
+
+	public function testGetLocale(){
+		$response = $this->gettext->getLocale();
+		$this->assertNotEmpty($response);
+		$this->assertTrue($response != 'en_US');
+		$this->assertTrue($response != '.');
+		$this->assertTrue($response != '.UTF-8');		
+		$this->assertEquals('en_US.UTF-8', $response);
+	}
+
+	public function testIsLocaleSupported(){
+		$this->assertTrue($this->gettext->isLocaleSupported('en_US'));
+	}
+
+	public function testFilesystemStructure(){
+		$this->assertTrue($this->gettext->filesystemStructure());
+	}
+
+	public function testToString(){
+		$response = $this->gettext->__toString();
+		$this->assertNotEmpty($response);
+		$this->assertTrue($response != 'en_US');
+		$this->assertTrue($response != '.');
+		$this->assertTrue($response != '.UTF-8');
+		$this->assertEquals('en_US.UTF-8', $response);
+	}
+
+	public function testGetEncoding(){
+		$response = $this->gettext->getEncoding();
+		$this->assertNotEmpty($response);
+		$this->assertEquals('UTF-8', $response);
+	}
+
+	public function testSetEncoding(){
+		$response = $this->gettext->setEncoding('UTF-8');
+		$this->assertNotEmpty($response);
+		$this->assertInstanceOf('Xinax\LaravelGettext\Gettext', $response);
 	}
 
 	public function tearDown(){
