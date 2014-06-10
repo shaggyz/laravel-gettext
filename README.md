@@ -94,9 +94,7 @@ Important Note: on blade templates you should use *<?= _('Foo') ?>* instead of *
 
 Open the PO file for the language that you want to translate with PoEdit. The PO files are located by default in *app/lang/i18n/lang_to_be_translated/LC_MESSAGES/messages.po*. 
 
-```python
-    # POEDIT images with the view example strings loaded
-```
+<img src="https://raw.github.com/xinax/laravel-gettext/master/doc/poedit.png" />
 
 Once PoEdit is loaded press the Update button to load all localized strings. You can repeat this step anytime you add a new localized string. 
 

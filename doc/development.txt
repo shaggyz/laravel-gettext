@@ -2,7 +2,7 @@
 Development deploy:
 ------------------
 
-Current package repo: apu:/home/git/laravel-gettext
+Current package repo: git@github.com:xinax/laravel-gettext.git
 
 
 1. Create the laravel project to contain the package
