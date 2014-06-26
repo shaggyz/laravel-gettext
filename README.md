@@ -10,7 +10,7 @@
 - GNU Gettext on system (and production server!) - http://www.gnu.org/software/gettext/
 - PoEdit - http://poedit.net/
 
-### 2. Instalation
+### 2. Install
 
 Add the composer repository to your *composer.json* file:
 
