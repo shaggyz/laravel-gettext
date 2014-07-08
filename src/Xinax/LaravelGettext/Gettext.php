@@ -106,7 +106,7 @@ class Gettext{
 	 */
 	public function getLocale(){
 		
-		return $this->locale . "." . $this->encoding;
+		return $this->locale;
 	}
 
 	/**
