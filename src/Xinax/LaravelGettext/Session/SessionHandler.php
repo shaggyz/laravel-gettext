@@ -14,7 +14,8 @@ class SessionHandler{
 	 * Returns the locale identifier from 
 	 * the main session adapter
 	 */
-	public function get($default){
+	public function get($default)
+    {
 
 		$locale = $default;
 		
@@ -29,8 +30,8 @@ class SessionHandler{
 	/**
 	 * Sets the given locale on session
 	 */	
-	public function set($locale){
+	public function set($locale)
+    {
 		Session::set(self::SESSION_IDENTIFIER, $locale);
 	}
-
 }
