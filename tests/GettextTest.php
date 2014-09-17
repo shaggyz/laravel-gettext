@@ -42,22 +42,23 @@ class GettextTest extends \PHPUnit_Framework_TestCase  {
 
 	}
 
+    /**
+     * Test setting locale.
+     */
 	public function testSetLocale(){
 		$response = $this->gettext->setLocale('en_US');
-		$this->assertNotEmpty($response);
-		$this->assertTrue($response != 'en_US');
-		$this->assertTrue($response != '.');
-		$this->assertTrue($response != '.UTF-8');
-		$this->assertEquals('en_US.UTF-8', $response);
+
+        $this->assertEquals('en_US', $response);
 	}
 
+    /**
+     * Test getting locale.
+     * It should receive locale from mocked config.
+     */
 	public function testGetLocale(){
 		$response = $this->gettext->getLocale();
-		$this->assertNotEmpty($response);
-		$this->assertTrue($response != 'en_US');
-		$this->assertTrue($response != '.');
-		$this->assertTrue($response != '.UTF-8');		
-		$this->assertEquals('en_US.UTF-8', $response);
+
+		$this->assertEquals('en_US', $response);
 	}
 
 	public function testIsLocaleSupported(){
@@ -68,13 +69,13 @@ class GettextTest extends \PHPUnit_Framework_TestCase  {
 		$this->assertTrue($this->gettext->filesystemStructure());
 	}
 
+    /**
+     * Test dumping locale to string
+     */
 	public function testToString(){
 		$response = $this->gettext->__toString();
-		$this->assertNotEmpty($response);
-		$this->assertTrue($response != 'en_US');
-		$this->assertTrue($response != '.');
-		$this->assertTrue($response != '.UTF-8');
-		$this->assertEquals('en_US.UTF-8', $response);
+
+		$this->assertEquals('en_US', $response);
 	}
 
 	public function testGetEncoding(){
