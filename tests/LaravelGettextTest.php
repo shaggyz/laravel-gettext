@@ -81,3 +81,4 @@ class LaravelGettextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('en_US', $this->laravelGettext->getLocale());
     }
 }
+
