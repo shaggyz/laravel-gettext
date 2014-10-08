@@ -5,12 +5,16 @@ namespace Xinax\LaravelGettext\Test;
 use \Mockery as m;
 use \Xinax\LaravelGettext\Gettext;
 
-class GettextTest extends \PHPUnit_Framework_TestCase  {
-
+class GettextTest extends \PHPUnit_Framework_TestCase
+{
+	/**
+	 * Gettext wrapper
+	 * @var Xinax\LaravelGettext\Gettext
+	 */
 	protected $gettext;
 
-	public function setUp(){
-
+	public function setUp()
+	{
 		// Config
 		$model = m::mock('Xinax\LaravelGettext\Config\Models\Config');
 		$model->shouldReceive('getEncoding')->andReturn('UTF-8');
@@ -46,7 +50,8 @@ class GettextTest extends \PHPUnit_Framework_TestCase  {
     /**
      * Test setting locale.
      */
-	public function testSetLocale(){
+	public function testSetLocale()
+	{
 		$response = $this->gettext->setLocale('en_US');
 
         $this->assertEquals('en_US', $response);
@@ -56,42 +61,49 @@ class GettextTest extends \PHPUnit_Framework_TestCase  {
      * Test getting locale.
      * It should receive locale from mocked config.
      */
-	public function testGetLocale(){
+	public function testGetLocale()
+	{
 		$response = $this->gettext->getLocale();
 
 		$this->assertEquals('en_US', $response);
 	}
 
-	public function testIsLocaleSupported(){
+	public function testIsLocaleSupported()
+	{
 		$this->assertTrue($this->gettext->isLocaleSupported('en_US'));
 	}
 
-	public function testFilesystemStructure(){
+	public function testFilesystemStructure()
+	{
 		$this->assertTrue($this->gettext->filesystemStructure());
 	}
 
     /**
      * Test dumping locale to string
      */
-	public function testToString(){
+	public function testToString()
+	{
 		$response = $this->gettext->__toString();
 
 		$this->assertEquals('en_US', $response);
 	}
 
-	public function testGetEncoding(){
+	public function testGetEncoding()
+	{
 		$response = $this->gettext->getEncoding();
 		$this->assertNotEmpty($response);
 		$this->assertEquals('UTF-8', $response);
 	}
 
-	public function testSetEncoding(){
+	public function testSetEncoding()
+	{
 		$response = $this->gettext->setEncoding('UTF-8');
 		$this->assertNotEmpty($response);
 		$this->assertInstanceOf('Xinax\LaravelGettext\Gettext', $response);
 	}
 
-	public function tearDown(){
+	public function tearDown()
+	{
 		m::close();
 	}
 

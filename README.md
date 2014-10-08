@@ -111,6 +111,7 @@ No route files included with this package. To change configuration on runtime yo
     /**
      * Sets the Current locale.
      * Example param value: 'es_ES'
+     *
      * @param mixed $locale the locale
      * @return LaravelGettext
      */
@@ -121,6 +122,7 @@ No route files included with this package. To change configuration on runtime yo
     /**
      * Gets the Current locale.
      * Example returned value: 'es_ES'
+     *
      * @return String
      */
      LaravelGettext::getLocale();
@@ -128,8 +130,19 @@ No route files included with this package. To change configuration on runtime yo
 
 ```php
     /**
+     * Gets the language portion of the locale.
+     * Eg from en_GB, returns en
+     *
+     * @return mixed
+     */
+    LaravelGettext::getLocaleLanguage()
+```
+
+```php
+    /**
      * Sets the Current encoding.
      * Example param value: 'UTF-8'     
+     * 
      * @param mixed $encoding the encoding
      * @return LaravelGettext
      */
@@ -140,10 +153,13 @@ No route files included with this package. To change configuration on runtime yo
     /**
      * Gets the Current encoding.
      * Example returned value: 'UTF-8'       
+     * 
      * @return String
      */
      LaravelGettext::getEncoding();
 ```
+
+
 
 ### 5. Extra notes
 
