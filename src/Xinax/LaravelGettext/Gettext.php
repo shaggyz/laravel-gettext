@@ -58,7 +58,8 @@ class Gettext
      */
     public function setLocale($locale)
     {
-        if ($locale) {
+
+        if (!$locale) {
             return;
         }
 
