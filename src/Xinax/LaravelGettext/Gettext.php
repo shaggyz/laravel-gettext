@@ -10,7 +10,6 @@ use \Session;
 
 class Gettext
 {
-
     /**
      * Config container
      * @type Xinax\LaravelGettext\Config\Models\Config

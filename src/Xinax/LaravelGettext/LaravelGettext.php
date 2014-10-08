@@ -4,7 +4,6 @@ namespace Xinax\LaravelGettext;
 
 class LaravelGettext
 {
-
     /**
      * Check dependencies
      */

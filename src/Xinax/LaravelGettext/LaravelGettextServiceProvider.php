@@ -9,7 +9,6 @@ use Illuminate\Support\ServiceProvider;
  */
 class LaravelGettextServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -34,7 +33,6 @@ class LaravelGettextServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         $this->app->bind('Adapters/AdapterInterface', 'Adapters/LaravelAdapter');
 
         // Main class register
