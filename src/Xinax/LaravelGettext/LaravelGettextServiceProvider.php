@@ -24,6 +24,8 @@ class LaravelGettextServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->package('xinax/laravel-gettext');
+
+        include __DIR__.'/../../filters.php';
     }
 
     /**
