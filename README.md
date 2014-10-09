@@ -214,7 +214,7 @@ It also supports custom labels:
     LaravelGettext::getSelector([
         'en_US' => 'English',
         'es_ES' => 'Spanish',
-        'de_DE' => 'Dustch',
+        'de_DE' => 'Dutch',
     ])->render();
 ```    
 
