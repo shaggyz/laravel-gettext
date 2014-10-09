@@ -2,6 +2,8 @@
 
 namespace Xinax\LaravelGettext;
 
+use Xinax\LaravelGettext\Composers\LanguageSelector;
+
 class LaravelGettext
 {
     /**
@@ -82,5 +84,15 @@ class LaravelGettext
         if (isset($localeArray[0])) {
             return $localeArray[0];
         }
+    }
+
+    /**
+     * Returns the language selector object
+     * @param  Array $labels 
+     * @return LanguageSelector         
+     */
+    public function getSelector($labels = [])
+    {
+        return LanguageSelector::create($labels, $this);
     }
 }

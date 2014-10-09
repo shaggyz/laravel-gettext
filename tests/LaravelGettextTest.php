@@ -5,6 +5,7 @@ namespace Xinax\LaravelGettext\Test;
 use \Mockery as m;
 use \Xinax\LaravelGettext\LaravelGettext;
 
+
 class LaravelGettextTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -14,10 +15,25 @@ class LaravelGettextTest extends \PHPUnit_Framework_TestCase
     protected $laravelGettext;
 
     /**
+     * Creates the application.
+     *
+     * @return Symfony\Component\HttpKernel\HttpKernelInterface
+     */
+    public function createApplication()
+    {
+        return require __DIR__.'/../vendor/autoload.php';
+        $unitTesting = true;
+ 
+        $testEnvironment = 'testing';
+ 
+    }    
+
+    /**
      * @inheritdoc
      */
     public function setUp()
     {
+        parent::setUp();
 
         $gettext = m::mock('Xinax\LaravelGettext\Gettext');
 
@@ -28,9 +44,6 @@ class LaravelGettextTest extends \PHPUnit_Framework_TestCase
         $gettext->shouldReceive('filesystemStructure')->andReturn(true);
 
         $this->laravelGettext = new LaravelGettext($gettext);
-
-        parent::setUp();
-
     }
 
     /**
@@ -80,5 +93,6 @@ class LaravelGettextTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('en_US', $this->laravelGettext->getLocale());
     }
+
 }
 

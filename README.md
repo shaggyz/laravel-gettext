@@ -1,5 +1,7 @@
 # Laravel Gettext
 
+<img src="https://api.travis-ci.org/xinax/laravel-gettext.svg?branch=master" alt="TravisCI">
+
 *Laravel Gettext* is a package compatible with the version 4.2.x of the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU Gettext* and *PoEdit*.
 
 ### 1. Requirements
@@ -198,7 +200,25 @@ app/controllers/HomeController.php
   </ul>
 ```
 
-##### C. Adding directories to search translations
+##### C. Built-in language selector:
+
+You can use the built-in language selector in your views:
+
+```php
+    LaravelGettext::getSelector()->render();
+```
+
+It also supports custom labels:
+
+```php
+    LaravelGettext::getSelector([
+        'en_US' => 'English',
+        'es_ES' => 'Spanish',
+        'de_DE' => 'Dustch',
+    ])->render();
+```    
+
+##### D. Adding directories to search translations
 
 You can achieve this editing the *source-paths* configuration array. By default app/views and app/controlles are set.
 

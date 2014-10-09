@@ -15,6 +15,8 @@ class GettextTest extends \PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
+		parent::setUp();
+
 		// Config
 		$model = m::mock('Xinax\LaravelGettext\Config\Models\Config');
 		$model->shouldReceive('getEncoding')->andReturn('UTF-8');
