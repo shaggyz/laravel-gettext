@@ -17,7 +17,7 @@
 Add the composer repository to your *composer.json* file:
 
 ```json
-    "xinax/laravel-gettext": "dev-master"
+    "xinax/laravel-gettext": "1.x"
 ```
 
 And run composer update. Once it's installed, you can register the service provider in app/config/app.php in the providers array:
@@ -90,7 +90,10 @@ By default *LaravelGettext* looks on app/controllers and app/views recursively s
     echo _('Another translated string');
 ```
 
-Important Note: on blade templates you should use *<?= _('Foo') ?>* instead of *{{ _('Foo') }}*. 
+```php
+    // an example view in blade
+    {{ _('Translated string'); }}
+```
 
 ##### B. Translate with PoEdit
 
