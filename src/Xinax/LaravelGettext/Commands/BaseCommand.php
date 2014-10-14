@@ -22,7 +22,7 @@ class BaseCommand extends Command
 
         parent::__construct();
     }
-    
+
    /**
     * Build views in order to parse php files
     *
@@ -31,12 +31,11 @@ class BaseCommand extends Command
    protected function compileViews()
    {
        $this->comment("Compiling views");
-       foreach( \Config::get('view.paths') as $path )
-       {
+       foreach ( \Config::get('view.paths') as $path ) {
            $fs = new \Illuminate\Filesystem\Filesystem($path);
            $glob = $fs->glob(realpath($path) .'/{,**/}*.php', GLOB_BRACE);
            $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, storage_path().'/views' );
-           
+
            foreach ($glob as $file) {
                $compiler->setPath($file);
                $contents = $compiler->compileString($fs->get($file));

@@ -29,7 +29,7 @@ class GettextUpdate extends BaseCommand
     public function fire()
     {
         $domainPath = $this->getDomainPath();
-        
+
         // Compile views
         $this->compileViews();
 
