@@ -92,7 +92,7 @@ By default *LaravelGettext* looks on app/controllers and app/views recursively s
 
 ```php
     // an example view in blade
-    {{ _('Translated string'); }}
+    {{ _('Translated string') }}
 ```
 
 ##### B. Translate with PoEdit
