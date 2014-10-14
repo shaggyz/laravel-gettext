@@ -104,8 +104,6 @@ class BaseCommand extends Command
         $template .= '"X-Poedit-Basepath: ' . $this->getRelativePath(app_path(), $path . '/LC_MESSAGES/') . '\n' . "\"\n";
         $template .= '"X-Poedit-SourceCharset: ' . $encoding . '\n' . "\"\n";
 
-        $this->buildViews();
-
         // Source paths
         $sourcePaths = $this->configuration->getSourcePaths();
 
