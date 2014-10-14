@@ -37,6 +37,9 @@ class GettextCreate extends BaseCommand
 
         $domainPath = $this->getDomainPath();
 
+        // Compile views
+        $this->compileViews();
+
         // Directories created counter
         $dirCount = 0;
 

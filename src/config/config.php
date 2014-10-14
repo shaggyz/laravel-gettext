@@ -62,6 +62,7 @@ return array(
 	'source-paths' => array(
 		'controllers',
 		'views',
+		'storage/views',
 	),
 
 	/**

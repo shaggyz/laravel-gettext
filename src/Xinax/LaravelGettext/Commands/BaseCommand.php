@@ -3,8 +3,6 @@
 namespace Xinax\LaravelGettext\Commands;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
 
@@ -19,17 +17,40 @@ class BaseCommand extends Command
     public function __construct()
     {
 
-        $configManager = new ConfigManager;
+        $configManager = new ConfigManager();
         $this->configuration = $configManager->get();
 
         parent::__construct();
     }
 
+   /**
+    * Build views in order to parse php files
+    *
+    * @return object $this
+    **/
+   protected function compileViews()
+   {
+       $this->comment("Compiling views");
+       foreach ( \Config::get('view.paths') as $path ) {
+           $fs = new \Illuminate\Filesystem\Filesystem($path);
+           $glob = $fs->glob(realpath($path) .'/{,**/}*.php', GLOB_BRACE);
+           $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, storage_path().'/views' );
+
+           foreach ($glob as $file) {
+               $compiler->setPath($file);
+               $contents = $compiler->compileString($fs->get($file));
+               $fs->put($compiler->getCompiledPath($compiler->getPath()) . '.php', $contents);
+           }
+       }
+
+      return $this;
+   }
+
     /**
      * Constructs and returns the full path to
      * translation files
      *
-     * @param String $append
+     * @param  String $append
      * @return String
      */
     protected function getDomainPath($append = null)
@@ -53,9 +74,9 @@ class BaseCommand extends Command
      * Creates a configured .po file on $path. If write is true the file will
      * be created, otherwise the file contents are returned.
      *
-     * @param String $path
-     * @param String $locale
-     * @param Boolean $write
+     * @param  String  $path
+     * @param  String  $locale
+     * @param  Boolean $write
      * @return Integer | String
      */
     protected function createPOFile($path, $locale, $write = true)
@@ -79,7 +100,7 @@ class BaseCommand extends Command
         $template .= '"Content-Transfer-Encoding: 8bit' . '\n' . "\"\n";
         $template .= '"X-Generator: Poedit 1.5.4' . '\n' . "\"\n";
         $template .= '"X-Poedit-KeywordsList: _' . '\n' . "\"\n";
-        $template .= '"X-Poedit-Basepath:' . app_path() . '\n' . "\"\n";
+        $template .= '"X-Poedit-Basepath: ' . $this->getRelativePath(app_path(), $path . '/LC_MESSAGES/') . '\n' . "\"\n";
         $template .= '"X-Poedit-SourceCharset: ' . $encoding . '\n' . "\"\n";
 
         // Source paths
@@ -97,6 +118,7 @@ class BaseCommand extends Command
             $file = fopen($path, "w");
             $result = fwrite($file, $template);
             fclose($file);
+
             return $result;
 
         } else {
@@ -105,14 +127,13 @@ class BaseCommand extends Command
             return $template . "\n";
         }
 
-
     }
 
     /**
      * Adds a new locale directory + .po file
      *
-     * @param String $localePath
-     * @param String $locale
+     * @param  String                $localePath
+     * @param  String                $locale
      * @throws FileCreationException
      */
     protected function addLocale($localePath, $locale)
@@ -146,8 +167,8 @@ class BaseCommand extends Command
     /**
      * Update the .po file headers (mainly source-file paths)
      *
-     * @param String $localePath
-     * @param String $locale
+     * @param  String                      $localePath
+     * @param  String                      $locale
      * @throws LocaleFileNotFoundException
      */
     protected function updateLocale($localePath, $locale)
@@ -177,4 +198,27 @@ class BaseCommand extends Command
 
         $this->comment("PO file for locale: $locale were updated successfuly");
     }
+
+   /**
+    * Return the relative path from a file or directory to another
+    *
+    * @param String $path
+    * @param String $from
+    * @return String $path
+    * @author Laurent Goussard
+    **/
+   private function getRelativePath($path, $from = __FILE__)
+   {
+       $path = explode(DIRECTORY_SEPARATOR, $path);
+       $from = explode(DIRECTORY_SEPARATOR, dirname($from.'.'));
+       $common = array_intersect_assoc($path, $from);
+
+       $base = array('.');
+       if ( $pre_fill = count( array_diff_assoc($from, $common) ) ) {
+           $base = array_fill(0, $pre_fill, '..');
+       }
+       $path = array_merge( $base, array_diff_assoc($path, $common) );
+
+       return implode(DIRECTORY_SEPARATOR, $path);
+   }
 }

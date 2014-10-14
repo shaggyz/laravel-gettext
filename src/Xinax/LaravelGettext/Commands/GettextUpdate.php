@@ -30,6 +30,9 @@ class GettextUpdate extends BaseCommand
     {
         $domainPath = $this->getDomainPath();
 
+        // Compile views
+        $this->compileViews();
+
         try {
 
             // Translation files base path
