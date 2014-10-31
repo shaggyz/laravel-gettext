@@ -37,8 +37,11 @@ class Gettext
     /**
      * Sets the configuration and session manager
      */
-    public function __construct(ConfigManager $configMan, SessionHandler $sessionHandler, AdapterInterface $adapter)
-    {
+    public function __construct(
+        ConfigManager $configMan, 
+        SessionHandler $sessionHandler, 
+        AdapterInterface $adapter
+    ){
         // Sets the package configuration and session handler
         $this->configuration = $configMan->get();
         $this->session = $sessionHandler;
@@ -58,10 +61,6 @@ class Gettext
      */
     public function setLocale($locale)
     {
-
-        if (!$locale) {
-            return;
-        }
 
         if (!$this->isLocaleSupported($locale)) {
             throw new Exceptions\LocaleNotSupportedException(
@@ -136,7 +135,11 @@ class Gettext
      */
     public function isLocaleSupported($locale)
     {
-        return in_array($locale, $this->configuration->getSupportedLocales());
+        if ($locale) {
+            return in_array($locale, $this->configuration->getSupportedLocales());
+        }
+
+        return false;
     }
 
 
