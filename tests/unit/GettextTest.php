@@ -62,11 +62,6 @@ class GettextTest extends BaseTestCase
 		$this->assertTrue($this->gettext->isLocaleSupported('en_US'));
 	}
 
-	public function testFilesystemStructure()
-	{
-		$this->assertTrue($this->gettext->filesystemStructure());
-	}
-
     /**
      * Test dumping locale to string
      */

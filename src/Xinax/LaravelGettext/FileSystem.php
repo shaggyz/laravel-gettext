@@ -3,6 +3,7 @@
 use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
 use Xinax\LaravelGettext\Exceptions\DirectoryNotFoundException;
+use Xinax\LaravelGettext\Exceptions\FileCreationException;
 
 class FileSystem {
 
@@ -156,7 +157,6 @@ class FileSystem {
      */
     public function addLocale($localePath, $locale)
     {
-
         if (!@mkdir($localePath)) {
             throw new FileCreationException(
                 "I can't create the directory: $localePath");
@@ -180,6 +180,7 @@ class FileSystem {
             throw new FileCreationException(
                 "I can't create the file: $poPath");
         }
+
     }
 
     /**
@@ -188,6 +189,7 @@ class FileSystem {
      * @param  String                      $localePath
      * @param  String                      $locale
      * @throws LocaleFileNotFoundException
+     * @return Boolean 
      */
     public function updateLocale($localePath, $locale)
     {
@@ -214,6 +216,8 @@ class FileSystem {
             throw new LocaleFileNotFoundException("I can't write on $localePOPath");
         }
 
+        return true;
+
     }    
 
    /**
@@ -224,19 +228,115 @@ class FileSystem {
     * @return String $path
     * @author Laurent Goussard
     **/
-   public function getRelativePath($path, $from = __FILE__)
-   {
-       $path = explode(DIRECTORY_SEPARATOR, $path);
-       $from = explode(DIRECTORY_SEPARATOR, dirname($from.'.'));
-       $common = array_intersect_assoc($path, $from);
+    public function getRelativePath($path, $from = __FILE__)
+    {
+        $path = explode(DIRECTORY_SEPARATOR, $path);
+        $from = explode(DIRECTORY_SEPARATOR, dirname($from.'.'));
+        $common = array_intersect_assoc($path, $from);
 
-       $base = array('.');
-       if ( $pre_fill = count( array_diff_assoc($from, $common) ) ) {
-           $base = array_fill(0, $pre_fill, '..');
-       }
-       $path = array_merge( $base, array_diff_assoc($path, $common) );
+        $base = array('.');
+        if ( $pre_fill = count( array_diff_assoc($from, $common) ) ) {
+            $base = array_fill(0, $pre_fill, '..');
+        }
+        $path = array_merge( $base, array_diff_assoc($path, $common) );
 
-       return implode(DIRECTORY_SEPARATOR, $path);
-   }    
+        return implode(DIRECTORY_SEPARATOR, $path);
+    }    
+
+    /**
+     * Checks for the translations base directory, also tries to create it if not exist.
+     * Returns a boolean that indicates if any directory was created.
+     *
+     * @throws FileCreationException If directory is unreachable
+     * @return Boolean
+     */
+    public function checkBasePath()
+    {
+        $domainPath = $this->getDomainPath();
+
+        // Translation files base path
+        if (!file_exists($domainPath)) {
+            if (!@mkdir($domainPath)) {
+                throw new FileCreationException(
+                    "I can't create the directory: $domainPath");
+            }
+            return true;
+        }        
+
+        return false;
+    }
+
+    /**
+     * Checks the needed directory structure
+     *
+     * @throws Exceptions\DirectoryNotFoundException
+     * @return boolean
+     */
+    public function filesystemStructure()
+    {
+        // Base path
+        $this->checkBasePath();
+        $domainPath = $this->getDomainPath();
+
+        // Translation files base path
+        if (!file_exists($domainPath)) {
+            throw new Exceptions\DirectoryNotFoundException(
+                "Missing base required directory: $domainPath");
+        }
+
+        foreach ($this->configuration->getSupportedLocales() as $locale) {
+
+            // Default locale is not needed
+            if ($locale == $this->configuration->getLocale()) {
+                continue;
+            }
+
+            $localePath = $this->getDomainPath($locale);
+            if (!file_exists($localePath)) {
+                throw new Exceptions\DirectoryNotFoundException(
+                    "Missing locale required directory: $localePath");
+            }
+
+        }
+
+        return true;
+
+    }    
+
+    /**
+     * Creates the localization directories and files, by domain
+     * Returns an array with all created paths  
+     * 
+     * @return Array paths
+     */
+    public function generateLocales()
+    {
+        $localePaths = array();
+
+        // Locale directories
+        foreach ($this->configuration->getSupportedLocales() as $locale) {
+
+            // We don't want a locale folder for the default language
+            if ($locale == $this->configuration->getLocale()) {
+                continue;
+            }
+
+            $localePath = $this->getDomainPath($locale);
+
+            if (!file_exists($localePath)) {
+
+                // Locale directory is created
+                $this->addLocale($localePath, $locale);
+
+                array_push($localePaths, $localePath);
+
+            }
+
+        }
+
+        return $localePaths;
+    }
+
+
 
 }

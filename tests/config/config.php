@@ -1,5 +1,7 @@
 <?php
 
+// Used for testing
+// return array(
 $testConfig = array(
 
 	/**
@@ -13,6 +15,8 @@ $testConfig = array(
 	 */
 	'supported-locales' => array(
 		'en_US',
+		'es_AR',
+		'de_DE'
 	),	
 
 	/**
@@ -31,7 +35,7 @@ $testConfig = array(
 	 * All paths in this configuration are relative to base-path 
 	 * (in laravel is the app directory by default)
 	 */
-	'base-path' => __DIR__ . '/../',
+	'base-path' => __DIR__ . '/..',
 
 	/**
 	 * Base translation directory path relative to base-path 
@@ -74,7 +78,7 @@ $testConfig = array(
 
 	/**
 	 * Multidomain directory paths. If you want separate your translations in 
-	 * different files, just must wrap your paths into domain name. 
+	 * different files, just must wrap your paths into a domain name. 
 	 * Paths on top-level will be associated to the default domain file, 
 	 * for example:
 	 */

@@ -2,8 +2,6 @@
 
 namespace Xinax\LaravelGettext\Commands;
 
-use Xinax\LaravelGettext\Exceptions\FileCreationException;
-
 class GettextCreate extends BaseCommand
 {
 
@@ -35,45 +33,29 @@ class GettextCreate extends BaseCommand
         $this->filesystem->compileViews(\Config::get('view.paths'), storage_path());
 
         // Directories created counter
-        $dirCount = 0;
+        $dirCreations = 0;
 
         try {
 
-            // Translation files base path
-            if (!file_exists($domainPath)) {
-                if (!@mkdir($domainPath)) {
-                    throw new FileCreationException(
-                        "I can't create the directory: $domainPath");
-                }
-
-                $dirCount++;
-                $this->comment("Base directory created ($domainPath)");
-
+            // i18n base directory
+            if ($this->fileSystem->checkBasePath()) {
+                $this->comment("Base directory created ($domainPath)");    
+                $dirCreations++;
             }
 
-            foreach ($this->configuration->getSupportedLocales() as $locale) {
-
-                // We don't want a locale folder for the default language
-                if ($locale == $this->configuration->getLocale()) {
-                    continue;
-                }
-
-                $localePath = $this->filesystem->getDomainPath($locale);
-
-                if (!file_exists($localePath)) {
-
-                    $this->filesystem->addLocale($localePath, $locale);
-                    $dirCount++;
-                    $this->comment("Directory for $locale created ($localePath)");
-
-                }
+            // Locales
+            $localesGenerated = $this->fileSystem->generateLocales();
+            foreach ($localesGenerated as $localePath) {
+                $this->comment("Directory for $locale created ($localePath)");
+                $dirCreations++;
             }
 
             $this->info("Done!");
-
-            $msg = "Structure is right! no directory creation were needed.";
-            if ($dirCount) {
-                $msg = "$dirCount directories were created.";
+            
+            if ($dirCreations) {
+                $msg = "$dirCreations directories were created.";
+            } else {
+                $msg = "The directory structure is right. No directory creation were needed.";
             }
 
             $this->info($msg);

@@ -35,6 +35,12 @@ class Gettext
     protected $adapter;
 
     /**
+     * File system helper
+     * @var FileSystem
+     */
+    protected $fileSystem;
+
+    /**
      * Sets the configuration and session manager
      */
     public function __construct(
@@ -46,8 +52,9 @@ class Gettext
         $this->configuration = $configMan->get();
         $this->session = $sessionHandler;
         $this->adapter = $adapter;
+        $this->fileSystem = new FileSystem($this->configuration);
 
-        // Encoding is set on configuration
+        // Encoding is set from configuration
         $this->encoding = $this->configuration->getEncoding();
 
         // Sets defaults for boot
@@ -73,7 +80,7 @@ class Gettext
 
             putenv("LC_ALL=$gettextLocale");
             setlocale(LC_ALL, $gettextLocale);
-            bindtextdomain($domain, $this->getDomainPath());
+            bindtextdomain($domain, $this->fileSystem->getDomainPath());
             textdomain($domain);
 
             $this->locale = $locale;
@@ -106,28 +113,6 @@ class Gettext
     }
 
     /**
-     * Constructs and returns the full path to
-     * translation files
-     *
-     * @return String
-     */
-    protected function getDomainPath($append = null)
-    {
-        $path = array(
-            $this->configuration->getBasePath(),
-            $this->configuration->getTranslationsPath(),
-            "i18n"
-        );
-
-        if (!is_null($append)) {
-            array_push($path, $append);
-        }
-
-        return implode(DIRECTORY_SEPARATOR, $path);
-
-    }
-
-    /**
      * Returns a boolean that indicates if $locale
      * is supported by configuration
      *
@@ -140,43 +125,6 @@ class Gettext
         }
 
         return false;
-    }
-
-
-    /**
-     * Checks the needed directory structure
-     *
-     * @throws Exceptions\DirectoryNotFoundException
-     * @return boolean
-     */
-    public function filesystemStructure()
-    {
-
-        $domainPath = $this->getDomainPath();
-
-        // Translation files base path
-        if (!file_exists($domainPath)) {
-            throw new Exceptions\DirectoryNotFoundException(
-                "Missing base required directory: $domainPath");
-        }
-
-        foreach ($this->configuration->getSupportedLocales() as $locale) {
-
-            // Default locale is not needed
-            if ($locale == $this->configuration->getLocale()) {
-                continue;
-            }
-
-            $localePath = $this->getDomainPath($locale);
-            if (!file_exists($localePath)) {
-                throw new Exceptions\DirectoryNotFoundException(
-                    "Missing locale required directory: $localePath");
-            }
-
-        }
-
-        return true;
-
     }
 
     /**

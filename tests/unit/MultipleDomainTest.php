@@ -62,6 +62,32 @@ class MultipleDomainTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
+
+    /**
+     * Test the update 
+     */
+    public function testFileSystem()
+    {
+        // Domain path test
+        $domainPath = $this->fileSystem->getDomainPath();
+        $this->fileSystem->checkBasePath();
+
+        $this->assertTrue(is_dir($domainPath));
+        $this->assertTrue(strpos($domainPath, 'i18n') !== false);
+
+        // Locale path test
+        $locale = 'es_AR';
+        $localePath = $this->fileSystem->getDomainPath($locale);
+
+        // Create locale test
+        $this->fileSystem->generateLocales();
+        $this->assertTrue($this->fileSystem->filesystemStructure());
+        $this->assertTrue(is_dir($localePath));
+
+        // Update locale test
+        $this->assertTrue($this->fileSystem->updateLocale($localePath, $locale));
+    }
+
     /**
      * Mocker tear-down
      */
