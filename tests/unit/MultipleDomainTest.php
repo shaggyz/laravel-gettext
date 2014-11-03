@@ -2,6 +2,8 @@
 
 namespace Xinax\LaravelGettext\Test;
 
+use \RecursiveIteratorIterator;
+use \RecursiveDirectoryIterator;
 use \Mockery as m;
 use \Xinax\LaravelGettext\LaravelGettext;
 use \Xinax\LaravelGettext\FileSystem;
@@ -80,12 +82,21 @@ class MultipleDomainTest extends BaseTestCase
         $localePath = $this->fileSystem->getDomainPath($locale);
 
         // Create locale test
-        $this->fileSystem->generateLocales();
+        $localesGenerated = $this->fileSystem->generateLocales();
+
+        $this->assertCount(2, $localesGenerated);
         $this->assertTrue($this->fileSystem->filesystemStructure());
         $this->assertTrue(is_dir($localePath));
 
         // Update locale test
         $this->assertTrue($this->fileSystem->updateLocale($localePath, $locale));
+    }
+
+    public function testTranslations()
+    {
+        /**
+         * @todo : test translations in different domains
+         */
     }
 
     /**
@@ -94,6 +105,30 @@ class MultipleDomainTest extends BaseTestCase
     public function tearDown()
     {
         m::close();
+    }
+
+    /**
+     * Clear all files generated for testing purposes
+     */
+    protected function clearFiles()
+    {
+        $dir = __DIR__ . '/../lang';
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($files as $fileinfo) {
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
+        }
+
+    }
+
+    public function __destruct()
+    {
+        $this->clearFiles();
     }
 
 }
