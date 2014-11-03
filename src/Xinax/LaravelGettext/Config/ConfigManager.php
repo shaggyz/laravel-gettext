@@ -2,47 +2,64 @@
 
 namespace Xinax\LaravelGettext\Config;
 
+use \Xinax\LaravelGettext\Config\Models\Config as ConfigModel;
 use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationFileException;
 use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationKeyException;
 use \Config;
 
 class ConfigManager
 {
+    /**
+     * Config model
+     *
+     * @var ConfigModel
+     */
+    protected $config;
 
     /**
-     * Config singleton
-     *
-     * @var boolean
+     * Package configuration route (published)
      */
-    protected $config = null;
+    const DEFAULT_PACKAGE_CONFIG = 'laravel-gettext::config';
 
     /**
-     * Returns the package configuration container
-     *
-     * @return Models\Config
+     * Sets configuration Array
+     * 
+     * @param Array $config
      */
-    public function get()
+    public function __construct(Array $config) 
     {
-        if (is_null($this->config)) {
-            $this->setConfig();
-        }
-
-        return $this->config;
+        $this->config = $this->generateFromArray($config);
     }
 
     /**
-     * Sets the configuration
+     * Returns a new instance of ConfigManager
+     * 
+     * @param  Array $config
+     * @return ConfigManager
      */
-    protected function setConfig()
+    public static function create($config = null)
     {
-        $config = Config::get('laravel-gettext::config');
+        if (is_null($config)) {
+            // Default package configuration file (published)
+            $config = Config::get(static::DEFAULT_PACKAGE_CONFIG);
+        }
 
-        if (!$config || !count($config)) {
+        if (!$config || !is_array($config)) {
             throw new RequiredConfigurationFileException(
                 "You need to publish the package configuration file");
         }
 
-        $this->config = $this->generateFromArray($config);
+        $manager = new static($config);
+        return $manager;
+    }
+
+    /**
+     * Returns the Config model
+     * @return ConfigModel
+     */
+    public function get() 
+    {
+        return $this->config;
     }
 
     /**
@@ -51,11 +68,10 @@ class ConfigManager
      *
      * @param array $config
      * @throws RequiredConfigurationKeyException
-     * @return mixed
+     * @return ConfigModel
      */
     protected function generateFromArray(array $config)
     {
-
         $requiredKeys = array('locale', 'fallback-locale', 'encoding');
 
         foreach ($requiredKeys as $key) {
@@ -65,7 +81,7 @@ class ConfigManager
             }
         }
 
-        $container = new Models\Config();
+        $container = new ConfigModel();
         $container->setLocale($config['locale'])
             ->setEncoding($config['encoding'])
             ->setFallbackLocale($config['fallback-locale'])

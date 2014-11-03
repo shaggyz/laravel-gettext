@@ -1,6 +1,7 @@
 <?php namespace Xinax\LaravelGettext;
 
 use Xinax\LaravelGettext\Config\Models\Config;
+use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
 
 class FileSystem {
 
