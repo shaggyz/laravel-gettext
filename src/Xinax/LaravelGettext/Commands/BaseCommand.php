@@ -30,7 +30,7 @@ class BaseCommand extends Command
     public function __construct()
     {
         $configManager = new ConfigManager();
-        $this->filesystem = new FileSystem($configManager);
+        $this->filesystem = new FileSystem($configManager->get());
         $this->configuration = $configManager->get();
 
         parent::__construct();

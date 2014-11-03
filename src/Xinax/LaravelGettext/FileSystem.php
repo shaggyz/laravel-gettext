@@ -1,21 +1,21 @@
 <?php namespace Xinax\LaravelGettext;
 
-use Xinax\LaravelGettext\Config\ConfigManager;
+use Xinax\LaravelGettext\Config\Models\Config;
 
 class FileSystem {
 
     /**
-     * Package configuration
-     * @var ConfigManager;
+     * Package configuration model
+     * @var Config
      */
     protected $configuration;
 
     /**
      * Sets configuration
      * 
-     * @param ConfigManager $config
+     * @param Config $config
      */
-    public function __construct(ConfigManager $config)
+    public function __construct(Config $config)
     {
         $this->configuration = $config;
     }
