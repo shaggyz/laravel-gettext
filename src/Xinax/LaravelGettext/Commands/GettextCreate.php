@@ -15,11 +15,6 @@ class GettextCreate extends BaseCommand
     protected $name = 'gettext:create';
 
     /**
-     * Package configuration
-     */
-    protected $configuration;
-
-    /**
      * The console command description.
      *
      * @var string
@@ -34,11 +29,10 @@ class GettextCreate extends BaseCommand
      */
     public function fire()
     {
-
-        $domainPath = $this->getDomainPath();
+        $domainPath = $this->filesystem->getDomainPath();
 
         // Compile views
-        $this->compileViews();
+        $this->filesystem->compileViews();
 
         // Directories created counter
         $dirCount = 0;
@@ -64,11 +58,11 @@ class GettextCreate extends BaseCommand
                     continue;
                 }
 
-                $localePath = $this->getDomainPath($locale);
+                $localePath = $this->filesystem->getDomainPath($locale);
 
                 if (!file_exists($localePath)) {
 
-                    $this->addLocale($localePath, $locale);
+                    $this->filesystem->addLocale($localePath, $locale);
                     $dirCount++;
                     $this->comment("Directory for $locale created ($localePath)");
 

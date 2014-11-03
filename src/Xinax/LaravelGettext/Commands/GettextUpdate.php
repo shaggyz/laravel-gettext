@@ -28,10 +28,10 @@ class GettextUpdate extends BaseCommand
      */
     public function fire()
     {
-        $domainPath = $this->getDomainPath();
+        $domainPath = $this->filesystem->getDomainPath();
 
         // Compile views
-        $this->compileViews();
+        $this->filesystem->compileViews();
 
         try {
 
@@ -50,15 +50,16 @@ class GettextUpdate extends BaseCommand
                     continue;
                 }
 
-                $localePath = $this->getDomainPath($locale);
+                $localePath = $this->filesystem->getDomainPath($locale);
 
                 // New locale without .po file
                 if (!file_exists($localePath)) {
-                    $this->addLocale($localePath, $locale);
+                    $this->filesystem->addLocale($localePath, $locale);
                     $this->comment("New locale was added: $locale ($localePath)");
                     $addedCount++;
                 } else {
-                    $this->updateLocale($localePath, $locale);
+                    $this->filesystem->updateLocale($localePath, $locale);
+                    $this->comment("PO file for locale: $locale were updated successfuly");
                     $updatedCount++;
                 }
 

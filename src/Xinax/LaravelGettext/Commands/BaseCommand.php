@@ -3,11 +3,24 @@
 namespace Xinax\LaravelGettext\Commands;
 
 use Illuminate\Console\Command;
+use Xinax\LaravelGettext\FileSystem;
 use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
 
 class BaseCommand extends Command
 {
+
+    /**
+     * Filesystem helper
+     * @var \Xinax\LaravelGettext\FileSystem
+     */
+    protected $filesystem;
+
+    /**
+     * Package configuration data
+     * @var Array
+     */
+    protected $configuration;    
 
     /**
      * Create a new command instance.
@@ -16,36 +29,25 @@ class BaseCommand extends Command
      */
     public function __construct()
     {
-
         $configManager = new ConfigManager();
+        $this->filesystem = new FileSystem($configManager);
         $this->configuration = $configManager->get();
 
         parent::__construct();
     }
 
-   /**
+    /**
     * Build views in order to parse php files
     *
     * @return object $this
     **/
-   protected function compileViews()
-   {
-       $this->comment("Compiling views");
+    protected function compileViews()
+    {
+        $this->comment("Compiling views");
+        $this->filesystem->compileViews();
 
-       foreach ( \Config::get('view.paths') as $path ) {
-           $fs = new \Illuminate\Filesystem\Filesystem($path);
-           $glob = $fs->glob(realpath($path) . '/{,**/}*.php', GLOB_BRACE);
-           $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, storage_path() . '/views' );
-
-           foreach ($glob as $file) {
-               $compiler->setPath($file);
-               $contents = $compiler->compileString($fs->get($file));
-               $fs->put($compiler->getCompiledPath($compiler->getPath()) . '.php', $contents);
-           }
-       }
-
-      return $this;
-   }
+        return $this;
+    }
 
     /**
      * Constructs and returns the full path to
@@ -56,7 +58,6 @@ class BaseCommand extends Command
      */
     protected function getDomainPath($append = null)
     {
-
         $path = array(
             app_path(),
             $this->configuration->getTranslationsPath(),
