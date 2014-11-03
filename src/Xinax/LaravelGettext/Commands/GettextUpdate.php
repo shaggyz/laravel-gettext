@@ -28,7 +28,7 @@ class GettextUpdate extends BaseCommand
      */
     public function fire()
     {
-        $domainPath = $this->filesystem->getDomainPath();
+        $domainPath = $this->filesystem->getDomainPath(\Config::get('view.paths'), storage_path());
 
         // Compile views
         $this->filesystem->compileViews();

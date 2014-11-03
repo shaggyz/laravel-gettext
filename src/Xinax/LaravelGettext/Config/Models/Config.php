@@ -41,6 +41,13 @@ class Config
     protected $domain;
 
     /**
+     * Application base path
+     * 
+     * @var String
+     */
+    protected $basePath;
+
+    /**
      * Path to translation files
      *
      * @type String
@@ -186,6 +193,28 @@ class Config
     }
 
     /**
+     * Gets the application path
+     * \
+     * @return mixed
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
+    /**
+     * Sets the application path
+     *
+     * @param String $basePath the application path
+     * @return self
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = $basePath;
+        return $this;
+    }
+
+    /**
      * Gets the Path to translation files.
      *
      * @return mixed
@@ -294,4 +323,14 @@ class Config
         $this->syncLaravel = $syncLaravel;
         return $this;
     }
+
+    /**
+     * Returs an array with all domain names defined 
+     * @return Array
+     */
+    public function getAllDomains()
+    {
+
+    }
+
 }

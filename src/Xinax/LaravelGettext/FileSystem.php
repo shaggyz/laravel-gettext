@@ -2,6 +2,7 @@
 
 use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
+use Xinax\LaravelGettext\Exceptions\DirectoryNotFoundException;
 
 class FileSystem {
 
@@ -23,22 +24,45 @@ class FileSystem {
 
     /**
      * Build views in order to parse php files
+     *
+     * @param Array $viewPaths
+     * @param String $outputDir
+     *
+     * @return Boolean status
      */
-    public function compileViews()
+    public function compileViews(Array $viewPaths, $outputDir)
     {
-        foreach ( \Config::get('view.paths') as $path ) {
+        // Check the output directory
+        $targetDir = $outputDir . '/views';
+
+        if ( !is_dir($targetDir) || !is_writable($targetDir)) {
+
+            if ( !mkdir($targetDir) ) {
+                throw new DirectoryNotFoundException(
+                    "I need a writeable directory in $targetDir to compile views!"
+                );    
+            }
+            
+        }
+
+        foreach ( $viewPaths as $path ) {
 
             $fs = new \Illuminate\Filesystem\Filesystem($path);
             $glob = $fs->glob(realpath($path) . '/{,**/}*.php', GLOB_BRACE);
-            $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, storage_path() . '/views' );
+            $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $targetDir);
 
             foreach ($glob as $file) {
+                
                 $compiler->setPath($file);
                 $contents = $compiler->compileString($fs->get($file));
-                $fs->put($compiler->getCompiledPath($compiler->getPath()) . '.php', $contents);
+                $compiledPath = $compiler->getCompiledPath($compiler->getPath());
+
+                $fs->put($compiledPath . '.php', $contents);
             }
 
         }
+
+        return true;
     }
 
     /**
@@ -51,7 +75,7 @@ class FileSystem {
     public function getDomainPath($append = null)
     {
         $path = array(
-            app_path(),
+            $this->configuration->getBasePath(),
             $this->configuration->getTranslationsPath(),
             "i18n"
         );
@@ -94,7 +118,7 @@ class FileSystem {
         $template .= '"Content-Transfer-Encoding: 8bit' . '\n' . "\"\n";
         $template .= '"X-Generator: Poedit 1.5.4' . '\n' . "\"\n";
         $template .= '"X-Poedit-KeywordsList: _' . '\n' . "\"\n";
-        $template .= '"X-Poedit-Basepath: ' . $this->getRelativePath(app_path(), $path . '/LC_MESSAGES/') . '\n' . "\"\n";
+        $template .= '"X-Poedit-Basepath: ' . $this->getRelativePath($this->configuration->getBasePath(), $path . '/LC_MESSAGES/') . '\n' . "\"\n";
         $template .= '"X-Poedit-SourceCharset: ' . $encoding . '\n' . "\"\n";
 
         // Source paths

@@ -6,27 +6,12 @@ use \Mockery as m;
 use \Xinax\LaravelGettext\LaravelGettext;
 
 
-class LaravelGettextTest extends \PHPUnit_Framework_TestCase
+class LaravelGettextTest extends BaseTestCase
 {
-
     /**
      * @var LaravelGettext
      */
     protected $laravelGettext;
-
-    /**
-     * Creates the application.
-     *
-     * @return Symfony\Component\HttpKernel\HttpKernelInterface
-     */
-    public function createApplication()
-    {
-        return require __DIR__.'/../vendor/autoload.php';
-        $unitTesting = true;
- 
-        $testEnvironment = 'testing';
- 
-    }    
 
     /**
      * @inheritdoc

@@ -32,7 +32,7 @@ class GettextCreate extends BaseCommand
         $domainPath = $this->filesystem->getDomainPath();
 
         // Compile views
-        $this->filesystem->compileViews();
+        $this->filesystem->compileViews(\Config::get('view.paths'), storage_path());
 
         // Directories created counter
         $dirCount = 0;

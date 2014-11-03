@@ -21,9 +21,6 @@
         "mockery/mockery": "dev-master"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
             "Xinax\\LaravelGettext\\": "src/"
         }

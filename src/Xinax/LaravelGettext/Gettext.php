@@ -114,7 +114,7 @@ class Gettext
     protected function getDomainPath($append = null)
     {
         $path = array(
-            $this->adapter->getApplicationPath(),
+            $this->configuration->getBasePath(),
             $this->configuration->getTranslationsPath(),
             "i18n"
         );

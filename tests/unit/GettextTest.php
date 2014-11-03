@@ -4,8 +4,9 @@ namespace Xinax\LaravelGettext\Test;
 
 use \Mockery as m;
 use \Xinax\LaravelGettext\Gettext;
+use \Xinax\LaravelGettext\Config\ConfigManager;
 
-class GettextTest extends \PHPUnit_Framework_TestCase
+class GettextTest extends BaseTestCase
 {
 	/**
 	 * Gettext wrapper
@@ -17,23 +18,9 @@ class GettextTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		// Config
-		$model = m::mock('Xinax\LaravelGettext\Config\Models\Config');
-		$model->shouldReceive('getEncoding')->andReturn('UTF-8');
-		$model->shouldReceive('getLocale')->andReturn('en_US');
-		$model->shouldReceive('getSupportedLocales')->andReturn(array(
-			'es_AR',
-			'en_US',
-			'it_IT',
-		));
-		$model->shouldReceive('getFallbackLocale')->andReturn('en_US');
-		$model->shouldReceive('getDomain')->andReturn('messages');
-		$model->shouldReceive('getSyncLaravel')->andReturn(true);
-		$model->shouldReceive('getTranslationsPath')->andReturn('lang');
-
-		// ConfigManager
-		$config = m::mock('Xinax\LaravelGettext\Config\ConfigManager');
-		$config->shouldReceive('get')->andReturn($model);
+        // Config
+        include __DIR__ . '/../config/config.php';
+        $config = ConfigManager::create($testConfig);
 
 		// Session handler
 		$session = m::mock('Xinax\LaravelGettext\Session\SessionHandler');
