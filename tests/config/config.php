@@ -96,7 +96,7 @@ $testConfig = array(
 		),
 
 		// Default domain
-		'storage/views'
+		//'storage/views'
 	),	
 
 	/**

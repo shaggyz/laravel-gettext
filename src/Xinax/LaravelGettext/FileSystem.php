@@ -106,7 +106,7 @@ class FileSystem {
         $timestamp = date("Y-m-d H:iO");
         $translator = $this->configuration->getTranslator();
         $encoding = $this->configuration->getEncoding();
-        $relativePath = $this->getRelativePath($this->configuration->getBasePath(), $path);
+        $relativePath = $this->getRelativePath($path, $this->configuration->getBasePath());
 
         $template = 'msgid ""' . "\n";
         $template .= 'msgstr ""' . "\n";
@@ -231,10 +231,10 @@ class FileSystem {
    /**
     * Return the relative path from a file or directory to another
     *
-    * @param String $from
-    * @param String $to
-    * @return String $path
-    * @author Laurent Goussard
+    * @param    String          $from
+    * @param    String          $to
+    * @return   String          $path
+    * @author   Laurent Goussard
     **/
     public function getRelativePath($from, $to)
     {
