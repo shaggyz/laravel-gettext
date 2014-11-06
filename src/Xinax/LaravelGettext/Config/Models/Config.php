@@ -330,7 +330,16 @@ class Config
      */
     public function getAllDomains()
     {
+        $domains = [ $this->domain ];
+        $userDomains = [];
 
+        foreach ($this->sourcePaths as $domain => $paths) {
+            if (is_array($paths)) {
+                array_push($userDomains, $domain);
+            }
+        }
+
+        return array_merge($domains, $userDomains);
     }
 
 }

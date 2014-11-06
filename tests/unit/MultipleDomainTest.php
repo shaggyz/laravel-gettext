@@ -49,7 +49,8 @@ class MultipleDomainTest extends BaseTestCase
             'backend',
         ];
 
-        $this->assertTrue($this->configManager->get()->getAllDomains() === $expected);
+        $result = $this->configManager->get()->getAllDomains();
+        $this->assertTrue($result === $expected);
     }    
 
     /**
