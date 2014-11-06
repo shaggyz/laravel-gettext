@@ -32,7 +32,7 @@ class GettextTest extends BaseTestCase
 		$adapter->shouldReceive('setLocale')->with('en_US');
 		$adapter->shouldReceive('getApplicationPath')->andReturn(dirname(__FILE__));
 
-		$this->gettext = new Gettext($config, $session, $adapter);
+		$this->gettext = new Gettext($config->get(), $session, $adapter);
 
 	}
 

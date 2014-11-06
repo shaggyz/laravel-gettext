@@ -20,7 +20,6 @@ class LaravelGettext
 
         // Gettext dependency
         $this->gettext = $gettext;
-        $this->gettext->filesystemStructure();
     }
 
     /**
@@ -88,6 +87,7 @@ class LaravelGettext
 
     /**
      * Returns the language selector object
+     *
      * @param  Array $labels 
      * @return LanguageSelector         
      */
@@ -95,4 +95,24 @@ class LaravelGettext
     {
         return LanguageSelector::create($labels, $this);
     }
+
+    /**
+     * Sets the current domain
+     * @param String $domain
+     */
+    public function setDomain($domain)
+    {
+        $this->gettext->setDomain($domain);
+    }
+
+    /**
+     * Returns the current domain
+     *
+     * @return String
+     */
+    public function getDomain()
+    {
+        return $this->gettext->getDomain();
+    }
+
 }

@@ -365,6 +365,4 @@ class FileSystem {
         return $localePaths;
     }
 
-
-
 }

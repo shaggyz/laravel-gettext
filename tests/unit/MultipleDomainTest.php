@@ -6,8 +6,10 @@ use \RecursiveIteratorIterator;
 use \RecursiveDirectoryIterator;
 use \Mockery as m;
 use \Xinax\LaravelGettext\LaravelGettext;
+use \Xinax\LaravelGettext\Gettext;
 use \Xinax\LaravelGettext\FileSystem;
 use \Xinax\LaravelGettext\Config\ConfigManager;
+use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
 
 class MultipleDomainTest extends BaseTestCase
 {
@@ -64,9 +66,9 @@ class MultipleDomainTest extends BaseTestCase
         $result = $this->configManager->get()->getSourcesFromDomain('frontend');
         $this->assertTrue($result === $expected);
 
-        $expected = [ 'storage/views' ];
+        $expected = [ 'views/misc' ];
         $result = $this->configManager->get()->getSourcesFromDomain('messages');
-        //$this->assertTrue($result === $expected);
+        $this->assertTrue($result === $expected);
 
         $this->assertCount(0, $this->configManager->get()->getSourcesFromDomain('missing'));
     }
@@ -111,7 +113,7 @@ class MultipleDomainTest extends BaseTestCase
         $this->assertTrue(is_dir($localePath));
 
         // Update locale test
-        //$this->assertTrue($this->fileSystem->updateLocale($localePath, $locale, "backend"));
+        $this->assertTrue($this->fileSystem->updateLocale($localePath, $locale, "backend"));
     }
 
     public function testGetRelativePath()
@@ -128,9 +130,55 @@ class MultipleDomainTest extends BaseTestCase
         $this->assertSame("./unit/", $result);
     }
 
+    /**
+     * @expectedException Xinax\LaravelGettext\Exceptions\UndefinedDomainException
+     */
     public function testTranslations()
     {
-        
+        // Session handler
+        $session = m::mock('Xinax\LaravelGettext\Session\SessionHandler');
+        $session->shouldReceive('get')->andReturn('es_AR');
+        $session->shouldReceive('set');
+
+        // Framework adapter
+        $adapter = m::mock('Xinax\LaravelGettext\Adapters\LaravelAdapter');
+        $adapter->shouldReceive('setLocale');
+        $adapter->shouldReceive('getApplicationPath')->andReturn(dirname(__FILE__));
+
+        $config = $this->configManager->get();
+
+        // Static traslation files
+        $config->setTranslationsPath("translations");
+        $gettext = new Gettext($config, $session, $adapter);
+        $laravelGettext = new LaravelGettext($gettext);
+
+        $laravelGettext->setLocale("es_AR");
+
+        $this->assertSame("Cadena general con echo de php",
+                                       _("general string with php echo"));
+
+        $laravelGettext->setDomain("backend");
+
+        $this->assertSame("backend", $laravelGettext->getDomain());
+        $this->assertSame("Cadena en el backend con echo de php",
+                                        _("Backend string with php echo"));
+
+        $laravelGettext->setDomain("frontend");
+
+        $this->assertSame("frontend", $laravelGettext->getDomain());
+        $this->assertSame("Cadena de controlador",
+                                _("Controller string"));
+        $this->assertSame("Cadena de frontend con echo de php",
+                                _("Frontend string with php echo"));
+
+        $laravelGettext->setLocale("en_US");
+
+        $this->assertSame("Frontend string with php echo",
+                                _("Frontend string with php echo"));
+
+        // Expected exception
+        $laravelGettext->setDomain("wrong-domain");
+
     }
 
     /**
@@ -162,7 +210,7 @@ class MultipleDomainTest extends BaseTestCase
 
     public function __destruct()
     {
-        // $this->clearFiles();
+        $this->clearFiles();
     }
 
 }

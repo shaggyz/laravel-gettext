@@ -2,9 +2,10 @@
 
 namespace Xinax\LaravelGettext;
 
-use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Session\SessionHandler;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
+use Xinax\LaravelGettext\Config\Models\Config;
+use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
 
 use \Session;
 
@@ -41,18 +42,26 @@ class Gettext
     protected $fileSystem;
 
     /**
+     * @var String
+     */
+    protected $domain;
+
+    /**
      * Sets the configuration and session manager
      */
     public function __construct(
-        ConfigManager $configMan, 
+        Config $config,
         SessionHandler $sessionHandler, 
         AdapterInterface $adapter
     ){
         // Sets the package configuration and session handler
-        $this->configuration = $configMan->get();
+        $this->configuration = $config;
         $this->session = $sessionHandler;
         $this->adapter = $adapter;
         $this->fileSystem = new FileSystem($this->configuration);
+
+        // General domain
+        $this->domain = $this->configuration->getDomain();
 
         // Encoding is set from configuration
         $this->encoding = $this->configuration->getEncoding();
@@ -75,13 +84,14 @@ class Gettext
         }
 
         try {
-            $domain = $this->configuration->getDomain();
             $gettextLocale = $locale . "." . $this->encoding;
 
+            // All locale functions are updated: LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
             putenv("LC_ALL=$gettextLocale");
             setlocale(LC_ALL, $gettextLocale);
-            bindtextdomain($domain, $this->fileSystem->getDomainPath());
-            textdomain($domain);
+
+            // Domain
+            $this->setDomain($this->domain);
 
             $this->locale = $locale;
             $this->session->set($locale);
@@ -159,4 +169,35 @@ class Gettext
         $this->encoding = $encoding;
         return $this;
     }
+
+    /**
+     * Sets the current domain and updates gettext domain application
+     *
+     * @param   String                      $domain
+     * @throws  UndefinedDomainException    If domain is not defined
+     * @return  self
+     */
+    public function setDomain($domain)
+    {
+        if (!in_array($domain, $this->configuration->getAllDomains())) {
+            throw new UndefinedDomainException("Domain '$domain' is not registerd.");
+        }
+
+        bindtextdomain($domain, $this->fileSystem->getDomainPath());
+        $this->domain = textdomain($domain);
+
+        return $this;
+    }
+
+    /**
+     * Returns the current domain
+     *
+     * @return String
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+
 }
