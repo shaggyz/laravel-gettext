@@ -95,16 +95,18 @@ class FileSystem {
      *
      * @param  String  $path
      * @param  String  $locale
+     * @param  String  $domain
      * @param  Boolean $write
      * @return Integer | String
      */
-    public function createPOFile($path, $locale, $write = true)
+    public function createPOFile($path, $locale, $domain, $write = true)
     {
 
         $project = $this->configuration->getProject();
         $timestamp = date("Y-m-d H:iO");
         $translator = $this->configuration->getTranslator();
         $encoding = $this->configuration->getEncoding();
+        $relativePath = $this->getRelativePath($this->configuration->getBasePath(), $path);
 
         $template = 'msgid ""' . "\n";
         $template .= 'msgstr ""' . "\n";
@@ -119,11 +121,11 @@ class FileSystem {
         $template .= '"Content-Transfer-Encoding: 8bit' . '\n' . "\"\n";
         $template .= '"X-Generator: Poedit 1.5.4' . '\n' . "\"\n";
         $template .= '"X-Poedit-KeywordsList: _' . '\n' . "\"\n";
-        $template .= '"X-Poedit-Basepath: ' . $this->getRelativePath($this->configuration->getBasePath(), $path . '/LC_MESSAGES/') . '\n' . "\"\n";
+        $template .= '"X-Poedit-Basepath: ' . $relativePath . '\n' . "\"\n";
         $template .= '"X-Poedit-SourceCharset: ' . $encoding . '\n' . "\"\n";
 
         // Source paths
-        $sourcePaths = $this->configuration->getSourcePaths();
+        $sourcePaths = $this->configuration->getSourcesFromDomain($domain);
 
         $i = 0;
         foreach ($sourcePaths as $sourcePath) {
@@ -171,39 +173,39 @@ class FileSystem {
                 "I can't create the directory: $localeGettext");
         }
 
+        // File generation for each domain
         foreach ($this->configuration->getAllDomains() as $domain) {
 
-            $poPath = $localeGettext .
-            DIRECTORY_SEPARATOR .
-            $domain .
-            ".po";
+            $localePOPath = implode(array(
+                $localePath,
+                "LC_MESSAGES",
+                $domain . ".po",
+            ), DIRECTORY_SEPARATOR);
 
-            if (!$this->createPOFile($poPath, $locale)) {
+            if (!$this->createPOFile($localePOPath, $locale, $domain)) {
                 throw new FileCreationException(
-                    "I can't create the file: $poPath");
+                    "I can't create the file: $localePOPath");
             }
 
         }
 
-        
-
     }
 
     /**
-     * Update the .po file headers (mainly source-file paths)
+     * Update the .po file headers (mainly source-file paths) by domain
      *
      * @param  String                      $localePath
+     * @param  String                      $locale
      * @param  String                      $locale
      * @throws LocaleFileNotFoundException
      * @return Boolean 
      */
-    public function updateLocale($localePath, $locale)
+    public function updateLocale($localePath, $locale, $domain)
     {
-
         $localePOPath = implode(array(
             $localePath,
             "LC_MESSAGES",
-            $this->configuration->getDomain() . ".po",
+            $domain . ".po",
         ), DIRECTORY_SEPARATOR);
 
         if (!file_exists($localePOPath) ||
@@ -213,7 +215,7 @@ class FileSystem {
                 "I can't read $localePOPath verify your locale structure");
         }
 
-        $newHeader = $this->createPOFile($localePath, $locale, false);
+        $newHeader = $this->createPOFile($localePath, $locale, $domain, false);
 
         // Header replacement
         $localeContents = preg_replace('/^([^#])+:?/', $newHeader, $localeContents);
@@ -229,24 +231,44 @@ class FileSystem {
    /**
     * Return the relative path from a file or directory to another
     *
-    * @param String $path
     * @param String $from
+    * @param String $to
     * @return String $path
     * @author Laurent Goussard
     **/
-    public function getRelativePath($path, $from = __FILE__)
+    public function getRelativePath($from, $to)
     {
-        $path = explode(DIRECTORY_SEPARATOR, $path);
-        $from = explode(DIRECTORY_SEPARATOR, dirname($from.'.'));
-        $common = array_intersect_assoc($path, $from);
+        // some compatibility fixes for Windows paths
+        $from = is_dir($from) ? rtrim($from, '\/') . '/' : $from;
+        $to   = is_dir($to)   ? rtrim($to, '\/') . '/'   : $to;
+        $from = str_replace('\\', '/', $from);
+        $to   = str_replace('\\', '/', $to);
 
-        $base = array('.');
-        if ( $pre_fill = count( array_diff_assoc($from, $common) ) ) {
-            $base = array_fill(0, $pre_fill, '..');
+        $from     = explode('/', $from);
+        $to       = explode('/', $to);
+        $relPath  = $to;
+
+        foreach($from as $depth => $dir) {
+            // find first non-matching dir
+            if($dir === $to[$depth]) {
+                // ignore this directory
+                array_shift($relPath);
+            } else {
+                // get number of remaining dirs to $from
+                $remaining = count($from) - $depth;
+                if($remaining > 1) {
+                    // add traversals up to first matching dir
+                    $padLength = (count($relPath) + $remaining - 1) * -1;
+                    $relPath = array_pad($relPath, $padLength, '..');
+                    break;
+                } else {
+                    $relPath[0] = './' . $relPath[0];
+                }
+            }
         }
-        $path = array_merge( $base, array_diff_assoc($path, $common) );
 
-        return implode(DIRECTORY_SEPARATOR, $path);
+        return implode('/', $relPath);
+
     }    
 
     /**

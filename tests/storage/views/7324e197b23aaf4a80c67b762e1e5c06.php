@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Backend</title>
+	<title>Frontend</title>
 </head>
 <body>
-	<?php echo _("Frontend Hello"); ?>
-
+	<section>
+		<?php echo _("Frontend string with balde"); ?>	
+	</section>
+	<footer>
+		<?= _("Frontend string with php echo") ?>
+	</footer>
 </body>
 </html>

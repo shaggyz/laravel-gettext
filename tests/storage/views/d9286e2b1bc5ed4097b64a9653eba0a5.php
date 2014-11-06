@@ -5,7 +5,11 @@
 	<title>Backend</title>
 </head>
 <body>
-	<?php echo _("Backend Hello"); ?>
-
+	<section>
+		<?php echo _("Backend string with balde"); ?>	
+	</section>
+	<footer>
+		<?= _("Backend string with php echo") ?>
+	</footer>
 </body>
 </html>

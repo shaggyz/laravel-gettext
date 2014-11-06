@@ -5,6 +5,11 @@
 	<title>Backend</title>
 </head>
 <body>
-	{{ _("Backend Hello") }}
+	<section>
+		{{ _("Backend string with balde") }}	
+	</section>
+	<footer>
+		<?= _("Backend string with php echo") ?>
+	</footer>
 </body>
 </html>
