@@ -52,13 +52,14 @@ class Gettext
     public function __construct(
         Config $config,
         SessionHandler $sessionHandler, 
-        AdapterInterface $adapter
+        AdapterInterface $adapter,
+        FileSystem $fileSystem
     ){
         // Sets the package configuration and session handler
         $this->configuration = $config;
         $this->session = $sessionHandler;
         $this->adapter = $adapter;
-        $this->fileSystem = new FileSystem($this->configuration);
+        $this->fileSystem = $fileSystem;
 
         // General domain
         $this->domain = $this->configuration->getDomain();
@@ -77,6 +78,9 @@ class Gettext
      */
     public function setLocale($locale)
     {
+        // To avoid spamming exceptions just about installed the package
+        // file system check is performed on set locale call.
+        $this->fileSystem->filesystemStructure(true);
 
         if (!$this->isLocaleSupported($locale)) {
             throw new Exceptions\LocaleNotSupportedException(

@@ -35,7 +35,7 @@ $testConfig = array(
 	 * All paths in this configuration are relative to base-path 
 	 * (in laravel is the app directory by default)
 	 */
-	'base-path' => realpath(__DIR__ . '/..'),
+	'base-path' => __DIR__ . '/..',
 
 	/**
 	 * Base translation directory path relative to base-path 

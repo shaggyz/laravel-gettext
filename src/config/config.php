@@ -27,6 +27,17 @@ return array(
 	 * -----------------------------------------------------------------------
 	 **/
 
+    /**
+     * All paths in this configuration are relative to base-path
+     * (in laravel is the app directory by default)
+     */
+    'base-path' => __DIR__ . '../../../../..',
+
+    /**
+     * Base translation directory path (don't use trailing slash)
+     */
+    'translations-path' => 'lang',
+
 	/**
 	 * Fallback locale: When default locale is not available
 	 */
@@ -36,11 +47,6 @@ return array(
 	 * Default domain used for translations: It is the file name for .po and .mo files
 	 */
 	'domain' => 'messages',
-
-	/**
-	 * Base translation directory path (don't use trailing slash)
-	 */
-	'translations-path' => 'lang',
 
 	/**
 	 * Project name: is used on .po header files 
@@ -59,11 +65,10 @@ return array(
 	 * If you have already .po files with translations and the need to add 
 	 * another directory remember to call artisan gettext:update after do this.
 	 */
-	/*'source-paths' => array(
+	'source-paths' => array(
 		'controllers',
 		'views',
-		'storage/views',
-	),*/
+	),
 
 	/**
 	 * Multidomain directory paths. If you want separate your translations in 
@@ -71,7 +76,7 @@ return array(
 	 * Paths on top-level will be associated to the default domain file, 
 	 * for example:
 	 */
-	'source-paths' => array(
+	/*'source-paths' => array(
 		'frontend' => array(
 			'controllers',
 			'views/frontend'
@@ -80,7 +85,7 @@ return array(
 			'views/backend'
 		),
 		'storage/views'
-	),	
+	),*/
 
 	/**
 	 * Sync laravel: A flag that determines if the laravel built-in locale must 

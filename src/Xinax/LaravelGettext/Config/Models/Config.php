@@ -199,7 +199,7 @@ class Config
      */
     public function getBasePath()
     {
-        return $this->basePath;
+        return realpath($this->basePath);
     }
 
     /**

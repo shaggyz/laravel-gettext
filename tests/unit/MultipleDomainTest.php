@@ -11,6 +11,10 @@ use \Xinax\LaravelGettext\FileSystem;
 use \Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
 
+/**
+ * Class MultipleDomainTest
+ * @package Xinax\LaravelGettext\Test
+ */
 class MultipleDomainTest extends BaseTestCase
 {
     /**
@@ -24,6 +28,11 @@ class MultipleDomainTest extends BaseTestCase
      * @var ConfigManager
      */
     protected $configManager;
+
+    public function __construct()
+    {
+        $this->clearFiles();
+    }
 
     /**
      * @inheritdoc
@@ -93,10 +102,6 @@ class MultipleDomainTest extends BaseTestCase
     {
         // Domain path test
         $domainPath = $this->fileSystem->getDomainPath();
-        $this->fileSystem->checkBasePath();
-
-        $this->assertTrue(is_dir($domainPath));
-        $this->assertTrue(strpos($domainPath, 'i18n') !== false);
 
         // Locale path test
         $locale = 'es_AR';
@@ -104,6 +109,9 @@ class MultipleDomainTest extends BaseTestCase
 
         // Create locale test
         $localesGenerated = $this->fileSystem->generateLocales();
+
+        $this->assertTrue(is_dir($domainPath));
+        $this->assertTrue(strpos($domainPath, 'i18n') !== false);
 
         foreach ($localesGenerated as $localeGenerated) {
             $this->assertTrue(file_exists($localeGenerated));    
@@ -149,7 +157,7 @@ class MultipleDomainTest extends BaseTestCase
 
         // Static traslation files
         $config->setTranslationsPath("translations");
-        $gettext = new Gettext($config, $session, $adapter);
+        $gettext = new Gettext($config, $session, $adapter, $this->fileSystem);
         $laravelGettext = new LaravelGettext($gettext);
 
         $laravelGettext->setLocale("es_AR");
@@ -206,11 +214,6 @@ class MultipleDomainTest extends BaseTestCase
             $todo($fileinfo->getRealPath());
         }
 
-    }
-
-    public function __destruct()
-    {
-        $this->clearFiles();
     }
 
 }

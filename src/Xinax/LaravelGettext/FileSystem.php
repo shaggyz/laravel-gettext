@@ -151,6 +151,20 @@ class FileSystem {
     }
 
     /**
+     * Tries to create a directory in $path
+     *
+     * @param $path
+     * @throws Exceptions\FileCreationException
+     */
+    protected function createDirectory($path)
+    {
+        if (!@mkdir($path)) {
+            throw new FileCreationException(
+                "I can't create the directory: $path");
+        }
+    }
+
+    /**
      * Adds a new locale directory + .po file
      *
      * @param  String                $localePath
@@ -159,19 +173,13 @@ class FileSystem {
      */
     public function addLocale($localePath, $locale)
     {
-        if (!@mkdir($localePath)) {
-            throw new FileCreationException(
-                "I can't create the directory: $localePath");
-        }
+        $this->createDirectory($localePath);
 
-        $localeGettext = $localePath .
+        $gettextPath = $localePath .
             DIRECTORY_SEPARATOR .
             "LC_MESSAGES";
 
-        if (!@mkdir($localeGettext)) {
-            throw new FileCreationException(
-                "I can't create the directory: $localeGettext");
-        }
+        $this->createDirectory($gettextPath);
 
         // File generation for each domain
         foreach ($this->configuration->getAllDomains() as $domain) {
@@ -271,46 +279,10 @@ class FileSystem {
 
     }    
 
-    /**
-     * Checks for the translations base directory, also tries to create it if not exist.
-     * Returns a boolean that indicates if any directory was created.
-     *
-     * @throws FileCreationException If directory is unreachable
-     * @return Boolean
-     */
-    public function checkBasePath()
+    public function createDirectoryStructure()
     {
-        $domainPath = $this->getDomainPath();
-
-        // Translation files base path
-        if (!file_exists($domainPath)) {
-            if (!@mkdir($domainPath)) {
-                throw new FileCreationException(
-                    "I can't create the directory: $domainPath");
-            }
-            return true;
-        }        
-
-        return false;
-    }
-
-    /**
-     * Checks the needed directory structure
-     *
-     * @throws Exceptions\DirectoryNotFoundException
-     * @return boolean
-     */
-    public function filesystemStructure()
-    {
-        // Base path
-        $this->checkBasePath();
-        $domainPath = $this->getDomainPath();
-
-        // Translation files base path
-        if (!file_exists($domainPath)) {
-            throw new Exceptions\DirectoryNotFoundException(
-                "Missing base required directory: $domainPath");
-        }
+        // Application base path
+        $this->createDirectory($this->getDomainPath());
 
         foreach ($this->configuration->getSupportedLocales() as $locale) {
 
@@ -319,12 +291,68 @@ class FileSystem {
                 continue;
             }
 
-            $localePath = $this->getDomainPath($locale);
-            if (!file_exists($localePath)) {
-                throw new Exceptions\DirectoryNotFoundException(
-                    "Missing locale required directory: $localePath");
-            }
+            $this->createDirectory($this->getDomainPath($locale));
 
+        }
+
+    }
+
+    public function checkDirectoryStructure()
+    {
+
+    }
+
+    /**
+     * Checks the needed directory structure and optionally each locale sub-folders
+     *
+     * @param       Boolean                                 $checkLocales
+     * @throws      Exceptions\DirectoryNotFoundException
+     * @return      boolean
+     */
+    public function filesystemStructure($checkLocales = false)
+    {
+        // Application base path
+        $basePath = $this->configuration->getBasePath();
+
+        if (false === $basePath) {
+            throw new Exceptions\DirectoryNotFoundException(
+                "The 'base-path' setting is wrong, directory not exists, check the configuration."
+            );
+        }
+
+        if (!file_exists($basePath)) {
+            throw new Exceptions\DirectoryNotFoundException(
+                "Missing root path directory: $basePath, check the 'base-path' key in your configuration."
+            );
+        }
+
+        // Domain path
+        $domainPath = $this->getDomainPath();
+
+        // Translation files domain path
+        if (!file_exists($domainPath)) {
+            throw new Exceptions\DirectoryNotFoundException(
+                "Missing base required directory: $domainPath" .
+                "<br>Remember run <b>artisan gettext:create</b> for first time."
+            );
+        }
+
+        if ($checkLocales) {
+            foreach ($this->configuration->getSupportedLocales() as $locale) {
+
+                // Default locale is not needed
+                if ($locale == $this->configuration->getLocale()) {
+                    continue;
+                }
+
+                $localePath = $this->getDomainPath($locale);
+                if (!file_exists($localePath)) {
+                    $hint = "<br>May be you forget run <b>artisan gettext:update</b>?";
+                    throw new Exceptions\DirectoryNotFoundException(
+                        "Missing locale required directory: $localePath" . $hint);
+                }
+
+            }
         }
 
         return true;

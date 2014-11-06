@@ -14,7 +14,7 @@ class GettextTest extends BaseTestCase
 	 */
 	protected $gettext;
 
-	public function setUp()
+    public function setUp()
 	{
 		parent::setUp();
 
@@ -32,7 +32,12 @@ class GettextTest extends BaseTestCase
 		$adapter->shouldReceive('setLocale')->with('en_US');
 		$adapter->shouldReceive('getApplicationPath')->andReturn(dirname(__FILE__));
 
-		$this->gettext = new Gettext($config->get(), $session, $adapter);
+        // FileSystem module
+        $fileSystem = m::mock('Xinax\LaravelGettext\FileSystem');
+        $fileSystem->shouldReceive('filesystemStructure')->andReturn(true);
+        $fileSystem->shouldReceive('getDomainPath')->andReturn('path');
+
+		$this->gettext = new Gettext($config->get(), $session, $adapter, $fileSystem);
 
 	}
 
