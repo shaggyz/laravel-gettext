@@ -342,4 +342,28 @@ class Config
         return array_merge($domains, $userDomains);
     }
 
+    /**
+     * Returns all routes from a single domain
+     * 
+     * @param  string $domain Domain name
+     * @return Array         
+     */
+    public function getSourcesFromDomain($domain) 
+    {
+        // Default domain
+        if ($domain == $this->domain) {
+            $rootPaths = [];
+            foreach ($this->sourcePaths as $domain => $path) {
+                if (!is_array($path)) {
+                    array_push($rootPaths, $path);
+                } 
+            }
+            return $rootPaths;
+        } else if (array_key_exists($domain, $this->sourcePaths)) {
+            return $this->sourcePaths[$domain];
+        } else {
+            return [];
+        }
+    }
+
 }

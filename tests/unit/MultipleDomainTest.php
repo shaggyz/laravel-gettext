@@ -51,7 +51,25 @@ class MultipleDomainTest extends BaseTestCase
 
         $result = $this->configManager->get()->getAllDomains();
         $this->assertTrue($result === $expected);
+
     }    
+
+    public function testDomainPaths()
+    {
+        $expected = [
+            'controllers',
+            'views/frontend'
+        ];
+
+        $result = $this->configManager->get()->getSourcesFromDomain('frontend');
+        $this->assertTrue($result === $expected);
+
+        $expected = [ 'storage/views' ];
+        $result = $this->configManager->get()->getSourcesFromDomain('messages');
+        $this->assertTrue($result === $expected);
+
+        $this->assertCount(0, $this->configManager->get()->getSourcesFromDomain('missing'));
+    }
 
     /**
      * View compiler tests

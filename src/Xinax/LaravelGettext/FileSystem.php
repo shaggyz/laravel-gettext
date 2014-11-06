@@ -171,15 +171,21 @@ class FileSystem {
                 "I can't create the directory: $localeGettext");
         }
 
-        $poPath = $localeGettext .
+        foreach ($this->configuration->getAllDomains() as $domain) {
+
+            $poPath = $localeGettext .
             DIRECTORY_SEPARATOR .
-            $this->configuration->getDomain() .
+            $domain .
             ".po";
 
-        if (!$this->createPOFile($poPath, $locale)) {
-            throw new FileCreationException(
-                "I can't create the file: $poPath");
+            if (!$this->createPOFile($poPath, $locale)) {
+                throw new FileCreationException(
+                    "I can't create the file: $poPath");
+            }
+
         }
+
+        
 
     }
 
