@@ -223,7 +223,7 @@ class FileSystem {
                 "I can't read $localePOPath verify your locale structure");
         }
 
-        $newHeader = $this->createPOFile($localePath, $locale, $domain, false);
+        $newHeader = $this->createPOFile($localePOPath, $locale, $domain, false);
 
         // Header replacement
         $localeContents = preg_replace('/^([^#])+:?/', $newHeader, $localeContents);

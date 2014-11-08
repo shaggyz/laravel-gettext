@@ -29,6 +29,9 @@ class MultipleDomainTest extends BaseTestCase
      */
     protected $configManager;
 
+    /**
+     * Clear temportal files before each test
+     */
     public function __construct()
     {
         $this->clearFiles();
