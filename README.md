@@ -1,8 +1,9 @@
 # Laravel Gettext
 
-<a href="https://github.com/xinax/laravel-gettext/tree/1.0.2">Latest stable release (1.0.2)</a> Laravel 4.x compatible <img src="https://api.travis-ci.org/xinax/laravel-gettext.svg?branch=1.0.2" alt="TravisCI Stable">
+[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=1.0.2)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.2">Latest stable release (1.0.2)</a> Laravel 4.x compatible
 
-<a href="https://github.com/xinax/laravel-gettext/tree/master">Development master</a> Unstable, only for development <img src="https://api.travis-ci.org/xinax/laravel-gettext.svg?branch=master" alt="TravisCI Development">
+
+[![Dev build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=master)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/master">Development master</a> Unstable, only for development 
 
 *Laravel Gettext* is a package compatible with the version 4.2.x of the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU Gettext* and *PoEdit*.
 
