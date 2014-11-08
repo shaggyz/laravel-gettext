@@ -13,7 +13,7 @@ class BaseCommand extends Command
      * Filesystem helper
      * @var \Xinax\LaravelGettext\FileSystem
      */
-    protected $filesystem;
+    protected $fileSystem;
 
     /**
      * Package configuration data
@@ -29,7 +29,7 @@ class BaseCommand extends Command
     public function __construct()
     {
         $configManager = ConfigManager::create();
-        $this->filesystem = new FileSystem($configManager->get());
+        $this->fileSystem = new FileSystem($configManager->get());
         $this->configuration = $configManager->get();
 
         parent::__construct();

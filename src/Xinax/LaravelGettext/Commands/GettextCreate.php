@@ -27,7 +27,7 @@ class GettextCreate extends BaseCommand
      */
     public function fire()
     {
-        $domainPath = $this->filesystem->getDomainPath();
+        $domainPath = $this->fileSystem->getDomainPath();
 
         // Compile views
         $this->filesystem->compileViews(\Config::get('view.paths'), storage_path());
