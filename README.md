@@ -259,4 +259,4 @@ If you want to help with the development of this package, you can:
 - Send me a pull request with your patch
 - Fix my disastrous English in the documentation/comments ;-)
 - Make a fork and create your own version of laravel-gettext
-- Give a star to project!
+- Give a star to the project!
