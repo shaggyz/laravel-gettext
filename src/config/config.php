@@ -31,7 +31,7 @@ return array(
      * All paths in this configuration are relative to base-path
      * (in laravel is the app directory by default)
      */
-    'base-path' => __DIR__ . '../../../../..',
+    'base-path' => __DIR__ . '/../../../..',
 
     /**
      * Base translation directory path (don't use trailing slash)

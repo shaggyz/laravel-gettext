@@ -30,23 +30,17 @@ class GettextCreate extends BaseCommand
         $domainPath = $this->fileSystem->getDomainPath();
 
         // Compile views
-        $this->filesystem->compileViews(\Config::get('view.paths'), storage_path());
+        $this->fileSystem->compileViews(\Config::get('view.paths'), storage_path());
 
         // Directories created counter
         $dirCreations = 0;
 
         try {
 
-            // i18n base directory
-            if ($this->fileSystem->checkBasePath()) {
-                $this->comment("Base directory created ($domainPath)");    
-                $dirCreations++;
-            }
-
             // Locales
             $localesGenerated = $this->fileSystem->generateLocales();
             foreach ($localesGenerated as $localePath) {
-                $this->comment("Directory for $locale created ($localePath)");
+                $this->comment("Locale directory created ($localePath)");
                 $dirCreations++;
             }
 
