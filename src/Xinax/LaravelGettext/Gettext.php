@@ -78,10 +78,6 @@ class Gettext
      */
     public function setLocale($locale)
     {
-        // To avoid spamming exceptions just about installed the package
-        // file system check is performed on set locale call.
-        $this->fileSystem->filesystemStructure(true);
-
         if (!$this->isLocaleSupported($locale)) {
             throw new Exceptions\LocaleNotSupportedException(
                 "Locale $locale is not supported");
@@ -90,7 +86,8 @@ class Gettext
         try {
             $gettextLocale = $locale . "." . $this->encoding;
 
-            // All locale functions are updated: LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
+            // All locale functions are updated: LC_COLLATE, LC_CTYPE,
+            // LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
             putenv("LC_ALL=$gettextLocale");
             setlocale(LC_ALL, $gettextLocale);
 

@@ -92,6 +92,9 @@ class MultipleDomainTest extends BaseTestCase
 
         $result = $this->fileSystem->compileViews($viewPaths, $outputDirectory);
         $this->assertTrue($result);
+        /**
+         * todo: test file generation
+         */
     }
 
 
@@ -109,7 +112,9 @@ class MultipleDomainTest extends BaseTestCase
 
         // Create locale test
         $localesGenerated = $this->fileSystem->generateLocales();
+        $this->assertTrue($this->fileSystem->checkDirectoryStructure(true));
 
+        $this->assertCount(2, $localesGenerated);
         $this->assertTrue(is_dir($domainPath));
         $this->assertTrue(strpos($domainPath, 'i18n') !== false);
 
@@ -117,7 +122,6 @@ class MultipleDomainTest extends BaseTestCase
             $this->assertTrue(file_exists($localeGenerated));    
         }
         
-        $this->assertTrue($this->fileSystem->filesystemStructure());
         $this->assertTrue(is_dir($localePath));
 
         // Update locale test

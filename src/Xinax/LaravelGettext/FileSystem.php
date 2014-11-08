@@ -158,7 +158,7 @@ class FileSystem {
      */
     protected function createDirectory($path)
     {
-        if (!@mkdir($path)) {
+        if (!mkdir($path)) {
             throw new FileCreationException(
                 "I can't create the directory: $path");
         }
@@ -204,7 +204,7 @@ class FileSystem {
      *
      * @param  String                      $localePath
      * @param  String                      $locale
-     * @param  String                      $locale
+     * @param  String                      $domain
      * @throws LocaleFileNotFoundException
      * @return Boolean 
      */
@@ -277,39 +277,17 @@ class FileSystem {
 
         return implode('/', $relPath);
 
-    }    
-
-    public function createDirectoryStructure()
-    {
-        // Application base path
-        $this->createDirectory($this->getDomainPath());
-
-        foreach ($this->configuration->getSupportedLocales() as $locale) {
-
-            // Default locale is not needed
-            if ($locale == $this->configuration->getLocale()) {
-                continue;
-            }
-
-            $this->createDirectory($this->getDomainPath($locale));
-
-        }
-
-    }
-
-    public function checkDirectoryStructure()
-    {
-
     }
 
     /**
-     * Checks the needed directory structure and optionally each locale sub-folders
+     * Checks the needed directories. Optionally checks
+     * each locale directory, if $checkLocales is true.
      *
-     * @param       Boolean                                 $checkLocales
-     * @throws      Exceptions\DirectoryNotFoundException
-     * @return      boolean
+     * @param bool $checkLocales
+     * @return bool
+     * @throws Exceptions\DirectoryNotFoundException
      */
-    public function filesystemStructure($checkLocales = false)
+    public function checkDirectoryStructure($checkLocales = false)
     {
         // Application base path
         $basePath = $this->configuration->getBasePath();
@@ -356,8 +334,7 @@ class FileSystem {
         }
 
         return true;
-
-    }    
+    }
 
     /**
      * Creates the localization directories and files, by domain
@@ -367,6 +344,9 @@ class FileSystem {
      */
     public function generateLocales()
     {
+        // Application base path
+        $this->createDirectory($this->getDomainPath());
+
         $localePaths = array();
 
         // Locale directories
