@@ -41,6 +41,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
         $this->app['laravel-gettext'] = $this->app->share(function ($app) {
 
             $configuration = Config\ConfigManager::create();
+            
             $fileSystem = new FileSystem($configuration->get());
 
             $gettext = new Gettext(

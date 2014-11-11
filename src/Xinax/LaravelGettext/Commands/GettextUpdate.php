@@ -28,10 +28,11 @@ class GettextUpdate extends BaseCommand
      */
     public function fire()
     {
-        $domainPath = $this->filesystem->getDomainPath(\Config::get('view.paths'), storage_path());
+        //$domainPath = $this->fileSystem->getDomainPath(\Config::get('view.paths'), storage_path());
+        $domainPath = $this->fileSystem->getDomainPath();
 
         // Compile views
-        $this->filesystem->compileViews();
+        //$this->fileSystem->compileViews();
 
         try {
 
@@ -43,6 +44,8 @@ class GettextUpdate extends BaseCommand
 
             $updatedCount = 0;
             $addedCount = 0;
+            $domains = $this->configuration->getAllDomains();
+
             foreach ($this->configuration->getSupportedLocales() as $locale) {
 
                 // We don't want a locale folder for the default language
@@ -50,17 +53,24 @@ class GettextUpdate extends BaseCommand
                     continue;
                 }
 
-                $localePath = $this->filesystem->getDomainPath($locale);
+                $localePath = $this->fileSystem->getDomainPath($locale);
 
                 // New locale without .po file
                 if (!file_exists($localePath)) {
-                    $this->filesystem->addLocale($localePath, $locale);
+                    
+                    $this->fileSystem->addLocale($localePath, $locale);
                     $this->comment("New locale was added: $locale ($localePath)");
                     $addedCount++;
+
                 } else {
-                    $this->filesystem->updateLocale($localePath, $locale);
-                    $this->comment("PO file for locale: $locale were updated successfuly");
-                    $updatedCount++;
+
+                    // Update by domain
+                    foreach ($domains as $domain) {
+                        $this->fileSystem->updateLocale($localePath, $locale, $domain);
+                        $this->comment("PO file for locale: $locale/$domain were updated successfuly");
+                        $updatedCount++;    
+                    }
+                    
                 }
 
             }
@@ -76,7 +86,7 @@ class GettextUpdate extends BaseCommand
             }
 
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->error($e->getFile() . ":" . $e->getLine() . " = " . $e->getMessage());
         }
     }
 
