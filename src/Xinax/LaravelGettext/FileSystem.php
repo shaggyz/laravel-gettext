@@ -9,18 +9,38 @@ class FileSystem {
 
     /**
      * Package configuration model
+     * 
      * @var Config
      */
     protected $configuration;
 
     /**
+     * File system base path
+     * All paths will be relative to this
+     * 
+     * @var String
+     */
+    protected $basePath;
+
+    /**
+     * Storage path for file generation
+     * 
+     * @var String
+     */
+    protected $storagePath;
+
+    /**
      * Sets configuration
      * 
      * @param Config $config
+     * @param String $basePath
+     * @param String $storagePath
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, $basePath, $storagePath)
     {
         $this->configuration = $config;
+        $this->basePath = $basePath;
+        $this->storagePath = $storagePath;
     }
 
     /**
@@ -76,7 +96,7 @@ class FileSystem {
     public function getDomainPath($append = null)
     {
         $path = array(
-            $this->configuration->getBasePath(),
+            $this->basePath,
             $this->configuration->getTranslationsPath(),
             "i18n"
         );
@@ -106,7 +126,7 @@ class FileSystem {
         $timestamp = date("Y-m-d H:iO");
         $translator = $this->configuration->getTranslator();
         $encoding = $this->configuration->getEncoding();
-        $relativePath = $this->getRelativePath($path, $this->configuration->getBasePath());
+        $relativePath = $this->getRelativePath($path, $this->basePath);
 
         $template = 'msgid ""' . "\n";
         $template .= 'msgstr ""' . "\n";
@@ -290,17 +310,10 @@ class FileSystem {
     public function checkDirectoryStructure($checkLocales = false)
     {
         // Application base path
-        $basePath = $this->configuration->getBasePath();
-
-        if (false === $basePath) {
+        if (!file_exists($this->basePath)) {
             throw new Exceptions\DirectoryNotFoundException(
-                "The 'base-path' setting is wrong, directory not exists, check the configuration."
-            );
-        }
-
-        if (!file_exists($basePath)) {
-            throw new Exceptions\DirectoryNotFoundException(
-                "Missing root path directory: $basePath, check the 'base-path' key in your configuration."
+                "Missing root path directory: " . $this->basePath . 
+                ", check the 'base-path' key in your configuration."
             );
         }
 
@@ -373,4 +386,72 @@ class FileSystem {
         return $localePaths;
     }
 
+
+    /**
+     * Gets the package configuration model.
+     *
+     * @return Config
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * Sets the Package configuration model.
+     *
+     * @param Config $configuration the configuration
+     * @return self
+     */
+    public function setConfiguration(Config $configuration)
+    {
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    /**
+     * Gets the File system base path
+     * All paths will be relative to this.
+     *
+     * @return String
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
+    /**
+     * Sets the File system base path
+     * All paths will be relative to this.
+     *
+     * @param String $basePath the base path
+     * @return self
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = $basePath;
+        return $this;
+    }
+
+    /**
+     * Gets the Storage path for file generation.
+     *
+     * @return String
+     */
+    public function getStoragePath()
+    {
+        return $this->storagePath;
+    }
+
+    /**
+     * Sets the Storage path for file generation.
+     *
+     * @param String $storagePath the storage path
+     * @return self
+     */
+    public function setStoragePath($storagePath)
+    {
+        $this->storagePath = $storagePath;
+        return $this;
+    }
 }

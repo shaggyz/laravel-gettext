@@ -72,7 +72,7 @@ class ConfigManager
      */
     protected function generateFromArray(array $config)
     {
-        $requiredKeys = array('locale', 'fallback-locale', 'encoding', 'base-path');
+        $requiredKeys = array('locale', 'fallback-locale', 'encoding');
 
         foreach ($requiredKeys as $key) {
             if (!array_key_exists($key, $config)) {
@@ -87,7 +87,6 @@ class ConfigManager
             ->setFallbackLocale($config['fallback-locale'])
             ->setSupportedLocales($config['supported-locales'])
             ->setDomain($config['domain'])
-            ->setBasePath($config['base-path'])
             ->setTranslationsPath($config['translations-path'])
             ->setProject($config['project'])
             ->setTranslator($config['translator'])

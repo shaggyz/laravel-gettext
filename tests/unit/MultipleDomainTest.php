@@ -30,6 +30,18 @@ class MultipleDomainTest extends BaseTestCase
     protected $configManager;
 
     /**
+     * Testing base path
+     * @var String
+     */
+    protected $basePath;
+
+    /**
+     * Testing storage path
+     * @var String
+     */
+    protected $storagePath;
+
+    /**
      * Clear temportal files before each test
      */
     public function __construct()
@@ -46,9 +58,15 @@ class MultipleDomainTest extends BaseTestCase
 
         // $testConfig array
         include __DIR__ . '/../config/config.php';
-        
         $this->configManager = ConfigManager::create($testConfig);
-        $this->fileSystem = new FileSystem($this->configManager->get());
+
+        $this->basePath = realpath(__DIR__ . '/..');
+        $this->storagePath = realpath(__DIR__ . '/../storage');
+        
+        $this->fileSystem = new FileSystem($this->configManager->get(), 
+            $this->basePath, 
+            $this->storagePath
+        ); 
 
     }
 
@@ -137,7 +155,7 @@ class MultipleDomainTest extends BaseTestCase
         $from = __DIR__;
 
         // Base path: tests/
-        $to = $this->configManager->get()->getBasePath();
+        $to = $this->basePath;
 
         $result = $this->fileSystem->getRelativePath($to, $from);
 
@@ -209,7 +227,11 @@ class MultipleDomainTest extends BaseTestCase
      */
     protected function clearFiles()
     {
-        $dir = __DIR__ . '/../lang';
+        $dir = __DIR__ . '/../lang/i18n';
+
+        if (!file_exists($dir)) {
+            return;
+        }
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -220,6 +242,8 @@ class MultipleDomainTest extends BaseTestCase
             $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
             $todo($fileinfo->getRealPath());
         }
+
+        rmdir($dir);
 
     }
 

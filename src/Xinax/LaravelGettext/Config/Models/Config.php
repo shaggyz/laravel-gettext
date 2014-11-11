@@ -41,13 +41,6 @@ class Config
     protected $domain;
 
     /**
-     * Application base path
-     * 
-     * @var String
-     */
-    protected $basePath;
-
-    /**
      * Path to translation files
      *
      * @type String
@@ -189,28 +182,6 @@ class Config
     public function setDomain($domain)
     {
         $this->domain = $domain;
-        return $this;
-    }
-
-    /**
-     * Gets the application path
-     * \
-     * @return mixed
-     */
-    public function getBasePath()
-    {
-        return realpath($this->basePath);
-    }
-
-    /**
-     * Sets the application path
-     *
-     * @param String $basePath the application path
-     * @return self
-     */
-    public function setBasePath($basePath)
-    {
-        $this->basePath = $basePath;
         return $this;
     }
 
