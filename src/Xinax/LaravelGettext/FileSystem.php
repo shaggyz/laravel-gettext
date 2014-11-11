@@ -48,6 +48,7 @@ class FileSystem {
         $this->configuration = $config;
         $this->basePath = $basePath;
         $this->storagePath = $storagePath;
+        $this->storageContainer = "views";
     }
 
     /**
@@ -481,6 +482,7 @@ class FileSystem {
     public function getStorageForDomain($domain)
     {
         $domainPath = $this->storagePath . 
+                        DIRECTORY_SEPARATOR .
                         $this->storageContainer . 
                         DIRECTORY_SEPARATOR .
                         $domain;
