@@ -28,12 +28,6 @@ return array(
 	 **/
 
     /**
-     * All paths in this configuration are relative to base-path
-     * (in laravel is the app directory by default)
-     */
-    'base-path' => __DIR__ . '/../../../..',
-
-    /**
      * Base translation directory path (don't use trailing slash)
      */
     'translations-path' => 'lang',
@@ -71,8 +65,8 @@ return array(
 	),
 
 	/**
-	 * Multidomain directory paths. If you want separate your translations in 
-	 * different files, just must wrap your paths into domain name. 
+	 * Multi-domain directory paths. If you want the translations in 
+	 * different files, just wrap your paths into domain name. 
 	 * Paths on top-level will be associated to the default domain file, 
 	 * for example:
 	 */
