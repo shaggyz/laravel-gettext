@@ -282,7 +282,7 @@ To add a new domain just wrap your paths in the desired domain name, like this e
 		'backend' => array(
 			'views/backend'
 		),
-		'storage/views'
+		'views/misc'
 	),
 ```
 
