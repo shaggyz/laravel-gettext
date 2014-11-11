@@ -29,7 +29,12 @@ class BaseCommand extends Command
     public function __construct()
     {
         $configManager = ConfigManager::create();
-        $this->fileSystem = new FileSystem($configManager->get());
+        
+        $this->fileSystem = new FileSystem($configManager->get(),
+            app_path(),
+            storage_path()
+        );
+
         $this->configuration = $configManager->get();
 
         parent::__construct();

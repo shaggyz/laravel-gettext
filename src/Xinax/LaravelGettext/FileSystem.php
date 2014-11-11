@@ -30,6 +30,13 @@ class FileSystem {
     protected $storagePath;
 
     /**
+     * Storage directory name for view compilation
+     * 
+     * @var String
+     */
+    protected $storageContainer;
+
+    /**
      * Sets configuration
      * 
      * @param Config $config
@@ -47,30 +54,33 @@ class FileSystem {
      * Build views in order to parse php files
      *
      * @param Array $viewPaths
-     * @param String $outputDir
-     *
+     * @param String $domain
+     * 
      * @return Boolean status
      */
-    public function compileViews(Array $viewPaths, $outputDir)
+    public function compileViews(Array $viewPaths, $domain)
     {
         // Check the output directory
-        $targetDir = $outputDir . '/views';
+        $targetDir = $this->storagePath . DIRECTORY_SEPARATOR . $this->storageContainer;
 
-        if ( !is_dir($targetDir) || !is_writable($targetDir)) {
+        if (!file_exists($targetDir)) {
+            $this->createDirectory($targetDir);
+        }
 
-            if ( !mkdir($targetDir) ) {
-                throw new DirectoryNotFoundException(
-                    "I need a writeable directory in $targetDir to compile views!"
-                );    
-            }
-            
+        // Domain separation
+        $domainDir = $targetDir . DIRECTORY_SEPARATOR . $domain;
+
+        if (!file_exists($domainDir)) {
+            $this->createDirectory($domainDir);
         }
 
         foreach ( $viewPaths as $path ) {
 
+            $path = $this->basePath . DIRECTORY_SEPARATOR . $path;
+
             $fs = new \Illuminate\Filesystem\Filesystem($path);
             $glob = $fs->glob(realpath($path) . '/{,**/}*.php', GLOB_BRACE);
-            $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $targetDir);
+            $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
             foreach ($glob as $file) {
                 
@@ -147,10 +157,19 @@ class FileSystem {
         // Source paths
         $sourcePaths = $this->configuration->getSourcesFromDomain($domain);
 
-        $i = 0;
-        foreach ($sourcePaths as $sourcePath) {
-            $template .= '"X-Poedit-SearchPath-' . $i . ': ' . $sourcePath . '\n' . "\"\n";
-            $i++;
+        // Compiled views on paths
+        if (count($sourcePaths)) {
+            
+            // View compilation
+            $this->compileViews($sourcePaths, $domain);
+            array_push($sourcePaths, $this->getStorageForDomain($domain));    
+
+            $i = 0;
+            foreach ($sourcePaths as $sourcePath) {
+                $template .= '"X-Poedit-SearchPath-' . $i . ': ' . $sourcePath . '\n' . "\"\n";
+                $i++;
+            }
+
         }
 
         if ($write) {
@@ -453,5 +472,21 @@ class FileSystem {
     {
         $this->storagePath = $storagePath;
         return $this;
+    }
+
+    /**
+     * Returns the full path for a domain storage directory
+     * 
+     * @param  String $domain
+     * @return String
+     */
+    public function getStorageForDomain($domain)
+    {
+        $domainPath = $this->storagePath . 
+                        $this->storageContainer . 
+                        DIRECTORY_SEPARATOR .
+                        $domain;
+
+        return $this->getRelativePath($this->basePath, $domainPath);
     }
 }
