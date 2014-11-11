@@ -69,10 +69,8 @@ class FileSystem {
 
         // Domain separation
         $domainDir = $targetDir . DIRECTORY_SEPARATOR . $domain;
-
-        if (!file_exists($domainDir)) {
-            $this->createDirectory($domainDir);
-        }
+        $this->clearDirectory($domainDir);
+        $this->createDirectory($domainDir);
 
         foreach ( $viewPaths as $path ) {
 
@@ -488,5 +486,30 @@ class FileSystem {
                         $domain;
 
         return $this->getRelativePath($this->basePath, $domainPath);
+    }
+
+    /**
+     * Removes the directory contents recursively
+     * 
+     * @param  String $path 
+     * @return void       
+     */
+    public static function clearDirectory($path)
+    {
+        if (!file_exists($path)) {
+            return;
+        }
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($files as $fileinfo) {
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
+        }
+
+        rmdir($path);
     }
 }

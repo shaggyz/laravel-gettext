@@ -225,23 +225,7 @@ class MultipleDomainTest extends BaseTestCase
     protected function clearFiles()
     {
         $dir = __DIR__ . '/../lang/i18n';
-
-        if (!file_exists($dir)) {
-            return;
-        }
-
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($files as $fileinfo) {
-            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-            $todo($fileinfo->getRealPath());
-        }
-
-        rmdir($dir);
-
+        FileSystem::clearDirectory($dir);
     }
 
 }
