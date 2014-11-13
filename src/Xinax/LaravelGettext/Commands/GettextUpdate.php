@@ -3,6 +3,7 @@
 namespace Xinax\LaravelGettext\Commands;
 
 use Xinax\LaravelGettext\Exceptions\DirectoryNotFoundException;
+use Symfony\Component\Console\Input\InputOption;
 
 class GettextUpdate extends BaseCommand
 {
@@ -28,11 +29,8 @@ class GettextUpdate extends BaseCommand
      */
     public function fire()
     {
-        //$domainPath = $this->fileSystem->getDomainPath(\Config::get('view.paths'), storage_path());
-        $domainPath = $this->fileSystem->getDomainPath();
 
-        // Compile views
-        //$this->fileSystem->compileViews();
+        $domainPath = $this->fileSystem->getDomainPath();
 
         try {
 
@@ -64,7 +62,12 @@ class GettextUpdate extends BaseCommand
 
                 } else {
 
-                    // Update by domain
+                    // Domain by command line argument
+                    if ($this->option('domain')) {
+                        $domains = [$this->option('domain')];
+                    }
+
+                    // Update by domain(s)
                     foreach ($domains as $domain) {
                         $this->fileSystem->updateLocale($localePath, $locale, $domain);
                         $this->comment("PO file for locale: $locale/$domain were updated successfuly");
@@ -107,7 +110,17 @@ class GettextUpdate extends BaseCommand
      */
     protected function getOptions()
     {
-        return array();
+        $options = array(
+            array(
+                'domain',
+                '-d',
+                InputOption::VALUE_OPTIONAL, 
+                'Update files only for this domain',
+                null
+            )
+        );
+
+        return $options;
     }
 
 }

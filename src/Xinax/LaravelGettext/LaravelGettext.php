@@ -98,6 +98,7 @@ class LaravelGettext
 
     /**
      * Sets the current domain
+     * 
      * @param String $domain
      */
     public function setDomain($domain)

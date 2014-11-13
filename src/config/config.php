@@ -56,8 +56,7 @@ return array(
 	 * Paths where PoEdit will search recursively for strings to translate. 
 	 * All paths are relative to app/ (don't use trailing slash).
 	 *
-	 * If you have already .po files with translations and the need to add 
-	 * another directory remember to call artisan gettext:update after do this.
+	 * Remember to call artisan gettext:update after change this.
 	 */
 	'source-paths' => array(
 		'controllers',
@@ -66,7 +65,7 @@ return array(
 
 	/**
 	 * Multi-domain directory paths. If you want the translations in 
-	 * different files, just wrap your paths into domain name. 
+	 * different files, just wrap your paths into a domain name. 
 	 * Paths on top-level will be associated to the default domain file, 
 	 * for example:
 	 */
