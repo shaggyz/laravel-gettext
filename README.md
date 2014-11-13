@@ -1,6 +1,6 @@
 # Laravel Gettext
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=1.0.2)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.2">Latest stable release (1.0.2)</a> Laravel 4.x compatible (1.x)
+[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=1.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.3">Latest stable release (1.0.3)</a> Laravel 4.x compatible (1.x)
 
 
 [![Dev build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=master)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/master">Development master</a> Unstable, only for development (dev-master)
@@ -301,6 +301,12 @@ To change the current domain in runtime:
 ```
 
 This command will update your PO files and will keep the current translations intact. After this you can open PoEdit and click on update button to add the new text strings in the new paths.
+
+You can update only the files of a single domain with the same command:
+
+```bash
+    php artisan gettext:update --domain backend
+```
 
 #### E. About gettext cache
 
