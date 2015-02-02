@@ -2,7 +2,7 @@
 
 [![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=1.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.3">Latest Laravel 4 stable release (1.0.3)</a>
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.0)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.3">Latest Laravel 5 stable release (2.0.0)</a>
+[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.0)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/2.0.0">Latest Laravel 5 stable release (2.0.0)</a>
 
 [![Dev build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=master)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/master">Development master</a> Unstable, only for development (dev-master)
 
@@ -18,10 +18,10 @@
 
 ### 2. Install
 
-Add the composer repository to your *composer.json* file:
+Add the composer repository to your *composer.json* file (branch 1.x is for Laravel 4, branch 2.x is for Laravel 5):
 
 ```json
-    "xinax/laravel-gettext": "1.x"
+    "xinax/laravel-gettext": "2.x" //L5
 ```
 
 And run composer update. Once it's installed, you can register the service provider in app/config/app.php in the providers array:
