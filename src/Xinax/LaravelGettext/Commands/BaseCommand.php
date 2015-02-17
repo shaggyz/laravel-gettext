@@ -22,11 +22,11 @@ class BaseCommand extends Command
     protected $configuration;    
 
     /**
-     * Create a new command instance.
-     *
-     * @return \Xinax\LaravelGettext\Commands\BaseCommand
+     * Prepares the package environment for gettext commands
+     * 
+     * @return void 
      */
-    public function __construct()
+    protected function prepare()
     {
         $configManager = ConfigManager::create();
         
@@ -36,8 +36,6 @@ class BaseCommand extends Command
         );
 
         $this->configuration = $configManager->get();
-
-        parent::__construct();
     }
 
 }

@@ -82,7 +82,7 @@ class FileSystem {
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
             foreach ($glob as $file) {
-                
+
                 $compiler->setPath($file);
                 $contents = $compiler->compileString($fs->get($file));
                 $compiledPath = $compiler->getCompiledPath($compiler->getPath());
@@ -130,12 +130,13 @@ class FileSystem {
      */
     public function createPOFile($path, $locale, $domain, $write = true)
     {
-
         $project = $this->configuration->getProject();
         $timestamp = date("Y-m-d H:iO");
         $translator = $this->configuration->getTranslator();
         $encoding = $this->configuration->getEncoding();
-        $relativePath = $this->getRelativePath($path, $this->basePath);
+
+        // L5 new structure, language resources are now here
+        $relativePath = "../../../../../app";
 
         $template = 'msgid ""' . "\n";
         $template .= 'msgstr ""' . "\n";
@@ -158,7 +159,7 @@ class FileSystem {
 
         // Compiled views on paths
         if (count($sourcePaths)) {
-            
+
             // View compilation
             $this->compileViews($sourcePaths, $domain);
             array_push($sourcePaths, $this->getStorageForDomain($domain));    

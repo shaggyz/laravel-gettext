@@ -49,7 +49,7 @@ class LanguageSelector
 	{
 		$html = '<ul class="language-selector">';
 
-		foreach (Config::get('laravel-gettext::config.supported-locales') as $locale) {
+		foreach (Config::get('laravel-gettext.supported-locales') as $locale) {
 
 			if(count($this->labels) && array_key_exists($locale, $this->labels)){
 				$localeLabel = $this->labels[$locale];

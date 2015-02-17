@@ -27,6 +27,8 @@ class GettextCreate extends BaseCommand
      */
     public function fire()
     {
+        $this->prepare();
+
         // Directories created counter
         $dirCreations = 0;
 

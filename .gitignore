@@ -6,3 +6,4 @@ composer.lock
 doc/poedit-fw.png
 tests/lang/*
 tests/storage/*
+doc/laravel5.txt

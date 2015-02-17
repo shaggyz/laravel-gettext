@@ -29,6 +29,7 @@ class GettextUpdate extends BaseCommand
      */
     public function fire()
     {
+        $this->prepare();
 
         $domainPath = $this->fileSystem->getDomainPath();
 

@@ -19,7 +19,7 @@ class ConfigManager
     /**
      * Package configuration route (published)
      */
-    const DEFAULT_PACKAGE_CONFIG = 'laravel-gettext::config';
+    const DEFAULT_PACKAGE_CONFIG = 'laravel-gettext';
 
     /**
      * Sets configuration Array
