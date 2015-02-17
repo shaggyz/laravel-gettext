@@ -209,7 +209,7 @@ To change configuration on runtime you have these methods:
 
 #### A. Route and controller implementation example:
 
-app/routes.php
+app/Http/routes.php
 
 ```php
     Route::get('/lang/{locale?}', [
@@ -263,7 +263,7 @@ It also supports custom labels:
 
 #### D. Adding source directories and domains
 
-You can achieve this editing the **source-paths** configuration array. By default resources/views and app/Http/Controllers are set.
+You can achieve this editing the **source-paths** configuration array. By default resources/views and app/Http/Controllers are set. 
 
 ```php
     /**
