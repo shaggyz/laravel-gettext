@@ -65,6 +65,15 @@ class LaravelGettextServiceProvider extends ServiceProvider
                 'Xinax\LaravelGettext\Facades\LaravelGettext');
         });
 
+        $this->registerCommands();
+    }
+
+    /**
+     * Register the package commands
+     * @return void 
+     */
+    protected function registerCommands()
+    {
         // Package commands
         $this->app->bind('xinax::gettext.create', function ($app) {
             return new Commands\GettextCreate();

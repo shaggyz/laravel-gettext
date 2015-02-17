@@ -1,6 +1,4 @@
-<?php
-
-namespace Xinax\LaravelGettext\Commands;
+<?php namespace Xinax\LaravelGettext\Commands;
 
 use Illuminate\Console\Command;
 use Xinax\LaravelGettext\FileSystem;
