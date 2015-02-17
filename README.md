@@ -8,17 +8,19 @@
 
 *Laravel Gettext* is a package compatible with the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU Gettext* and *PoEdit*.
 
+Note that <b>branch 1.x is for Laravel 4</b>, <b>branch 2.x is for Laravel 5</b>
+
 ### 1. Requirements
 
 - Composer - http://www.getcomposer.org
-- Laravel 4.2.* - http://www.laravel.com
+- Laravel 5.* - http://www.laravel.com
 - php-gettext - http://www.php.net/manual/en/book.gettext.php
 - GNU Gettext on system (and production server!) - http://www.gnu.org/software/gettext/
 - PoEdit - http://poedit.net/
 
 ### 2. Install
 
-Add the composer repository to your *composer.json* file (branch 1.x is for Laravel 4, branch 2.x is for Laravel 5):
+Add the composer repository to your *composer.json* file:
 
 ```json
     "xinax/laravel-gettext": "2.x" //L5
@@ -39,6 +41,15 @@ Now you need to publish the configuration file in order to set your own applicat
 ```
 
 This command set the package configuration file in: *app/config/packages/xinax/laravel-getttext/config.php*.
+
+In Laravel 5 you also need to register the LaravelGettext middleware in the app/Http/Kernel.php file:
+
+```php
+    protected $middleware = [
+        ...
+        'Xinax\LaravelGettext\Middleware\GettextMiddleware',
+    ]
+```
 
 ### 3. Configuration
 
