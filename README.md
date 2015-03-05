@@ -236,7 +236,7 @@ app/Http/Controllers/HomeController.php
 
 ```php
   <ul>
-      @foreach(Config::get('laravel-gettext::config.supported-locales') as $locale)
+      @foreach(Config::get('laravel-gettext.supported-locales') as $locale)
             <li><a href="/lang/{{$locale}}">{{$locale}}</a></li>
       @endforeach
   </ul>
