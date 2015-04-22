@@ -78,11 +78,10 @@ class FileSystem {
             $path = $this->basePath . DIRECTORY_SEPARATOR . $path;
 
             $fs = new \Illuminate\Filesystem\Filesystem($path);
-            $glob = $fs->glob(realpath($path) . '/{,**/}*.php', GLOB_BRACE);
+            $files = $fs->allFiles(realpath($path));
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
-            foreach ($glob as $file) {
-
+            foreach ($files as $file) {
                 $compiler->setPath($file);
                 $contents = $compiler->compileString($fs->get($file));
                 $compiledPath = $compiler->getCompiledPath($compiler->getPath());
