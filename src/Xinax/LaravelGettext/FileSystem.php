@@ -82,8 +82,9 @@ class FileSystem {
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
             foreach ($files as $file) {
-                $compiler->setPath($file);
-                $contents = $compiler->compileString($fs->get($file));
+				$filePath = $file->getRealPath();
+                $compiler->setPath($filePath);
+                $contents = $compiler->compileString($fs->get($filePath));
                 $compiledPath = $compiler->getCompiledPath($compiler->getPath());
 
                 $fs->put($compiledPath . '.php', $contents);
