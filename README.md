@@ -51,6 +51,8 @@ In Laravel 5 you also need to register the LaravelGettext middleware in the app/
     ]
 ```
 
+Be sure to add the line after ```Illuminate\Session\Middleware\StartSession```, otherwise the locale won't be saved into the session.
+
 ### 3. Configuration
 
 At this time your application have full gettext support. Now you need to set some configuration values in *laravel-gettext.php*.
