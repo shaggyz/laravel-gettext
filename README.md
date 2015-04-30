@@ -2,7 +2,7 @@
 
 [![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=1.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.3">Latest Laravel 4 stable release (1.0.3)</a>
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.2)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/2.0.2">Latest Laravel 5 stable release (2.0.2)</a>
+[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/2.0.3">Latest Laravel 5 stable release (2.0.3)</a>
 
 [![Dev build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=master)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/master">Development master</a> Unstable, only for development (dev-master)
 
