@@ -108,7 +108,7 @@ class MultipleDomainTest extends BaseTestCase
      */
     public function testCompileViews()
     {
-        $viewPaths = [ __DIR__ . '/../views' ];
+        $viewPaths = [ 'views' ];
 
         $result = $this->fileSystem->compileViews($viewPaths, "frontend");
         $this->assertTrue($result);
