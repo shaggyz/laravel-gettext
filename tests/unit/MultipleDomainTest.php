@@ -108,7 +108,7 @@ class MultipleDomainTest extends BaseTestCase
      */
     public function testCompileViews()
     {
-        $viewPaths = [ __DIR__ . '/../views' ];
+        $viewPaths = [ 'views' ];
 
         $result = $this->fileSystem->compileViews($viewPaths, "frontend");
         $this->assertTrue($result);
@@ -132,7 +132,7 @@ class MultipleDomainTest extends BaseTestCase
         $localesGenerated = $this->fileSystem->generateLocales();
         $this->assertTrue($this->fileSystem->checkDirectoryStructure(true));
 
-        $this->assertCount(2, $localesGenerated);
+        $this->assertCount(3, $localesGenerated);
         $this->assertTrue(is_dir($domainPath));
         $this->assertTrue(strpos($domainPath, 'i18n') !== false);
 
