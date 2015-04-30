@@ -47,11 +47,6 @@ class GettextUpdate extends BaseCommand
 
             foreach ($this->configuration->getSupportedLocales() as $locale) {
 
-                // We don't want a locale folder for the default language
-                if ($locale == $this->configuration->getLocale()) {
-                    continue;
-                }
-
                 $localePath = $this->fileSystem->getDomainPath($locale);
 
                 // New locale without .po file

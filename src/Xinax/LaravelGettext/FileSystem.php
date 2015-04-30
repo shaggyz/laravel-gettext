@@ -384,11 +384,6 @@ class FileSystem {
         // Locale directories
         foreach ($this->configuration->getSupportedLocales() as $locale) {
 
-            // We don't want a locale folder for the default language
-            if ($locale == $this->configuration->getLocale()) {
-                continue;
-            }
-
             $localePath = $this->getDomainPath($locale);
 
             if (!file_exists($localePath)) {
