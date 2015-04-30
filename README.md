@@ -301,7 +301,7 @@ To add a new domain just wrap your paths in the desired domain name, like this e
 
 This configuration generates three translation files by each language: **messages.po**, **frontend.po** and **backend.po**
 
-To change the current domain in runtime:
+To change the current domain in runtime (a route-middleware would be a nice place for do this):
 
 ```php
     LaravelGettext::setDomain("backend");
