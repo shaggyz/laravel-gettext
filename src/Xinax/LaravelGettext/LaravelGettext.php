@@ -73,11 +73,15 @@ class LaravelGettext
      * Gets the language portion of the locale.
      * Eg from en_GB, returns en
      *
+     * @param  String $locale
      * @return mixed
      */
-    public function getLocaleLanguage()
+    public function getLocaleLanguage($locale = null)
     {
-        $locale = $this->getLocale();
+        if(!$locale){
+            $locale = $this->getLocale();
+        }
+
         $localeArray = explode('_', $locale);
 
         if (isset($localeArray[0])) {
