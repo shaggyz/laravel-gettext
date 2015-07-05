@@ -48,7 +48,7 @@ class FileSystem {
         $this->configuration = $config;
         $this->basePath = $basePath;
         $this->storagePath = $storagePath;
-        $this->storageContainer = "views";
+        $this->storageContainer = "framework";
     }
 
     /**
