@@ -61,7 +61,7 @@ return array(
 	'source-paths' => array(
         'Http/Controllers',
         '../resources/views',
-        'Commands'    
+        'Console/Commands'    
 	),
 
 	/**
