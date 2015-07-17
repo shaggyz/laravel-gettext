@@ -9,7 +9,7 @@ before_install:
   - sudo apt-get update && sudo apt-get --reinstall install -qq language-pack-en language-pack-es
 
 before_script:
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+  - sudo composer self-update
+  - composer install --prefer-source --no-interaction
 
 script: phpunit
