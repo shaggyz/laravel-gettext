@@ -66,7 +66,7 @@ class GettextUpdate extends BaseCommand
                     // Update by domain(s)
                     foreach ($domains as $domain) {
                         $this->fileSystem->updateLocale($localePath, $locale, $domain);
-                        $this->comment("PO file for locale: $locale/$domain were updated successfuly");
+                        $this->comment("PO file for locale: $locale/$domain updated successfuly");
                         $updatedCount++;    
                     }
                     
@@ -81,7 +81,7 @@ class GettextUpdate extends BaseCommand
             }
 
             if ($updatedCount) {
-                $this->info("$updatedCount locales were updated.");
+                $this->info("$updatedCount locales updated.");
             }
 
         } catch (\Exception $e) {
