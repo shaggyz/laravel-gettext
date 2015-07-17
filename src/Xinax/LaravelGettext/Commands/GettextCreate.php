@@ -44,7 +44,7 @@ class GettextCreate extends BaseCommand
             $this->info("Done!");
             
             if ($dirCreations) {
-                $msg = "$dirCreations directories were created.";
+                $msg = "$dirCreations directories created.";
             } else {
                 $msg = "The directory structure is right. No directory creation were needed.";
             }
