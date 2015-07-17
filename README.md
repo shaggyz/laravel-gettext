@@ -5,7 +5,7 @@
 > Note: branch <b>1.x is for Laravel 4.x</b>, branch <b>2.x is for Laravel 5.x</b>. 
 > This documentation applies to laravel 5.1. For older versions of laravel check the following links:
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=3.0.0)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/3.0.0">Latest Laravel 5.1+ stable release (3.0.0)</a>
+[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=3.0.1)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/3.0.1">Latest Laravel 5.1+ stable release (3.0.1)</a>
 
 [![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/2.0.3">Latest Laravel 5.0 stable release (2.0.3)</a>
 
