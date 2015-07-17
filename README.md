@@ -26,7 +26,7 @@
 Add the composer repository to your *composer.json* file:
 
 ```json
-    "xinax/laravel-gettext": "2.x"
+    "xinax/laravel-gettext": "3.x"
 ```
 
 And run composer update. Once it's installed, you can register the service provider in config/app.php in the providers array:
