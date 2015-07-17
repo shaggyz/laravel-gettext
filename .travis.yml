@@ -1,16 +1,24 @@
 language: php
 
+sudo: false
+
 php:
-  - 5.4
   - 5.5
   - 5.6
 
-cache:
-  directories:
-    - $HOME/.composer/cache
+# cache:
+#   directories:
+#     - $HOME/.composer/cache
 
-before_install:  
-  - sudo apt-get update && sudo apt-get --reinstall install -qq language-pack-en language-pack-es
+#before_install:  
+#  - sudo apt-get update && sudo apt-get --reinstall install -qq language-pack-en language-pack-es
+
+addons:
+  apt:
+    packages:
+    - language-pack-en
+    - language-pack-es
 
 script: 
+  - composer install --prefer-source --no-interaction
   - phpunit
