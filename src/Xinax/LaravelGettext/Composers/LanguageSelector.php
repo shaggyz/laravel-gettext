@@ -1,7 +1,7 @@
 <?php namespace Xinax\LaravelGettext\Composers;
 
 use Xinax\LaravelGettext\LaravelGettext;
-use \Config;
+use Illuminate\Support\Facades\Config;
 
 /**
  * Simple language selector generator.

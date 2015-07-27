@@ -7,7 +7,7 @@ use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
 
-use \Session;
+use Illuminate\Support\Facades\Session;
 
 class Gettext
 {
