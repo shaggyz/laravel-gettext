@@ -2,6 +2,8 @@
 
 namespace Xinax\LaravelGettext\Adapters;
 
+use Illuminate\Support\Facades\App;
+
 class LaravelAdapter implements AdapterInterface
 {
 
@@ -10,7 +12,7 @@ class LaravelAdapter implements AdapterInterface
      */
     public function setLocale($locale)
     {
-        \App::setLocale(substr($locale, 0, 2));
+        App::setLocale(substr($locale, 0, 2));
     }
 
     /**
@@ -18,7 +20,7 @@ class LaravelAdapter implements AdapterInterface
      */
     public function getLocale()
     {
-        return \App::getLocale();
+        return App::getLocale();
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 namespace Xinax\LaravelGettext\Session;
-use \Session;
+use Illuminate\Support\Facades\Session;
 
 class SessionHandler{
 

@@ -5,7 +5,7 @@ namespace Xinax\LaravelGettext\Config;
 use \Xinax\LaravelGettext\Config\Models\Config as ConfigModel;
 use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationFileException;
 use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationKeyException;
-use \Config;
+use \Illuminate\Support\Facades\Config;
 
 class ConfigManager
 {
