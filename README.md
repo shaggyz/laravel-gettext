@@ -112,6 +112,9 @@ By default *LaravelGettext* looks on app/Http/Controllers and resources/views re
     echo 'Non translated string';
     echo _('Translated string');
     echo _('Another translated string');
+    // with parameter
+    $str = 'parameter';
+    echo sprintf(_('Translated string with %s'), $str);
 ```
 
 ```php
@@ -298,15 +301,15 @@ To add a new domain just wrap your paths in the desired domain name, like this e
 
 ```php
     'source-paths' => array(
-		'frontend' => array(
-			'Http/Controllers',
-			'../resources/views/frontend',
-		),
-		'backend' => array(
-			'../resources/views/backend',
-		),
-		'../resources/views/misc',
-	),
+        'frontend' => array(
+            'Http/Controllers',
+            '../resources/views/frontend',
+        ),
+        'backend' => array(
+            '../resources/views/backend',
+        ),
+        '../resources/views/misc',
+    ),
 ```
 
 This configuration generates three translation files by each language: **messages.po**, **frontend.po** and **backend.po**
