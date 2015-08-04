@@ -2,6 +2,7 @@
 /public
 composer.phar
 composer.lock
+.idea
 .DS_Store
 doc/poedit-fw.png
 tests/lang/*
