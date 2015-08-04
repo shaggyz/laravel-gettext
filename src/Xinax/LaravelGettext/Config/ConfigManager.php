@@ -83,6 +83,7 @@ class ConfigManager
 
         $container = new ConfigModel();
         $container->setLocale($config['locale'])
+            ->setSessionIdentifier(isset($config['session-identifier']) ? $config['session-identifier'] : 'laravel-gettext-locale')
             ->setEncoding($config['encoding'])
             ->setFallbackLocale($config['fallback-locale'])
             ->setSupportedLocales($config['supported-locales'])

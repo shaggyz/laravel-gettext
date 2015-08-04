@@ -3,6 +3,11 @@
 return array(
 
     /**
+     * Session identifier: Key under which the current locale will be stored.
+     */
+    'session-identifier' => 'laravel-gettext-locale',
+
+    /**
      * Default locale: this will be the default for your application.
      * Is to be supposed that all strings are written in this language.
      */

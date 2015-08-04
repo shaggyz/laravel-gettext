@@ -6,6 +6,13 @@ class Config
 {
 
     /**
+     * Session identifier
+     *
+     * @type String
+     */
+    protected $sessionIdentifier;
+
+    /**
      * Charset encoding for files (UTF-8)
      *
      * @type
@@ -74,6 +81,28 @@ class Config
      * @type Boolean
      */
     protected $syncLaravel;
+
+    /**
+     * Gets the session identifier.
+     *
+     * @return mixed
+     */
+    public function getSessionIdentifier()
+    {
+        return $this->sessionIdentifier;
+    }
+
+    /**
+     * Sets the session identifier.
+     *
+     * @param mixed $identifier the identifier
+     * @return self
+     */
+    public function setSessionIdentifier($identifier)
+    {
+        $this->encoding = $identifier;
+        return $this;
+    }
 
     /**
      * Gets the Charset encoding for files (UTF-8).
