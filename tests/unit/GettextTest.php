@@ -19,7 +19,7 @@ class GettextTest extends BaseTestCase
         parent::setUp();
 
         // Config
-        include __DIR__ . '/../config/config.php';
+        $testConfig = include __DIR__ . '/../config/config.php';
         $config = ConfigManager::create($testConfig);
 
         // Session handler

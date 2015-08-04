@@ -2,7 +2,12 @@
 
 // Used for testing
 // return array(
-$testConfig = array(
+return array(
+
+    /**
+     * Session identifier: Key under which the current locale will be stored.
+     */
+    'session-identifier' => 'laravel-gettext-locale',
 
     /**
      * Default locale: this will be the default for your application.
