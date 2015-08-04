@@ -9,7 +9,7 @@ class FileSystem {
 
     /**
      * Package configuration model
-     * 
+     *
      * @var Config
      */
     protected $configuration;
@@ -17,28 +17,28 @@ class FileSystem {
     /**
      * File system base path
      * All paths will be relative to this
-     * 
+     *
      * @var String
      */
     protected $basePath;
 
     /**
      * Storage path for file generation
-     * 
+     *
      * @var String
      */
     protected $storagePath;
 
     /**
      * Storage directory name for view compilation
-     * 
+     *
      * @var String
      */
     protected $storageContainer;
 
     /**
      * Sets configuration
-     * 
+     *
      * @param Config $config
      * @param String $basePath
      * @param String $storagePath
@@ -56,7 +56,7 @@ class FileSystem {
      *
      * @param Array $viewPaths
      * @param String $domain
-     * 
+     *
      * @return Boolean status
      */
     public function compileViews(Array $viewPaths, $domain)
@@ -82,7 +82,7 @@ class FileSystem {
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
             foreach ($files as $file) {
-				$filePath = $file->getRealPath();
+                $filePath = $file->getRealPath();
                 $compiler->setPath($filePath);
                 $contents = $compiler->compileString($fs->get($filePath));
                 $compiledPath = $compiler->getCompiledPath($compiler->getPath());
@@ -162,7 +162,7 @@ class FileSystem {
 
             // View compilation
             $this->compileViews($sourcePaths, $domain);
-            array_push($sourcePaths, $this->getStorageForDomain($domain));    
+            array_push($sourcePaths, $this->getStorageForDomain($domain));
 
             $i = 0;
             foreach ($sourcePaths as $sourcePath) {
@@ -245,7 +245,7 @@ class FileSystem {
      * @param  String                      $locale
      * @param  String                      $domain
      * @throws LocaleFileNotFoundException
-     * @return Boolean 
+     * @return Boolean
      */
     public function updateLocale($localePath, $locale, $domain)
     {
@@ -273,16 +273,16 @@ class FileSystem {
 
         return true;
 
-    }    
+    }
 
-   /**
-    * Return the relative path from a file or directory to another
-    *
-    * @param    String          $from
-    * @param    String          $to
-    * @return   String          $path
-    * @author   Laurent Goussard
-    **/
+    /**
+     * Return the relative path from a file or directory to another
+     *
+     * @param    String          $from
+     * @param    String          $to
+     * @return   String          $path
+     * @author   Laurent Goussard
+     **/
     public function getRelativePath($from, $to)
     {
         // some compatibility fixes for Windows paths
@@ -331,7 +331,7 @@ class FileSystem {
         // Application base path
         if (!file_exists($this->basePath)) {
             throw new Exceptions\DirectoryNotFoundException(
-                "Missing root path directory: " . $this->basePath . 
+                "Missing root path directory: " . $this->basePath .
                 ", check the 'base-path' key in your configuration."
             );
         }
@@ -370,8 +370,8 @@ class FileSystem {
 
     /**
      * Creates the localization directories and files, by domain
-     * Returns an array with all created paths  
-     * 
+     * Returns an array with all created paths
+     *
      * @return Array paths
      */
     public function generateLocales()
@@ -471,26 +471,26 @@ class FileSystem {
 
     /**
      * Returns the full path for a domain storage directory
-     * 
+     *
      * @param  String $domain
      * @return String
      */
     public function getStorageForDomain($domain)
     {
-        $domainPath = $this->storagePath . 
-                        DIRECTORY_SEPARATOR .
-                        $this->storageContainer . 
-                        DIRECTORY_SEPARATOR .
-                        $domain;
+        $domainPath = $this->storagePath .
+            DIRECTORY_SEPARATOR .
+            $this->storageContainer .
+            DIRECTORY_SEPARATOR .
+            $domain;
 
         return $this->getRelativePath($this->basePath, $domainPath);
     }
 
     /**
      * Removes the directory contents recursively
-     * 
-     * @param  String $path 
-     * @return void       
+     *
+     * @param  String $path
+     * @return void
      */
     public static function clearDirectory($path)
     {

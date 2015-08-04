@@ -227,5 +227,4 @@ class MultipleDomainTest extends BaseTestCase
         $dir = __DIR__ . '/../lang/i18n';
         FileSystem::clearDirectory($dir);
     }
-
 }

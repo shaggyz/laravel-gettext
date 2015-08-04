@@ -5,7 +5,6 @@ namespace Xinax\LaravelGettext\Test;
 use \Mockery as m;
 use \Xinax\LaravelGettext\LaravelGettext;
 
-
 class LaravelGettextTest extends BaseTestCase
 {
     /**
@@ -78,6 +77,4 @@ class LaravelGettextTest extends BaseTestCase
     {
         $this->assertEquals('en_US', $this->laravelGettext->getLocale());
     }
-
 }
-
