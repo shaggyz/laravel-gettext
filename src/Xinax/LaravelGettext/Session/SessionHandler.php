@@ -24,7 +24,6 @@ class SessionHandler{
      */
     public function get($default)
     {
-
         $locale = $default;
 
         if(Session::has($this->sessionIdentifier)){

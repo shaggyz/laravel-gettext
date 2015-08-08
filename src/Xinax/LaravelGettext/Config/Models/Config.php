@@ -100,7 +100,7 @@ class Config
      */
     public function setSessionIdentifier($identifier)
     {
-        $this->encoding = $identifier;
+        $this->sessionIdentifier = $identifier;
         return $this;
     }
 
