@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 class ExampleController
 {
-	public function __construct()
-	{
-		$translated = _("Controller string");
-	}
+    public function __construct()
+    {
+        $translated = _("Controller string");
+    }
 }

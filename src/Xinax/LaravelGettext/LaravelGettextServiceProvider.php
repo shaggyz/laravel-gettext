@@ -46,7 +46,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
 
             $gettext = new Gettext(
                 $configuration->get(),
-                new Session\SessionHandler,
+                new Session\SessionHandler($configuration->get()->getSessionIdentifier()),
                 new Adapters\LaravelAdapter,
                 $fileSystem
             );

@@ -13,7 +13,7 @@ class Gettext
 {
     /**
      * Config container
-     * @type Xinax\LaravelGettext\Config\Models\Config
+     * @type \Xinax\LaravelGettext\Config\Models\Config
      */
     protected $configuration;
 
@@ -31,7 +31,7 @@ class Gettext
 
     /**
      * Framework adapter
-     * @type Xinax\Adapters\LaravelAdapter
+     * @type \Xinax\Adapters\LaravelAdapter
      */
     protected $adapter;
 

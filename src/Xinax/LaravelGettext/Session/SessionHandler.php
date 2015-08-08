@@ -1,37 +1,44 @@
 <?php
 
 namespace Xinax\LaravelGettext\Session;
+
 use Illuminate\Support\Facades\Session;
 
 class SessionHandler{
 
-	/**
-	 * Session identifier to store active locale 
-	 */
-	const SESSION_IDENTIFIER = "laravel-gettext-locale";
+    private $sessionIdentifier;
 
-	/**
-	 * Returns the locale identifier from 
-	 * the main session adapter
-	 */
-	public function get($default)
+    /**
+     * Creates a new Session handler.
+     *
+     * @param string $sessionIdentifier The identifier
+     */
+    public function __construct($sessionIdentifier)
     {
+        $this->sessionIdentifier = $sessionIdentifier;
+    }
 
-		$locale = $default;
-		
-		if(Session::has(self::SESSION_IDENTIFIER)){
-			$locale = Session::get(self::SESSION_IDENTIFIER);
-		}
-
-		return $locale;
-
-	}
-
-	/**
-	 * Sets the given locale on session
-	 */	
-	public function set($locale)
+    /**
+     * Returns the locale identifier from
+     * the main session adapter
+     */
+    public function get($default)
     {
-		Session::set(self::SESSION_IDENTIFIER, $locale);
-	}
+        $locale = $default;
+
+        if(Session::has($this->sessionIdentifier)){
+            $locale = Session::get($this->sessionIdentifier);
+        }
+
+        return $locale;
+
+    }
+
+    /**
+     * Sets the given locale on session
+     */
+    public function set($locale)
+    {
+        Session::set($this->sessionIdentifier, $locale);
+    }
 }

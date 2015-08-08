@@ -57,7 +57,7 @@ class MultipleDomainTest extends BaseTestCase
         parent::setUp();
 
         // $testConfig array
-        include __DIR__ . '/../config/config.php';
+        $testConfig = include __DIR__ . '/../config/config.php';
         $this->configManager = ConfigManager::create($testConfig);
 
         $this->basePath = realpath(__DIR__ . '/..');
@@ -227,5 +227,4 @@ class MultipleDomainTest extends BaseTestCase
         $dir = __DIR__ . '/../lang/i18n';
         FileSystem::clearDirectory($dir);
     }
-
 }
