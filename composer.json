@@ -2,7 +2,13 @@
     "name": "xinax/laravel-gettext",
     "description": "Adds localization support to laravel applications in an easy way using PoEdit and GNU-Gettext.",
     "homepage": "https://github.com/xinax/laravel-gettext",
-    "keywords": ["gettext", "localization", "poedit", "laravel-gettext", "laravel", "translation"],
+    "keywords": [
+        "gettext",
+        "localization",
+        "poedit",
+        "laravel-gettext",
+        "laravel", "translation"
+    ],
     "license": "MIT",    
     "authors": [
         {
@@ -18,7 +24,9 @@
         "laravel/framework": "5.*"
     },
     "require-dev": {
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "dev-master",
+        "phpunit/phpunit": "~4.0",
+        "squizlabs/php_codesniffer" : "1.5.*"
     },
     "autoload": {
         "psr-0": {

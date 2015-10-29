@@ -1,7 +1,6 @@
 <?php
 
-return array(
-
+return [
     /**
      * Session identifier: Key under which the current locale will be stored.
      */
@@ -16,9 +15,9 @@ return array(
     /**
      * Supported locales: An array containing all allowed languages
      */
-    'supported-locales' => array(
+    'supported-locales' => [
         'en_US',
-    ),
+    ],
 
     /**
      * Default charset encoding.
@@ -63,11 +62,11 @@ return array(
      *
      * Remember to call artisan gettext:update after change this.
      */
-    'source-paths' => array(
+    'source-paths' => [
         'Http/Controllers',
         '../resources/views',
-        'Console/Commands'
-    ),
+        'Console/Commands',
+    ],
 
     /**
      * Multi-domain directory paths. If you want the translations in
@@ -75,20 +74,22 @@ return array(
      * Paths on top-level will be associated to the default domain file,
      * for example:
      */
-    /*'source-paths' => array(
-		'frontend' => array(
+    /*
+    'source-paths' => [
+		'frontend' => [
 			'controllers',
-			'views/frontend'
-		),
-		'backend' => array(
-			'views/backend'
-		),
-		'storage/views'
-	),*/
+			'views/frontend',
+		],
+		'backend' => [
+			'views/backend',
+		],
+		'storage/views',
+	],
+    */
 
     /**
      * Sync laravel: A flag that determines if the laravel built-in locale must
      * be changed when you call LaravelGettext::setLocale.
      */
     'sync-laravel' => true,
-);
+];

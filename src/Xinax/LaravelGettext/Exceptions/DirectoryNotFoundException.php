@@ -2,4 +2,9 @@
 
 namespace Xinax\LaravelGettext\Exceptions;
 
-class DirectoryNotFoundException extends \Exception{}
+use Exception;
+
+class DirectoryNotFoundException extends Exception
+{
+
+}

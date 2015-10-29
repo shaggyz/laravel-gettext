@@ -2,4 +2,9 @@
 
 namespace Xinax\LaravelGettext\Exceptions;
 
-class UndefinedDomainException extends \Exception{}
+use Exception;
+
+class UndefinedDomainException extends Exception
+{
+
+}

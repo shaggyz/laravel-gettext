@@ -6,17 +6,22 @@ use Illuminate\Support\Facades\App;
 
 class LaravelAdapter implements AdapterInterface
 {
-
     /**
-     * Returns the adapter current locale
+     * Set current locale
+     *
+     * @param string $locale
+     * @return bool
      */
     public function setLocale($locale)
     {
         App::setLocale(substr($locale, 0, 2));
+        return true;
     }
 
     /**
-     * Sets the locale on current addapter
+     * Get the locale
+     *
+     * @return string
      */
     public function getLocale()
     {
@@ -24,7 +29,9 @@ class LaravelAdapter implements AdapterInterface
     }
 
     /**
-     * Return the application path
+     * Get the application path
+     *
+     * @return string
      */
     public function getApplicationPath()
     {

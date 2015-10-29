@@ -47,14 +47,19 @@ class Gettext
     protected $domain;
 
     /**
-     * Sets the configuration and session manager
+     * @param Config $config
+     * @param SessionHandler $sessionHandler
+     * @param AdapterInterface $adapter
+     * @param FileSystem $fileSystem
+     * @throws Exceptions\LocaleNotSupportedException
+     * @throws \Exception
      */
     public function __construct(
         Config $config,
-        SessionHandler $sessionHandler, 
+        SessionHandler $sessionHandler,
         AdapterInterface $adapter,
         FileSystem $fileSystem
-    ){
+    ) {
         // Sets the package configuration and session handler
         $this->configuration = $config;
         $this->session = $sessionHandler;
@@ -80,7 +85,8 @@ class Gettext
     {
         if (!$this->isLocaleSupported($locale)) {
             throw new Exceptions\LocaleNotSupportedException(
-                "Locale $locale is not supported");
+                sprintf('Locale %s is not supported', $locale)
+            );
         }
 
         try {
@@ -99,14 +105,12 @@ class Gettext
             $this->session->set($locale);
 
             // Laravel built-in locale
-            if ($this->configuration->getSyncLaravel()) {
+            if ($this->configuration->isSyncLaravel()) {
                 $this->adapter->setLocale($locale);
             }
 
             return $this->getLocale();
-
         } catch (\Exception $e) {
-
             $this->locale = $this->configuration->getFallbackLocale();
             $exceptionPosition = $e->getFile() . ":" . $e->getLine();
             throw new \Exception($exceptionPosition . $e->getMessage());
@@ -202,6 +206,4 @@ class Gettext
     {
         return $this->domain;
     }
-
-
 }

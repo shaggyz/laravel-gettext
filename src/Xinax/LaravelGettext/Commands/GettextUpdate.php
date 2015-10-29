@@ -2,6 +2,7 @@
 
 namespace Xinax\LaravelGettext\Commands;
 
+use Exception;
 use Xinax\LaravelGettext\Exceptions\DirectoryNotFoundException;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -32,59 +33,75 @@ class GettextUpdate extends BaseCommand
         $this->prepare();
 
         $domainPath = $this->fileSystem->getDomainPath();
+        $fileSystem = $this->fileSystem;
 
         try {
-
             // Translation files base path
             if (!file_exists($domainPath)) {
                 throw new DirectoryNotFoundException(
-                    "You need to call gettext:create (No locale directory)");
+                    "You need to call gettext:create (No locale directory)"
+                );
             }
 
-            $updatedCount = 0;
-            $addedCount = 0;
+            $count = [
+                'added' => 0,
+                'updated' => 0,
+            ];
+
             $domains = $this->configuration->getAllDomains();
 
             foreach ($this->configuration->getSupportedLocales() as $locale) {
-
                 $localePath = $this->fileSystem->getDomainPath($locale);
 
-                // New locale without .po file
+                // Create new locale
                 if (!file_exists($localePath)) {
-                    
                     $this->fileSystem->addLocale($localePath, $locale);
                     $this->comment("New locale was added: $locale ($localePath)");
-                    $addedCount++;
 
-                } else {
+                    $count['added']++;
 
-                    // Domain by command line argument
-                    if ($this->option('domain')) {
-                        $domains = [$this->option('domain')];
-                    }
-
-                    // Update by domain(s)
-                    foreach ($domains as $domain) {
-                        $this->fileSystem->updateLocale($localePath, $locale, $domain);
-                        $this->comment("PO file for locale: $locale/$domain updated successfuly");
-                        $updatedCount++;    
-                    }
-                    
+                    continue;
                 }
 
+                // Domain by command line argument
+                if ($this->option('domain')) {
+                    $domains = [$this->option('domain')];
+                }
+
+                // Update by domain(s)
+                foreach ($domains as $domain) {
+                    $fileSystem->updateLocale(
+                        $localePath,
+                        $locale,
+                        $domain
+                    );
+
+                    $this->comment(
+                        sprintf(
+                            "PO file for locale: %s/%s updated successfuly",
+                            $locale,
+                            $domain
+                        )
+                    );
+
+                    $count['updated']++;
+                }
             }
 
-            $this->info("Done!");
+            $this->info("Finished");
 
-            if ($addedCount) {
-                $this->info("$addedCount new locales were added.");
+            // Number of locales created
+            if ($count['added'] > 0) {
+                $this->info(sprintf('%s new locales were added.', $count['added']));
             }
 
-            if ($updatedCount) {
-                $this->info("$updatedCount locales updated.");
+
+            // Number of locales updated
+            if ($count['updated'] > 0) {
+                $this->info(sprintf('%s locales updated.', $count['updated']));
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error($e->getFile() . ":" . $e->getLine() . " = " . $e->getMessage());
         }
     }
@@ -96,7 +113,7 @@ class GettextUpdate extends BaseCommand
      */
     protected function getArguments()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -106,17 +123,14 @@ class GettextUpdate extends BaseCommand
      */
     protected function getOptions()
     {
-        $options = array(
-            array(
+        return [
+            [
                 'domain',
                 '-d',
-                InputOption::VALUE_OPTIONAL, 
+                InputOption::VALUE_OPTIONAL,
                 'Update files only for this domain',
-                null
-            )
-        );
-
-        return $options;
+                null,
+            ]
+        ];
     }
-
 }

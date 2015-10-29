@@ -41,11 +41,10 @@ class MultipleDomainTest extends BaseTestCase
      */
     protected $storagePath;
 
-    /**
-     * Clear temportal files before each test
-     */
     public function __construct()
     {
+        parent::__construct();
+
         $this->clearFiles();
     }
 
@@ -148,67 +147,90 @@ class MultipleDomainTest extends BaseTestCase
 
     public function testGetRelativePath()
     {
-        // Unit dir: we are here now :D
+        // dir/
         $from = __DIR__;
-
-        // Base path: tests/
-        $to = $this->basePath;
+        $to = dirname(dirname(__DIR__));
 
         $result = $this->fileSystem->getRelativePath($to, $from);
 
-        // Relative path from base path: ./unit/
-        $this->assertSame("./unit/", $result);
+        // Relative path from base path: unit/
+        $this->assertSame("unit/", $result);
     }
 
     /**
-     * @expectedException Xinax\LaravelGettext\Exceptions\UndefinedDomainException
+     * @expectedException \Xinax\LaravelGettext\Exceptions\UndefinedDomainException
      */
     public function testTranslations()
     {
-        // Session handler
+        /** @var \Xinax\LaravelGettext\Session\SessionHandler|\Mockery\MockInterface $session */
         $session = m::mock('Xinax\LaravelGettext\Session\SessionHandler');
-        $session->shouldReceive('get')->andReturn('es_AR');
+        $session->shouldReceive('get')
+            ->andReturn('es_AR');
+
         $session->shouldReceive('set');
 
-        // Framework adapter
+        /** @var \Xinax\LaravelGettext\Adapters\LaravelAdapter|\Mockery\MockInterface $adapter */
         $adapter = m::mock('Xinax\LaravelGettext\Adapters\LaravelAdapter');
+
         $adapter->shouldReceive('setLocale');
-        $adapter->shouldReceive('getApplicationPath')->andReturn(dirname(__FILE__));
+        $adapter->shouldReceive('getApplicationPath')
+            ->andReturn(dirname(__FILE__));
 
         $config = $this->configManager->get();
 
         // Static traslation files
         $config->setTranslationsPath("translations");
-        $gettext = new Gettext($config, $session, $adapter, $this->fileSystem);
-        $laravelGettext = new LaravelGettext($gettext);
 
+        $gettext = new Gettext(
+            $config,
+            $session,
+            $adapter,
+            $this->fileSystem
+        );
+
+        $laravelGettext = new LaravelGettext($gettext);
         $laravelGettext->setLocale("es_AR");
 
-        $this->assertSame("Cadena general con echo de php",
-                                       _("general string with php echo"));
+        $this->assertSame(
+            "Cadena general con echo de php",
+            _("general string with php echo")
+        );
 
         $laravelGettext->setDomain("backend");
 
-        $this->assertSame("backend", $laravelGettext->getDomain());
-        $this->assertSame("Cadena en el backend con echo de php",
-                                        _("Backend string with php echo"));
+        $this->assertSame(
+            "backend",
+            $laravelGettext->getDomain()
+        );
+
+        $this->assertSame(
+            "Cadena en el backend con echo de php",
+            _("Backend string with php echo")
+        );
 
         $laravelGettext->setDomain("frontend");
 
-        $this->assertSame("frontend", $laravelGettext->getDomain());
+        $this->assertSame(
+            "frontend",
+            $laravelGettext->getDomain()
+        );
+
         $this->assertSame("Cadena de controlador",
                                 _("Controller string"));
-        $this->assertSame("Cadena de frontend con echo de php",
-                                _("Frontend string with php echo"));
+        $this->assertSame(
+            "Cadena de frontend con echo de php",
+            _("Frontend string with php echo")
+        );
 
         $laravelGettext->setLocale("en_US");
 
-        $this->assertSame("Frontend string with php echo",
-                                _("Frontend string with php echo"));
+        $this->assertSame(
+            "Frontend string with php echo",
+            _("Frontend string with php echo")
+        );
 
         // Expected exception
         $laravelGettext->setDomain("wrong-domain");
-
     }
 
     /**

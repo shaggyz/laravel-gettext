@@ -5,7 +5,12 @@ namespace Xinax\LaravelGettext;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Laravel gettext main service provider
+ * Main service provider
+ *
+ * Class LaravelGettextServiceProvider
+ * @package Xinax\LaravelGettext
+ *
+ * TODO: Use providers
  */
 class LaravelGettextServiceProvider extends ServiceProvider
 {
@@ -35,7 +40,10 @@ class LaravelGettextServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Adapters/AdapterInterface', 'Adapters/LaravelAdapter');
+        $this->app->bind(
+            'Adapters/AdapterInterface',
+            'Adapters/LaravelAdapter'
+        );
 
         // Main class register
         $this->app['laravel-gettext'] = $this->app->share(function ($app) {
@@ -54,19 +62,21 @@ class LaravelGettextServiceProvider extends ServiceProvider
             return new LaravelGettext($gettext);
         });
 
-        // Auto alias
+        // Alias
         $this->app->booting(function () {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('LaravelGettext',
-                'Xinax\LaravelGettext\Facades\LaravelGettext');
+
+            $loader->alias(
+                'LaravelGettext',
+                'Xinax\LaravelGettext\Facades\LaravelGettext'
+            );
         });
 
         $this->registerCommands();
     }
 
     /**
-     * Register the package commands
-     * @return void 
+     * Register commands
      */
     protected function registerCommands()
     {
@@ -74,23 +84,26 @@ class LaravelGettextServiceProvider extends ServiceProvider
         $this->app->bind('xinax::gettext.create', function ($app) {
             return new Commands\GettextCreate();
         });
+
         $this->app->bind('xinax::gettext.update', function ($app) {
             return new Commands\GettextUpdate();
         });
-        $this->commands(array(
+
+        $this->commands([
             'xinax::gettext.create',
             'xinax::gettext.update',
-        ));
+        ]);
     }
 
     /**
-     * Get the services provided by the provider.
+     * Get the services
      *
      * @return array
      */
     public function provides()
     {
-        return array('laravel-gettext');
+        return [
+            'laravel-gettext'
+        ];
     }
 }
-

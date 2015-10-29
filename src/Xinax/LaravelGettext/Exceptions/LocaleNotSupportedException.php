@@ -2,4 +2,9 @@
 
 namespace Xinax\LaravelGettext\Exceptions;
 
-class LocaleNotSupportedException extends \Exception{}
+use Exception;
+
+class LocaleNotSupportedException extends Exception
+{
+
+}

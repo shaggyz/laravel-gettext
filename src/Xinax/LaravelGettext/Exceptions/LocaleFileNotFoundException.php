@@ -2,4 +2,9 @@
 
 namespace Xinax\LaravelGettext\Exceptions;
 
-class LocaleFileNotFoundException extends \Exception{}
+use Exception;
+
+class LocaleFileNotFoundException extends Exception
+{
+
+}

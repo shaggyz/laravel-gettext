@@ -2,4 +2,9 @@
 
 namespace Xinax\LaravelGettext\Exceptions;
 
-class FileCreationException extends \Exception{}
+use Exception;
+
+class FileCreationException extends Exception
+{
+
+}

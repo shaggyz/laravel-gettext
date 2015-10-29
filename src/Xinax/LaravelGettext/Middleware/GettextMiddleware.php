@@ -1,11 +1,13 @@
-<?php namespace Xinax\LaravelGettext\Middleware;
+<?php
+
+namespace Xinax\LaravelGettext\Middleware;
 
 use Closure;
 use \LaravelGettext;
 use Illuminate\Contracts\Routing\Middleware;
 
-class GettextMiddleware implements Middleware {
-
+class GettextMiddleware implements Middleware
+{
     /**
     * Handle an incoming request.
     *
@@ -25,5 +27,4 @@ class GettextMiddleware implements Middleware {
 
         return $next($request);
     }
-
 }
