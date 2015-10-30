@@ -93,7 +93,7 @@ At this time your application have full gettext support. Now you need to set som
 
 Ok, now is configured. It's time to generate the directory structure and translation files for first time. 
 
-> Make sure you have wirte permissions on ```storage/``` before run this command
+> Make sure you have write permissions on ```storage/``` before run this command
 
 ```bash
     php artisan gettext:create
