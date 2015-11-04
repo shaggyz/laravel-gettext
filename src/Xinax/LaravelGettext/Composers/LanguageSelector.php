@@ -9,60 +9,68 @@ use Illuminate\Support\Facades\Config;
  */
 class LanguageSelector
 {
-
     /**
-     * Language labels
-     * @var Array
+     * Labels
+     *
+     * @var array
      */
     protected $labels = [];
 
     /**
-     * Laravel gettext wrapper
      * @var LaravelGettext
      */
     protected $gettext;
 
     /**
-     * Creates a new instance of language selector
-     * @param Array $labels
+     * @param LaravelGettext $gettext
+     * @param array $labels
      */
-    public function __construct($labels = [], LaravelGettext $gettext)
+    public function __construct(LaravelGettext $gettext, array $labels = [])
     {
         $this->labels = $labels;
         $this->gettext = $gettext;
     }
 
     /**
-     * Creates a new selector instance
-     * @return void
+     * @param LaravelGettext $gettext
+     * @param array $labels
+     * @return LanguageSelector
      */
-    public static function create($labels = [], LaravelGettext $gettext)
+    public static function create(LaravelGettext $gettext, $labels = [])
     {
-        return new LanguageSelector($labels, $gettext);
+        return new LanguageSelector($gettext, $labels);
     }
 
     /**
      * Renders the language selector
-     * @return String
+     * @return string
      */
     public function render()
     {
+        /** @var array $locales */
+        $locales = Config::get('laravel-gettext.supported-locales');
+
+        /** @var string $currentLocale */
+        $currentLocale = $this->gettext->getLocale();
+
         $html = '<ul class="language-selector">';
 
-        foreach (Config::get('laravel-gettext.supported-locales') as $locale) {
+        foreach ($locales as $locale) {
+            $localeLabel = $locale;
 
-            if(count($this->labels) && array_key_exists($locale, $this->labels)){
+            // Check if label exists
+            if (array_key_exists($locale, $this->labels)) {
                 $localeLabel = $this->labels[$locale];
-            } else {
-                $localeLabel = $locale;
             }
 
-            if($locale == $this->gettext->getLocale()){
-                $html .= '<li><strong class="active ' . $locale . '">' . $localeLabel . '</strong></li>';
-            } else {
-                $html .= '<li><a href="/lang/' . $locale . '" class="' . $locale . '">' . $localeLabel . '</a></li>';
+
+            $link = '<a href="/lang/' . $locale . '" class="' . $locale . '">' . $localeLabel . '</a>';
+
+            if ($locale == $currentLocale) {
+                $link = '<strong class="active ' . $locale . '">' . $localeLabel . '</strong>';
             }
 
+            $html .= '<li>' . $link . '</li>';
         }
 
         $html .= '</ul>';
@@ -71,12 +79,12 @@ class LanguageSelector
     }
 
     /**
-     * String conversion
+     * Convert to string
+     *
      * @return string
      */
     public function __toString()
     {
         return $this->render();
     }
-
 }

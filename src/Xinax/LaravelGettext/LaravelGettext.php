@@ -7,25 +7,24 @@ use Xinax\LaravelGettext\Composers\LanguageSelector;
 class LaravelGettext
 {
     /**
-     * Check dependencies
+     * @param Gettext $gettext
+     * @throws Exceptions\MissingPhpGettextModuleException
      */
     public function __construct(Gettext $gettext)
     {
-        // Dependencies will be checked on first package call
         if (!function_exists('gettext')) {
             throw new Exceptions\MissingPhpGettextModuleException(
                 "You need to install the php-gettext module for this package."
             );
         }
 
-        // Gettext dependency
         $this->gettext = $gettext;
     }
 
     /**
-     * Gets the Current encoding.
+     * Get the current encoding
      *
-     * @return mixed
+     * @return string
      */
     public function getEncoding()
     {
@@ -33,10 +32,10 @@ class LaravelGettext
     }
 
     /**
-     * Sets the Current encoding.
+     * Set the current encoding
      *
-     * @param mixed $encoding the encoding
-     * @return self
+     * @param string $encoding
+     * @return $this
      */
     public function setEncoding($encoding)
     {
@@ -47,7 +46,7 @@ class LaravelGettext
     /**
      * Gets the Current locale.
      *
-     * @return mixed
+     * @return string
      */
     public function getLocale()
     {
@@ -55,10 +54,12 @@ class LaravelGettext
     }
 
     /**
-     * Sets the Current locale.
+     * Set current locale
      *
-     * @param mixed $locale the locale
-     * @return self
+     * @param string $locale
+     * @return $this
+     * @throws Exceptions\LocaleNotSupportedException
+     * @throws \Exception
      */
     public function setLocale($locale)
     {
@@ -70,54 +71,57 @@ class LaravelGettext
     }
 
     /**
-     * Gets the language portion of the locale.
-     * Eg from en_GB, returns en
+     * Get the language portion of the locale
+     * (ex. en_GB returns en)
      *
-     * @param  String $locale
-     * @return mixed
+     * @param string|null $locale
+     * @return string|null
      */
     public function getLocaleLanguage($locale = null)
     {
-        if(!$locale){
+        if (is_null($locale)) {
             $locale = $this->getLocale();
         }
 
         $localeArray = explode('_', $locale);
 
-        if (isset($localeArray[0])) {
-            return $localeArray[0];
+        if (!isset($localeArray[0])) {
+            return null;
         }
+
+        return $localeArray[0];
     }
 
     /**
-     * Returns the language selector object
+     * Get the language selector object
      *
-     * @param  Array $labels 
-     * @return LanguageSelector         
+     * @param array $labels
+     * @return LanguageSelector
      */
     public function getSelector($labels = [])
     {
-        return LanguageSelector::create($labels, $this);
+        return LanguageSelector::create($this, $labels);
     }
 
     /**
      * Sets the current domain
      * 
-     * @param String $domain
+     * @param string $domain
+     * @return $this
      */
     public function setDomain($domain)
     {
         $this->gettext->setDomain($domain);
+        return $this;
     }
 
     /**
      * Returns the current domain
      *
-     * @return String
+     * @return string
      */
     public function getDomain()
     {
         return $this->gettext->getDomain();
     }
-
 }

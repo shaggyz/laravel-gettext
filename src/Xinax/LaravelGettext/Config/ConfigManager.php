@@ -22,20 +22,20 @@ class ConfigManager
     const DEFAULT_PACKAGE_CONFIG = 'laravel-gettext';
 
     /**
-     * Sets configuration Array
-     * 
-     * @param Array $config
+     * @param array $config
+     * @throws RequiredConfigurationKeyException
      */
-    public function __construct(Array $config) 
+    public function __construct(array $config)
     {
         $this->config = $this->generateFromArray($config);
     }
 
     /**
-     * Returns a new instance of ConfigManager
-     * 
-     * @param  Array $config
-     * @return ConfigManager
+     * Get new instance of the ConfigManager
+     *
+     * @param null $config
+     * @return static
+     * @throws RequiredConfigurationFileException
      */
     public static function create($config = null)
     {
@@ -44,46 +44,54 @@ class ConfigManager
             $config = Config::get(static::DEFAULT_PACKAGE_CONFIG);
         }
 
-        if (!$config || !is_array($config)) {
+        if (!is_array($config)) {
             throw new RequiredConfigurationFileException(
-                "You need to publish the package configuration file");
+                "You need to publish the package configuration file"
+            );
         }
 
-        $manager = new static($config);
-        return $manager;
+        return new static($config);
     }
 
     /**
-     * Returns the Config model
+     * Get the config model
+     *
      * @return ConfigModel
      */
-    public function get() 
+    public function get()
     {
         return $this->config;
     }
 
     /**
-     * Creates the configuration container and
-     * checks from required fields
+     * Creates a configuration container and checks the required fields
      *
      * @param array $config
-     * @throws RequiredConfigurationKeyException
      * @return ConfigModel
+     * @throws RequiredConfigurationKeyException
      */
     protected function generateFromArray(array $config)
     {
-        $requiredKeys = array('locale', 'fallback-locale', 'encoding');
+        $requiredKeys = [
+            'locale',
+            'fallback-locale',
+            'encoding'
+        ];
 
         foreach ($requiredKeys as $key) {
             if (!array_key_exists($key, $config)) {
                 throw new RequiredConfigurationKeyException(
-                    "Unconfigured required value: $key");
+                    sprintf('Unconfigured required value: %s', $key)
+                );
             }
         }
 
         $container = new ConfigModel();
+
+        $id = isset($config['session-identifier']) ? $config['session-identifier'] : 'laravel-gettext-locale';
+
         $container->setLocale($config['locale'])
-            ->setSessionIdentifier(isset($config['session-identifier']) ? $config['session-identifier'] : 'laravel-gettext-locale')
+            ->setSessionIdentifier($id)
             ->setEncoding($config['encoding'])
             ->setFallbackLocale($config['fallback-locale'])
             ->setSupportedLocales($config['supported-locales'])

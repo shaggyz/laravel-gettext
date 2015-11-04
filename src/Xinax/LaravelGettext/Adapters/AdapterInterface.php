@@ -4,20 +4,25 @@ namespace Xinax\LaravelGettext\Adapters;
 
 interface AdapterInterface
 {
-
     /**
-     * Returns the adapter current locale
+     * Get the current locale
+     *
+     * @return string
      */
     public function getLocale();
 
     /**
-     * Sets the locale on current addapter
+     * Sets the locale on the adapter
+     *
+     * @param string $locale
+     * @return boolean
      */
     public function setLocale($locale);
 
     /**
-     * Return the application path
+     * Get the application path
+     *
+     * @return string
      */
     public function getApplicationPath();
-
 }

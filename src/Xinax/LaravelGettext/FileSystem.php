@@ -1,12 +1,14 @@
 <?php namespace Xinax\LaravelGettext;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
 use Xinax\LaravelGettext\Exceptions\DirectoryNotFoundException;
 use Xinax\LaravelGettext\Exceptions\FileCreationException;
 
-class FileSystem {
-
+class FileSystem
+{
     /**
      * Package configuration model
      *
@@ -18,30 +20,35 @@ class FileSystem {
      * File system base path
      * All paths will be relative to this
      *
-     * @var String
+     * @var string
      */
     protected $basePath;
 
     /**
      * Storage path for file generation
      *
-     * @var String
+     * @var string
      */
     protected $storagePath;
 
     /**
      * Storage directory name for view compilation
      *
-     * @var String
+     * @var string
      */
     protected $storageContainer;
 
     /**
-     * Sets configuration
+     * The folder name in which the language files are stored
      *
+     * @var string
+     */
+    protected $folderName;
+
+    /**
      * @param Config $config
-     * @param String $basePath
-     * @param String $storagePath
+     * @param $basePath
+     * @param $storagePath
      */
     public function __construct(Config $config, $basePath, $storagePath)
     {
@@ -49,6 +56,7 @@ class FileSystem {
         $this->basePath = $basePath;
         $this->storagePath = $storagePath;
         $this->storageContainer = "framework";
+        $this->folderName = 'i18n';
     }
 
     /**
@@ -59,7 +67,15 @@ class FileSystem {
      *
      * @return Boolean status
      */
-    public function compileViews(Array $viewPaths, $domain)
+    /**
+     * Build views in order to parse php files
+     *
+     * @param array $viewPaths
+     * @param string $domain
+     * @return bool
+     * @throws FileCreationException
+     */
+    public function compileViews(array $viewPaths, $domain)
     {
         // Check the output directory
         $targetDir = $this->storagePath . DIRECTORY_SEPARATOR . $this->storageContainer;
@@ -73,60 +89,61 @@ class FileSystem {
         $this->clearDirectory($domainDir);
         $this->createDirectory($domainDir);
 
-        foreach ( $viewPaths as $path ) {
-
+        foreach ($viewPaths as $path) {
             $path = $this->basePath . DIRECTORY_SEPARATOR . $path;
 
             $fs = new \Illuminate\Filesystem\Filesystem($path);
             $files = $fs->allFiles(realpath($path));
+
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
             foreach ($files as $file) {
                 $filePath = $file->getRealPath();
                 $compiler->setPath($filePath);
+
                 $contents = $compiler->compileString($fs->get($filePath));
+
                 $compiledPath = $compiler->getCompiledPath($compiler->getPath());
 
-                $fs->put($compiledPath . '.php', $contents);
+                $fs->put(
+                    $compiledPath . '.php',
+                    $contents
+                );
             }
-
         }
 
         return true;
     }
 
     /**
-     * Constructs and returns the full path to
-     * translation files
-     *
-     * @param  String $append
-     * @return String
+     * Constructs and returns the full path to the translation files
+     * @param null $append
+     * @return string
      */
     public function getDomainPath($append = null)
     {
-        $path = array(
+        $path = [
             $this->basePath,
             $this->configuration->getTranslationsPath(),
-            "i18n"
-        );
+            $this->folderName,
+        ];
 
         if (!is_null($append)) {
             array_push($path, $append);
         }
 
         return implode(DIRECTORY_SEPARATOR, $path);
-
     }
 
     /**
-     * Creates a configured .po file on $path. If write is true the file will
-     * be created, otherwise the file contents are returned.
+     * Creates a configured .po file on $path
+     * If PHP are not able to create the file the content will be returned instead
      *
-     * @param  String  $path
-     * @param  String  $locale
-     * @param  String  $domain
-     * @param  Boolean $write
-     * @return Integer | String
+     * @param string $path
+     * @param string $locale
+     * @param string $domain
+     * @param bool|true $write
+     * @return int|string
      */
     public function createPOFile($path, $locale, $domain, $write = true)
     {
@@ -135,7 +152,7 @@ class FileSystem {
         $translator = $this->configuration->getTranslator();
         $encoding = $this->configuration->getEncoding();
 
-        // L5 new structure, language resources are now here
+        // TODO: Find better linking
         $relativePath = "../../../../../app";
 
         $template = 'msgid ""' . "\n";
@@ -165,6 +182,7 @@ class FileSystem {
             array_push($sourcePaths, $this->getStorageForDomain($domain));
 
             $i = 0;
+
             foreach ($sourcePaths as $sourcePath) {
                 $template .= '"X-Poedit-SearchPath-' . $i . ': ' . $sourcePath . '\n' . "\"\n";
                 $i++;
@@ -172,34 +190,30 @@ class FileSystem {
 
         }
 
-        if ($write) {
-
-            // File creation
-            $file = fopen($path, "w");
-            $result = fwrite($file, $template);
-            fclose($file);
-
-            return $result;
-
-        } else {
-
-            // Contents for update
+        if (!$write) {
             return $template . "\n";
         }
 
+        // File creation
+        $file = fopen($path, "w");
+        $result = fwrite($file, $template);
+        fclose($file);
+
+        return $result;
     }
 
     /**
-     * Tries to create a directory in $path
+     * Validate if the directory can be created
      *
      * @param $path
-     * @throws Exceptions\FileCreationException
+     * @throws FileCreationException
      */
     protected function createDirectory($path)
     {
         if (!mkdir($path)) {
             throw new FileCreationException(
-                "I can't create the directory: $path");
+                sprintf('Can\'t create the directory: %s', $path)
+            );
         }
     }
 
@@ -214,24 +228,23 @@ class FileSystem {
     {
         $this->createDirectory($localePath);
 
-        $gettextPath = $localePath .
-            DIRECTORY_SEPARATOR .
-            "LC_MESSAGES";
-
+        $gettextPath = $localePath . DIRECTORY_SEPARATOR . "LC_MESSAGES";
         $this->createDirectory($gettextPath);
 
         // File generation for each domain
         foreach ($this->configuration->getAllDomains() as $domain) {
-
-            $localePOPath = implode(array(
+            $data = [
                 $localePath,
                 "LC_MESSAGES",
                 $domain . ".po",
-            ), DIRECTORY_SEPARATOR);
+            ];
+
+            $localePOPath = implode($data, DIRECTORY_SEPARATOR);
 
             if (!$this->createPOFile($localePOPath, $locale, $domain)) {
                 throw new FileCreationException(
-                    "I can't create the file: $localePOPath");
+                    sprintf('Can\'t create the file: %s', $localePOPath)
+                );
             }
 
         }
@@ -239,79 +252,92 @@ class FileSystem {
     }
 
     /**
-     * Update the .po file headers (mainly source-file paths) by domain
+     * Update the .po file headers by domain
+     * (mainly source-file paths)
      *
-     * @param  String                      $localePath
-     * @param  String                      $locale
-     * @param  String                      $domain
+     * @param $localePath
+     * @param $locale
+     * @param $domain
+     * @return bool
      * @throws LocaleFileNotFoundException
-     * @return Boolean
      */
     public function updateLocale($localePath, $locale, $domain)
     {
-        $localePOPath = implode(array(
+        $data = [
             $localePath,
             "LC_MESSAGES",
             $domain . ".po",
-        ), DIRECTORY_SEPARATOR);
+        ];
 
-        if (!file_exists($localePOPath) ||
-            !$localeContents = file_get_contents($localePOPath)
-        ) {
+        $localePOPath = implode($data, DIRECTORY_SEPARATOR);
+
+        if (!file_exists($localePOPath) || !$localeContents = file_get_contents($localePOPath)) {
             throw new LocaleFileNotFoundException(
-                "I can't read $localePOPath verify your locale structure");
+                sprintf('Can\'t read %s verify your locale structure', $localePOPath)
+            );
         }
 
-        $newHeader = $this->createPOFile($localePOPath, $locale, $domain, false);
+        $newHeader = $this->createPOFile(
+            $localePOPath,
+            $locale,
+            $domain,
+            false
+        );
 
         // Header replacement
         $localeContents = preg_replace('/^([^#])+:?/', $newHeader, $localeContents);
 
         if (!file_put_contents($localePOPath, $localeContents)) {
-            throw new LocaleFileNotFoundException("I can't write on $localePOPath");
+            throw new LocaleFileNotFoundException(
+                sprintf('Can\'t write on %s', $localePOPath)
+            );
         }
 
         return true;
-
     }
 
     /**
-     * Return the relative path from a file or directory to another
+     * Return the relative path from a file or directory to anothe
      *
-     * @param    String          $from
-     * @param    String          $to
-     * @return   String          $path
-     * @author   Laurent Goussard
-     **/
+     * @param string $from
+     * @param string $to
+     * @return string
+     * @author Laurent Goussard
+     */
     public function getRelativePath($from, $to)
     {
-        // some compatibility fixes for Windows paths
+        // Compatibility fixes for Windows paths
         $from = is_dir($from) ? rtrim($from, '\/') . '/' : $from;
         $to   = is_dir($to)   ? rtrim($to, '\/') . '/'   : $to;
         $from = str_replace('\\', '/', $from);
         $to   = str_replace('\\', '/', $to);
 
-        $from     = explode('/', $from);
-        $to       = explode('/', $to);
-        $relPath  = $to;
+        $from = explode('/', $from);
+        $to = explode('/', $to);
+        $relPath = $to;
 
-        foreach($from as $depth => $dir) {
-            // find first non-matching dir
-            if($dir === $to[$depth]) {
-                // ignore this directory
-                array_shift($relPath);
-            } else {
-                // get number of remaining dirs to $from
+        foreach ($from as $depth => $dir) {
+            if ($dir !== $to[$depth]) {
+                // Number of remaining directories
                 $remaining = count($from) - $depth;
-                if($remaining > 1) {
-                    // add traversals up to first matching dir
+
+                if ($remaining > 1) {
+                    // Add traversals up to first matching directory
                     $padLength = (count($relPath) + $remaining - 1) * -1;
-                    $relPath = array_pad($relPath, $padLength, '..');
+
+                    $relPath = array_pad(
+                        $relPath,
+                        $padLength,
+                        '..'
+                    );
+
                     break;
-                } else {
-                    $relPath[0] = './' . $relPath[0];
                 }
+
+                $relPath[0] = './' . $relPath[0];
             }
+
+            array_shift($relPath);
         }
 
         return implode('/', $relPath);
@@ -319,20 +345,22 @@ class FileSystem {
     }
 
     /**
-     * Checks the needed directories. Optionally checks
-     * each locale directory, if $checkLocales is true.
+     * Checks the required directory
+     * Optionally checks each local directory, if $checkLocales is true
      *
-     * @param bool $checkLocales
+     * @param bool|false $checkLocales
      * @return bool
-     * @throws Exceptions\DirectoryNotFoundException
+     * @throws DirectoryNotFoundException
      */
     public function checkDirectoryStructure($checkLocales = false)
     {
         // Application base path
         if (!file_exists($this->basePath)) {
             throw new Exceptions\DirectoryNotFoundException(
-                "Missing root path directory: " . $this->basePath .
-                ", check the 'base-path' key in your configuration."
+                sprintf(
+                    'Missing root path directory:  %s, check the \'base-path\' key in your configuration.',
+                    $this->basePath
+                )
             );
         }
 
@@ -342,26 +370,32 @@ class FileSystem {
         // Translation files domain path
         if (!file_exists($domainPath)) {
             throw new Exceptions\DirectoryNotFoundException(
-                "Missing base required directory: $domainPath" .
-                "<br>Remember run <b>artisan gettext:create</b> for first time."
+                sprintf(
+                    'Missing base required directory: %s, remember to run \'artisan gettext:create\' the first time',
+                    $domainPath
+                )
             );
         }
 
-        if ($checkLocales) {
-            foreach ($this->configuration->getSupportedLocales() as $locale) {
+        if (!$checkLocales) {
+            return true;
+        }
 
-                // Default locale is not needed
-                if ($locale == $this->configuration->getLocale()) {
-                    continue;
-                }
+        foreach ($this->configuration->getSupportedLocales() as $locale) {
+            // Default locale is not needed
+            if ($locale == $this->configuration->getLocale()) {
+                continue;
+            }
 
-                $localePath = $this->getDomainPath($locale);
-                if (!file_exists($localePath)) {
-                    $hint = "<br>May be you forget run <b>artisan gettext:update</b>?";
-                    throw new Exceptions\DirectoryNotFoundException(
-                        "Missing locale required directory: $localePath" . $hint);
-                }
+            $localePath = $this->getDomainPath($locale);
 
+            if (!file_exists($localePath)) {
+                throw new Exceptions\DirectoryNotFoundException(
+                    sprintf(
+                        'Missing locale required directory: %s, maybe you forgot to run \'artisan gettext:update\'',
+                        $locale
+                    )
+                );
             }
         }
 
@@ -369,32 +403,29 @@ class FileSystem {
     }
 
     /**
-     * Creates the localization directories and files, by domain
-     * Returns an array with all created paths
+     * Creates the localization directories and files by domain
      *
-     * @return Array paths
+     * @return array
+     * @throws FileCreationException
      */
     public function generateLocales()
     {
         // Application base path
         $this->createDirectory($this->getDomainPath());
 
-        $localePaths = array();
+        $localePaths = [];
 
         // Locale directories
         foreach ($this->configuration->getSupportedLocales() as $locale) {
-
             $localePath = $this->getDomainPath($locale);
 
             if (!file_exists($localePath)) {
-
                 // Locale directory is created
                 $this->addLocale($localePath, $locale);
 
                 array_push($localePaths, $localePath);
 
             }
-
         }
 
         return $localePaths;
@@ -412,10 +443,10 @@ class FileSystem {
     }
 
     /**
-     * Sets the Package configuration model.
+     * Set the package configuration model
      *
-     * @param Config $configuration the configuration
-     * @return self
+     * @param Config $configuration
+     * @return $this
      */
     public function setConfiguration(Config $configuration)
     {
@@ -424,10 +455,9 @@ class FileSystem {
     }
 
     /**
-     * Gets the File system base path
-     * All paths will be relative to this.
+     * Get the filesystem base path
      *
-     * @return String
+     * @return string
      */
     public function getBasePath()
     {
@@ -435,11 +465,10 @@ class FileSystem {
     }
 
     /**
-     * Sets the File system base path
-     * All paths will be relative to this.
+     * Set the filesystem base path
      *
-     * @param String $basePath the base path
-     * @return self
+     * @param $basePath
+     * @return $this
      */
     public function setBasePath($basePath)
     {
@@ -448,9 +477,9 @@ class FileSystem {
     }
 
     /**
-     * Gets the Storage path for file generation.
+     * Get the storage path
      *
-     * @return String
+     * @return string
      */
     public function getStoragePath()
     {
@@ -458,10 +487,10 @@ class FileSystem {
     }
 
     /**
-     * Sets the Storage path for file generation.
+     * Set the storage path
      *
-     * @param String $storagePath the storage path
-     * @return self
+     * @param $storagePath
+     * @return $this
      */
     public function setStoragePath($storagePath)
     {
@@ -470,9 +499,9 @@ class FileSystem {
     }
 
     /**
-     * Returns the full path for a domain storage directory
+     * Get the full path for domain storage directory
      *
-     * @param  String $domain
+     * @param $domain
      * @return String
      */
     public function getStorageForDomain($domain)
@@ -489,18 +518,18 @@ class FileSystem {
     /**
      * Removes the directory contents recursively
      *
-     * @param  String $path
-     * @return void
+     * @param string $path
+     * @return null|boolean
      */
     public static function clearDirectory($path)
     {
         if (!file_exists($path)) {
-            return;
+            return null;
         }
 
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ($files as $fileinfo) {
@@ -509,5 +538,26 @@ class FileSystem {
         }
 
         rmdir($path);
+        return true;
+    }
+
+    /**
+     * Get the folder name
+     *
+     * @return string
+     */
+    public function getFolderName()
+    {
+        return $this->folderName;
+    }
+
+    /**
+     * Set the folder name
+     *
+     * @param $folderName
+     */
+    public function setFolderName($folderName)
+    {
+        $this->folderName = $folderName;
     }
 }

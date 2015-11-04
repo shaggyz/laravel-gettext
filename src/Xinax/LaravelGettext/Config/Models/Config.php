@@ -4,76 +4,75 @@ namespace Xinax\LaravelGettext\Config\Models;
 
 class Config
 {
-
     /**
      * Session identifier
      *
-     * @type String
+     * @var string
      */
     protected $sessionIdentifier;
 
     /**
-     * Charset encoding for files (UTF-8)
+     * Charset encoding for files
      *
-     * @type
+     * @var string
      */
-    protected $encoding = 'UTF-8';
+    protected $encoding;
 
     /**
      * Full ISO Locale (en_EN)
      *
-     * @type String
+     * @var string
      */
     protected $locale;
 
     /**
      * Fallback locale
      *
-     * @type String
+     * @var string
      */
     protected $fallbackLocale;
 
     /**
      * Supported locales
      *
-     * @type Array
+     * @var array
      */
-    protected $supportedLocales = array();
+    protected $supportedLocales;
 
     /**
      * Gettext domain
      *
-     * @type String
+     * @var string
      */
     protected $domain;
 
     /**
      * Path to translation files
      *
-     * @type String
+     * @var string
      */
     protected $translationsPath;
 
     /**
-     * Project identificator
+     * Project identifier
      *
-     * @type String
+     * @var string
      */
     protected $project;
 
     /**
      * Translator contact data
      *
-     * @type String
+     * @var string
      */
     protected $translator;
 
     /**
      * Source paths
      *
-     * @type Array
+     * @var array
      */
-    protected $sourcePaths = array();
+    protected $sourcePaths;
 
     /**
      * Sync with laravel locale
@@ -82,10 +81,15 @@ class Config
      */
     protected $syncLaravel;
 
+    public function __construct()
+    {
+        $this->encoding = 'UTF-8';
+        $this->supportedLocales = [];
+        $this->sourcePaths = [];
+    }
+
     /**
-     * Gets the session identifier.
-     *
-     * @return mixed
+     * @return string
      */
     public function getSessionIdentifier()
     {
@@ -93,21 +97,17 @@ class Config
     }
 
     /**
-     * Sets the session identifier.
-     *
-     * @param mixed $identifier the identifier
-     * @return self
+     * @param string $sessionIdentifier
+     * @return $this
      */
-    public function setSessionIdentifier($identifier)
+    public function setSessionIdentifier($sessionIdentifier)
     {
-        $this->sessionIdentifier = $identifier;
+        $this->sessionIdentifier = $sessionIdentifier;
         return $this;
     }
 
     /**
-     * Gets the Charset encoding for files (UTF-8).
-     *
-     * @return mixed
+     * @return string
      */
     public function getEncoding()
     {
@@ -115,10 +115,8 @@ class Config
     }
 
     /**
-     * Sets the Charset encoding for files (UTF-8).
-     *
-     * @param mixed $encoding the encoding
-     * @return self
+     * @param string $encoding
+     * @return $this
      */
     public function setEncoding($encoding)
     {
@@ -127,9 +125,7 @@ class Config
     }
 
     /**
-     * Gets the Full ISO Locale (en_EN).
-     *
-     * @return mixed
+     * @return string
      */
     public function getLocale()
     {
@@ -137,10 +133,8 @@ class Config
     }
 
     /**
-     * Sets the Full ISO Locale (en_EN).
-     *
-     * @param mixed $locale the locale
-     * @return self
+     * @param string $locale
+     * @return $this
      */
     public function setLocale($locale)
     {
@@ -149,9 +143,7 @@ class Config
     }
 
     /**
-     * Gets the Fallback locale.
-     *
-     * @return mixed
+     * @return string
      */
     public function getFallbackLocale()
     {
@@ -159,10 +151,8 @@ class Config
     }
 
     /**
-     * Sets the Fallback locale.
-     *
-     * @param mixed $fallbackLocale the fallback locale
-     * @return self
+     * @param string $fallbackLocale
+     * @return $this
      */
     public function setFallbackLocale($fallbackLocale)
     {
@@ -171,9 +161,7 @@ class Config
     }
 
     /**
-     * Gets the Supported locales.
-     *
-     * @return mixed
+     * @return array
      */
     public function getSupportedLocales()
     {
@@ -181,10 +169,8 @@ class Config
     }
 
     /**
-     * Sets the Supported locales.
-     *
-     * @param mixed $supportedLocales the supported locales
-     * @return self
+     * @param array $supportedLocales
+     * @return $this
      */
     public function setSupportedLocales($supportedLocales)
     {
@@ -193,9 +179,7 @@ class Config
     }
 
     /**
-     * Gets the Gettext domain.
-     * \
-     * @return mixed
+     * @return string
      */
     public function getDomain()
     {
@@ -203,10 +187,8 @@ class Config
     }
 
     /**
-     * Sets the Gettext domain.
-     *
-     * @param mixed $domain the domain
-     * @return self
+     * @param string $domain
+     * @return $this
      */
     public function setDomain($domain)
     {
@@ -215,9 +197,7 @@ class Config
     }
 
     /**
-     * Gets the Path to translation files.
-     *
-     * @return mixed
+     * @return string
      */
     public function getTranslationsPath()
     {
@@ -225,10 +205,8 @@ class Config
     }
 
     /**
-     * Sets the Path to translation files.
-     *
-     * @param mixed $translationsPath the translations path
-     * @return self
+     * @param string $translationsPath
+     * @return $this
      */
     public function setTranslationsPath($translationsPath)
     {
@@ -237,9 +215,7 @@ class Config
     }
 
     /**
-     * Gets the Project identificator.
-     *
-     * @return mixed
+     * @return string
      */
     public function getProject()
     {
@@ -247,10 +223,8 @@ class Config
     }
 
     /**
-     * Sets the Project identificator.
-     *
-     * @param mixed $project the project
-     * @return self
+     * @param string $project
+     * @return $this
      */
     public function setProject($project)
     {
@@ -259,9 +233,7 @@ class Config
     }
 
     /**
-     * Gets the Translator contact data.
-     *
-     * @return mixed
+     * @return string
      */
     public function getTranslator()
     {
@@ -269,10 +241,8 @@ class Config
     }
 
     /**
-     * Sets the Translator contact data.
-     *
-     * @param mixed $translator the translator
-     * @return self
+     * @param string $translator
+     * @return $this
      */
     public function setTranslator($translator)
     {
@@ -281,9 +251,7 @@ class Config
     }
 
     /**
-     * Gets the Source paths.
-     *
-     * @return mixed
+     * @return array
      */
     public function getSourcePaths()
     {
@@ -291,10 +259,8 @@ class Config
     }
 
     /**
-     * Sets the Source paths.
-     *
-     * @param mixed $sourcePaths the source paths
-     * @return self
+     * @param array $sourcePaths
+     * @return $this
      */
     public function setSourcePaths($sourcePaths)
     {
@@ -303,20 +269,16 @@ class Config
     }
 
     /**
-     * Gets the Sync with laravel locale.
-     *
-     * @return mixed
+     * @return boolean
      */
-    public function getSyncLaravel()
+    public function isSyncLaravel()
     {
         return $this->syncLaravel;
     }
 
     /**
-     * Sets the Sync with laravel locale.
-     *
-     * @param mixed $syncLaravel the sync laravel
-     * @return self
+     * @param boolean $syncLaravel
+     * @return $this
      */
     public function setSyncLaravel($syncLaravel)
     {
@@ -325,12 +287,16 @@ class Config
     }
 
     /**
-     * Returs an array with all domain names defined 
-     * @return Array
+     * Return an array with all domain names
+     *
+     * @return array
      */
     public function getAllDomains()
     {
-        $domains = [ $this->domain ];
+        $domains = [
+            $this->domain
+        ];
+
         $userDomains = [];
 
         foreach ($this->sourcePaths as $domain => $paths) {
@@ -343,27 +309,29 @@ class Config
     }
 
     /**
-     * Returns all routes from a single domain
-     * 
-     * @param  string $domain Domain name
-     * @return Array         
+     * Return all routes for a single domain
+     *
+     * @param $domain
+     * @return array
      */
-    public function getSourcesFromDomain($domain) 
+    public function getSourcesFromDomain($domain)
     {
-        // Default domain
         if ($domain == $this->domain) {
             $rootPaths = [];
+
             foreach ($this->sourcePaths as $domain => $path) {
                 if (!is_array($path)) {
                     array_push($rootPaths, $path);
-                } 
+                }
             }
-            return $rootPaths;
-        } else if (array_key_exists($domain, $this->sourcePaths)) {
-            return $this->sourcePaths[$domain];
-        } else {
-            return [];
-        }
-    }
 
+            return $rootPaths;
+        }
+
+        if (array_key_exists($domain, $this->sourcePaths)) {
+            return $this->sourcePaths[$domain];
+        }
+
+        return [];
+    }
 }

@@ -21,9 +21,7 @@ class GettextCreate extends BaseCommand
         'Generates the initial directories and files for laravel-gettext.';
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * Execute the console command
      */
     public function fire()
     {
@@ -33,20 +31,20 @@ class GettextCreate extends BaseCommand
         $dirCreations = 0;
 
         try {
-
             // Locales
             $localesGenerated = $this->fileSystem->generateLocales();
+
             foreach ($localesGenerated as $localePath) {
-                $this->comment("Locale directory created ($localePath)");
+                $this->comment(sprintf("Locale directory created (%s)", $localePath));
                 $dirCreations++;
             }
 
-            $this->info("Done!");
-            
+            $this->info("Finished");
+
+            $msg = "The directory structure is right. No directory creation were needed.";
+
             if ($dirCreations) {
-                $msg = "$dirCreations directories created.";
-            } else {
-                $msg = "The directory structure is right. No directory creation were needed.";
+                $msg = $dirCreations . " directories has been created.";
             }
 
             $this->info($msg);
@@ -63,7 +61,7 @@ class GettextCreate extends BaseCommand
      */
     protected function getArguments()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -73,6 +71,6 @@ class GettextCreate extends BaseCommand
      */
     protected function getOptions()
     {
-        return array();
+        return [];
     }
 }

@@ -4,8 +4,9 @@ namespace Xinax\LaravelGettext\Session;
 
 use Illuminate\Support\Facades\Session;
 
-class SessionHandler{
-
+class SessionHandler
+{
+    /** @var string */
     private $sessionIdentifier;
 
     /**
@@ -19,14 +20,16 @@ class SessionHandler{
     }
 
     /**
-     * Returns the locale identifier from
-     * the main session adapter
+     * Return the local identifier from the main session adapter
+     *
+     * @param string $default
+     * @return string
      */
     public function get($default)
     {
         $locale = $default;
 
-        if(Session::has($this->sessionIdentifier)){
+        if (Session::has($this->sessionIdentifier)) {
             $locale = Session::get($this->sessionIdentifier);
         }
 
@@ -35,10 +38,14 @@ class SessionHandler{
     }
 
     /**
-     * Sets the given locale on session
+     * Set the given locale in the session
+     *
+     * @param string $locale
+     * @return $this
      */
     public function set($locale)
     {
         Session::set($this->sessionIdentifier, $locale);
+        return $this;
     }
 }

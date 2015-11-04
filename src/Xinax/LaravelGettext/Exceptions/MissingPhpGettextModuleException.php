@@ -2,4 +2,9 @@
 
 namespace Xinax\LaravelGettext\Exceptions;
 
-class MissingPhpGettextModuleException extends \Exception{}
+use Exception;
+
+class MissingPhpGettextModuleException extends Exception
+{
+
+}
