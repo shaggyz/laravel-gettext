@@ -81,11 +81,21 @@ class Config
      */
     protected $syncLaravel;
 
+    protected $relativePath;
+
     public function __construct()
     {
         $this->encoding = 'UTF-8';
         $this->supportedLocales = [];
         $this->sourcePaths = [];
+    }
+
+    public function getRelativePath(){
+        return $this->relativePath;
+    }
+
+    public function setRelativePath($path){
+        $this->relativePath = $path;
     }
 
     /**
