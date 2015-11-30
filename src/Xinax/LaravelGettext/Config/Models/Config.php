@@ -277,6 +277,16 @@ class Config
     }
 
     /**
+     * Gets the Sync with laravel locale.
+     *
+     * @return mixed
+     */
+    public function getSyncLaravel()
+    {
+        return $this->syncLaravel;
+    }
+
+    /**
      * @param boolean $syncLaravel
      * @return $this
      */
