@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MultilanguageLaravelApplication\n"
+"POT-Creation-Date: 2014-11-06 17:32+0100\n"
+"PO-Revision-Date: 2014-11-06 17:32+0100\n"
+"Last-Translator: Nicolás Palumbo <n@xinax.net>\n"
+"Language-Team: James Translator <james@translations.colm>\n"
+"Language: es_AR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../../../\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: controllers\n"
+"X-Poedit-SearchPath-1: views/frontend\n"
+
+#: controllers/ExampleController.php:7
+msgid "Controller string"
+msgstr "Cadena de controlador"
+
+#: views/frontend/frontend.blade.php:12
+msgid "Frontend string with php echo"
+msgstr "Cadena de frontend con echo de php"
