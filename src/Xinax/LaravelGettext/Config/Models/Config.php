@@ -334,4 +334,26 @@ class Config
 
         return [];
     }
+
+    /**
+     * Gets C locale setting.
+     *
+     * @return boolean
+     */
+    public function getCustomLocale()
+    {
+        return $this->customLocale;
+    }
+    
+    /**
+     * Sets if will use C locale structure.
+     *
+     * @param mixed $sourcePaths the source paths
+     * @return self
+     */
+    public function setCustomLocale($customLocale)
+    {
+        $this->customLocale = $customLocale;
+        return $this;
+    }
 }

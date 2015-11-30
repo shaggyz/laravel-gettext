@@ -90,7 +90,8 @@ class Gettext
         }
 
         try {
-            $gettextLocale = $locale . "." . $this->encoding;
+            $customLocale = $this->configuration->getCustomLocale() ? "C." : $locale . ".";
+            $gettextLocale = $customLocale . $this->encoding;
 
             // All locale functions are updated: LC_COLLATE, LC_CTYPE,
             // LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
@@ -98,11 +99,11 @@ class Gettext
             putenv("LANGUAGE=$gettextLocale");
             setlocale(LC_ALL, $gettextLocale);
 
-            // Domain
-            $this->setDomain($this->domain);
-
             $this->locale = $locale;
             $this->session->set($locale);
+
+            // Domain
+            $this->setDomain($this->domain);
 
             // Laravel built-in locale
             if ($this->configuration->isSyncLaravel()) {
@@ -189,7 +190,9 @@ class Gettext
             throw new UndefinedDomainException("Domain '$domain' is not registered.");
         }
 
-        bindtextdomain($domain, $this->fileSystem->getDomainPath());
+        $customLocale = $this->configuration->getCustomLocale() ? "/" . $this->locale : "";
+        
+        bindtextdomain($domain, $this->fileSystem->getDomainPath() . $customLocale);
         bind_textdomain_codeset($domain, $this->encoding);
 
         $this->domain = textdomain($domain);
