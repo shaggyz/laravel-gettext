@@ -153,7 +153,6 @@ class FileSystem
         $translator = $this->configuration->getTranslator();
         $encoding = $this->configuration->getEncoding();
 
-        // TODO: Find better linking
         $relativePath = $this->configuration->getRelativePath();
 
         $template = 'msgid ""' . "\n";
