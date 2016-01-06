@@ -4,9 +4,8 @@ namespace Xinax\LaravelGettext\Middleware;
 
 use Closure;
 use \LaravelGettext;
-use Illuminate\Contracts\Routing\Middleware;
 
-class GettextMiddleware implements Middleware
+class GettextMiddleware
 {
     /**
     * Handle an incoming request.
