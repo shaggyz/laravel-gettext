@@ -81,6 +81,12 @@ class Config
      */
     protected $syncLaravel;
 
+    /**
+     * Custom locale name
+     * Used when needed locales are unavalilable
+     */
+    protected $customLocale = false;
+
     public function __construct()
     {
         $this->encoding = 'UTF-8';
