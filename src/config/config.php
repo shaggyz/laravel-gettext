@@ -92,4 +92,9 @@ return [
      * be changed when you call LaravelGettext::setLocale.
      */
     'sync-laravel' => true,
+
+    /**
+     * Use custom locale that is not supported by the system
+     */
+    'custom-locale' => false,
 ];

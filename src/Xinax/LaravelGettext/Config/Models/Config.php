@@ -277,6 +277,16 @@ class Config
     }
 
     /**
+     * Gets the Sync with laravel locale.
+     *
+     * @return mixed
+     */
+    public function getSyncLaravel()
+    {
+        return $this->syncLaravel;
+    }
+
+    /**
      * @param boolean $syncLaravel
      * @return $this
      */
@@ -333,5 +343,27 @@ class Config
         }
 
         return [];
+    }
+
+    /**
+     * Gets C locale setting.
+     *
+     * @return boolean
+     */
+    public function getCustomLocale()
+    {
+        return $this->customLocale;
+    }
+    
+    /**
+     * Sets if will use C locale structure.
+     *
+     * @param mixed $sourcePaths the source paths
+     * @return self
+     */
+    public function setCustomLocale($customLocale)
+    {
+        $this->customLocale = $customLocale;
+        return $this;
     }
 }

@@ -215,8 +215,11 @@ class MultipleDomainTest extends BaseTestCase
             $laravelGettext->getDomain()
         );
 
-        $this->assertSame("Cadena de controlador",
-                                _("Controller string"));
+        $this->assertSame(
+            "Cadena de controlador",
+            _("Controller string")
+        );
+                                
         $this->assertSame(
             "Cadena de frontend con echo de php",
             _("Frontend string with php echo")

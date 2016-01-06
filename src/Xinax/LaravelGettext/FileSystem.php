@@ -226,18 +226,28 @@ class FileSystem
      */
     public function addLocale($localePath, $locale)
     {
+        $data = array(
+            $localePath,
+            "LC_MESSAGES"
+        );
+
         $this->createDirectory($localePath);
 
-        $gettextPath = $localePath . DIRECTORY_SEPARATOR . "LC_MESSAGES";
+        if ( $this->configuration->getCustomLocale() ) {
+            $data[1] = 'C';
+
+            $gettextPath = implode($data, DIRECTORY_SEPARATOR);
+            $this->createDirectory($gettextPath);
+
+            $data[2] = 'LC_MESSAGES';
+        }
+
+        $gettextPath = implode($data, DIRECTORY_SEPARATOR);
         $this->createDirectory($gettextPath);
 
         // File generation for each domain
         foreach ($this->configuration->getAllDomains() as $domain) {
-            $data = [
-                $localePath,
-                "LC_MESSAGES",
-                $domain . ".po",
-            ];
+            $data[3] = $domain . ".po";
 
             $localePOPath = implode($data, DIRECTORY_SEPARATOR);
 
@@ -268,6 +278,12 @@ class FileSystem
             "LC_MESSAGES",
             $domain . ".po",
         ];
+
+        if ( $this->configuration->getCustomLocale() ) {
+            $customLocale = array('C');
+            
+            array_splice( $data, 1, 0, $customLocale );
+        }
 
         $localePOPath = implode($data, DIRECTORY_SEPARATOR);
 
