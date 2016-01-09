@@ -45,7 +45,7 @@ return array(
     /**
      * Relative path to the app folder: is used on .po header files
      */
-    'relativePath' => '../../../../../app',
+    'relative-path' => '../../../../../app',
 
     /**
      * Fallback locale: When default locale is not available

@@ -87,7 +87,7 @@ class Config
      *
      * @type Boolean
      */
-    protected $customLocale = false;
+    protected $customLocale;
     
     /**
      * Default relative path
@@ -101,6 +101,8 @@ class Config
         $this->encoding = 'UTF-8';
         $this->supportedLocales = [];
         $this->sourcePaths = [];
+        $this->customLocale = false;
+        $this->relativePath = "../../../../../app";
     }
 
     public function getRelativePath(){
