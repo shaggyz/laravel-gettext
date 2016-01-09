@@ -100,7 +100,8 @@ class ConfigManager
             ->setProject($config['project'])
             ->setTranslator($config['translator'])
             ->setSourcePaths($config['source-paths'])
-            ->setSyncLaravel($config['sync-laravel']);
+            ->setSyncLaravel($config['sync-laravel'])
+            ->setRelativePath($config['relativePath']);
 
         if (array_key_exists("custom-locale", $config)) {  
             $container->setCustomLocale($config['custom-locale']);

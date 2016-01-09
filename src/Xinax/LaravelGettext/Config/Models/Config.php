@@ -84,14 +84,31 @@ class Config
     /**
      * Custom locale name
      * Used when needed locales are unavalilable
+     *
+     * @type Boolean
      */
     protected $customLocale = false;
+    
+    /**
+     * Default relative path
+     *
+     * @type string
+     */
+    protected $relativePath;
 
     public function __construct()
     {
         $this->encoding = 'UTF-8';
         $this->supportedLocales = [];
         $this->sourcePaths = [];
+    }
+
+    public function getRelativePath(){
+        return $this->relativePath;
+    }
+
+    public function setRelativePath($path){
+        $this->relativePath = $path;
     }
 
     /**
