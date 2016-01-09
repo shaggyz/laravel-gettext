@@ -102,6 +102,10 @@ class ConfigManager
             ->setSourcePaths($config['source-paths'])
             ->setSyncLaravel($config['sync-laravel']);
 
+        if (array_key_exists('relative-path', $config)) {
+            $container->setRelativePath($config['relative-path']);
+        }
+
         if (array_key_exists("custom-locale", $config)) {  
             $container->setCustomLocale($config['custom-locale']);
         }

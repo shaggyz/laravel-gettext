@@ -43,6 +43,11 @@ return array(
     'translations-path' => 'lang',
 
     /**
+     * Relative path to the app folder: is used on .po header files
+     */
+    'relative-path' => '../../../../../app',
+
+    /**
      * Fallback locale: When default locale is not available
      */
     'fallback-locale' => 'es_AR',

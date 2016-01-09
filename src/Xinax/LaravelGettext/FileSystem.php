@@ -54,6 +54,7 @@ class FileSystem
     {
         $this->configuration = $config;
         $this->basePath = $basePath;
+
         $this->storagePath = $storagePath;
         $this->storageContainer = "framework";
         $this->folderName = 'i18n';
@@ -152,8 +153,7 @@ class FileSystem
         $translator = $this->configuration->getTranslator();
         $encoding = $this->configuration->getEncoding();
 
-        // TODO: Find better linking
-        $relativePath = "../../../../../app";
+        $relativePath = $this->configuration->getRelativePath();
 
         $template = 'msgid ""' . "\n";
         $template .= 'msgstr ""' . "\n";
