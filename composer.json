@@ -9,7 +9,7 @@
         "laravel-gettext",
         "laravel", "translation"
     ],
-    "license": "MIT",    
+    "license": "MIT",
     "authors": [
         {
             "name": "Nicolás Daniel Palumbo",
@@ -18,7 +18,7 @@
     ],
     "support": {
         "issues": "https://github.com/xinax/laravel-gettext/issues"
-    },    
+    },
     "require": {
         "php": ">=5.4.0",
         "laravel/framework": "5.*"
@@ -31,7 +31,10 @@
     "autoload": {
         "psr-0": {
             "Xinax\\LaravelGettext\\": "src/"
-        }
+        },
+        "files": [
+            "src/Xinax/LaravelGettext/Support/helpers.php"
+        ]
     },
     "minimum-stability": "stable"
 }
