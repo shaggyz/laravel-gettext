@@ -102,4 +102,14 @@ return [
      * Use custom locale that is not supported by the system
      */
     'custom-locale' => false,
+
+    /**
+     * The keywords list used by poedit to search the strings to be translated
+     *
+     * The "_", "__" and "gettext" are singular translation functions
+     * The "_n" and "ngettext" are plural translation functions
+     *
+     * "__" and "_n" are helpers functions @see \Xinax\LaravelGettext\Support\helpers.php
+     */
+    'keywords-list' => ['_', '__', 'gettext', '_n:1,2', 'ngettext:1,2'],
 ];

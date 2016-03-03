@@ -155,6 +155,8 @@ class FileSystem
 
         $relativePath = $this->configuration->getRelativePath();
 
+        $keywords = implode(';', $this->configuration->getKeywordsList());
+
         $template = 'msgid ""' . "\n";
         $template .= 'msgstr ""' . "\n";
         $template .= '"Project-Id-Version: ' . $project . '\n' . "\"\n";
@@ -167,7 +169,7 @@ class FileSystem
         $template .= '"Content-Type: text/plain; charset=' . $encoding . '\n' . "\"\n";
         $template .= '"Content-Transfer-Encoding: 8bit' . '\n' . "\"\n";
         $template .= '"X-Generator: Poedit 1.5.4' . '\n' . "\"\n";
-        $template .= '"X-Poedit-KeywordsList: _' . '\n' . "\"\n";
+        $template .= '"X-Poedit-KeywordsList: ' . $keywords . '\n' . "\"\n";
         $template .= '"X-Poedit-Basepath: ' . $relativePath . '\n' . "\"\n";
         $template .= '"X-Poedit-SourceCharset: ' . $encoding . '\n' . "\"\n";
 
@@ -233,7 +235,7 @@ class FileSystem
 
         $this->createDirectory($localePath);
 
-        if ( $this->configuration->getCustomLocale() ) {
+        if ($this->configuration->getCustomLocale()) {
             $data[1] = 'C';
 
             $gettextPath = implode($data, DIRECTORY_SEPARATOR);
@@ -279,10 +281,9 @@ class FileSystem
             $domain . ".po",
         ];
 
-        if ( $this->configuration->getCustomLocale() ) {
+        if ($this->configuration->getCustomLocale()) {
             $customLocale = array('C');
-            
-            array_splice( $data, 1, 0, $customLocale );
+            array_splice($data, 1, 0, $customLocale);
         }
 
         $localePOPath = implode($data, DIRECTORY_SEPARATOR);
@@ -550,12 +551,12 @@ class FileSystem
 
         foreach ($files as $fileinfo) {
             // if the file isn't a .gitignore file we should remove it.
-            if($fileinfo->getFilename() !== '.gitignore'){
+            if ($fileinfo->getFilename() !== '.gitignore') {
                 $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
                 $todo($fileinfo->getRealPath());
             }
         }
-        
+
         // since the folder now contains a .gitignore we can't remove it
         //rmdir($path);
         return true;

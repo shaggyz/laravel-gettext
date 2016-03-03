@@ -106,8 +106,12 @@ class ConfigManager
             $container->setRelativePath($config['relative-path']);
         }
 
-        if (array_key_exists("custom-locale", $config)) {  
+        if (array_key_exists("custom-locale", $config)) {
             $container->setCustomLocale($config['custom-locale']);
+        }
+
+        if (array_key_exists("keywords-list", $config)) {
+            $container->setKeywordsList($config['keywords-list']);
         }
 
         return $container;
