@@ -93,6 +93,13 @@ class FileSystem
         foreach ($viewPaths as $path) {
             $path = $this->basePath . DIRECTORY_SEPARATOR . $path;
 
+            if (empty(realpath($path))) {
+                throw new Exceptions\DirectoryNotFoundException(sprintf(
+                        'The source-path: %s, is not found, please check that it exists, and update your config with the right path.',
+                        $path
+                    ));
+            }
+
             $fs = new \Illuminate\Filesystem\Filesystem($path);
             $files = $fs->allFiles(realpath($path));
 
