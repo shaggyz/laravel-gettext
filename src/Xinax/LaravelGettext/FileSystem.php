@@ -210,7 +210,7 @@ class FileSystem
      */
     protected function createDirectory($path)
     {
-        if (!mkdir($path)) {
+        if (!file_exists($path) && !mkdir($path)) {
             throw new FileCreationException(
                 sprintf('Can\'t create the directory: %s', $path)
             );
@@ -549,11 +549,15 @@ class FileSystem
         );
 
         foreach ($files as $fileinfo) {
-            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-            $todo($fileinfo->getRealPath());
+            // if the file isn't a .gitignore file we should remove it.
+            if($fileinfo->getFilename() !== '.gitignore'){
+                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                $todo($fileinfo->getRealPath());
+            }
         }
-
-        rmdir($path);
+        
+        // since the folder now contains a .gitignore we can't remove it
+        //rmdir($path);
         return true;
     }
 
