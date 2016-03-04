@@ -238,19 +238,26 @@ class FileSystem
             "LC_MESSAGES"
         );
 
-        $this->createDirectory($localePath);
+        if (!file_exists($localePath)) {
+            $this->createDirectory($localePath);
+        }
 
         if ( $this->configuration->getCustomLocale() ) {
             $data[1] = 'C';
 
             $gettextPath = implode($data, DIRECTORY_SEPARATOR);
-            $this->createDirectory($gettextPath);
+            if (!file_exists($gettextPath)) {
+                $this->createDirectory($gettextPath);
+            }
 
             $data[2] = 'LC_MESSAGES';
         }
 
         $gettextPath = implode($data, DIRECTORY_SEPARATOR);
-        $this->createDirectory($gettextPath);
+        if (!file_exists($gettextPath)) {
+                $this->createDirectory($gettextPath);
+        }
+
 
         // File generation for each domain
         foreach ($this->configuration->getAllDomains() as $domain) {
@@ -434,8 +441,9 @@ class FileSystem
     public function generateLocales()
     {
         // Application base path
-        $this->createDirectory($this->getDomainPath());
-
+        if (!file_exists($this->getDomainPath())) {
+            $this->createDirectory($this->getDomainPath());
+        }
         $localePaths = [];
 
         // Locale directories
