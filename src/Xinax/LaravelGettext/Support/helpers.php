@@ -1,12 +1,26 @@
 <?php
+
+if (!function_exists('_')) {
+    /**
+     * Generic translation function
+     *
+     * @param $message
+     * @return mixed
+     */
+    function _($message)
+    {
+        return gettext($message);
+    }
+}
+
 if (!function_exists('__')) {
     /**
-     * Translate a formated string based on printf formats
+     * Translate a formatted string based on printf formats
      * Can be use an array on args or use the number of the arguments
      *
      * @param  string $message the message to translate
      * @param  array|mixed $args the tokens values used inside the $message
-     * @return string the message translated and formated
+     * @return string the message translated and formatted
      */
     function __($message, $args = null)
     {
@@ -21,14 +35,14 @@ if (!function_exists('__')) {
 
 if (!function_exists('_n')) {
     /**
-     * Translate a formated pluralized string based on printf formats
+     * Translate a formatted pluralized string based on printf formats
      * Can be use an array on args or use the number of the arguments
      *
      * @param  string $singular the singular message to be translated
      * @param  string $plural the plural message to be translated if the $count > 1
-     * @param  int $count the number of occurence to be used to pluralize the $singular
-     * @param  array|mixed $argsthe tokens values used inside $singular or $plural
-     * @return string the message translated, pluralized and formated
+     * @param  int $count the number of occurrence to be used to pluralize the $singular
+     * @param  array|mixed $args the tokens values used inside $singular or $plural
+     * @return string the message translated, pluralized and formatted
      */
     function _n($singular, $plural, $count, $args = null)
     {

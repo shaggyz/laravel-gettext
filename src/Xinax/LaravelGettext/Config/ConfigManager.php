@@ -114,6 +114,10 @@ class ConfigManager
             $container->setKeywordsList($config['keywords-list']);
         }
 
+        if (array_key_exists("handler", $config)) {
+            $container->setHandler($config['handler']);
+        }
+
         return $container;
     }
 }

@@ -3,21 +3,16 @@
 namespace Xinax\LaravelGettext;
 
 use Xinax\LaravelGettext\Composers\LanguageSelector;
+use Xinax\LaravelGettext\Translators\TranslatorInterface;
 
 class LaravelGettext
 {
     /**
-     * @param Gettext $gettext
+     * @param TranslatorInterface $gettext
      * @throws Exceptions\MissingPhpGettextModuleException
      */
-    public function __construct(Gettext $gettext)
+    public function __construct(TranslatorInterface $gettext)
     {
-        if (!function_exists('gettext')) {
-            throw new Exceptions\MissingPhpGettextModuleException(
-                "You need to install the php-gettext module for this package."
-            );
-        }
-
         $this->gettext = $gettext;
     }
 
@@ -124,4 +119,5 @@ class LaravelGettext
     {
         return $this->gettext->getDomain();
     }
+
 }

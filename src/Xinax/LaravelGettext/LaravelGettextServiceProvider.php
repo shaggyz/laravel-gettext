@@ -31,6 +31,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../config/config.php' => config_path('laravel-gettext.php')
         ], 'config');
+
     }
 
     /**
@@ -52,15 +53,26 @@ class LaravelGettextServiceProvider extends ServiceProvider
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
 
-            $gettext = new Gettext(
+            // php-gettext mod implementation
+            /*$translator = new Translators\Gettext(
+                $configuration->get(),
+                new Session\SessionHandler($configuration->get()->getSessionIdentifier()),
+                new Adapters\LaravelAdapter,
+                $fileSystem
+            );*/
+
+            // symfony translator implementation
+            $translator = new Translators\Symfony(
                 $configuration->get(),
                 new Session\SessionHandler($configuration->get()->getSessionIdentifier()),
                 new Adapters\LaravelAdapter,
                 $fileSystem
             );
 
-            return new LaravelGettext($gettext);
+            return new LaravelGettext($translator);
         });
+
+        include_once __DIR__ . '/Support/helpers.php';
 
         // Alias
         $this->app->booting(function () {

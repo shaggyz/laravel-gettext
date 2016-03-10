@@ -1,15 +1,22 @@
 <?php
 
-namespace Xinax\LaravelGettext;
+namespace Xinax\LaravelGettext\Translators;
 
+use Xinax\LaravelGettext\FileSystem;
 use Xinax\LaravelGettext\Session\SessionHandler;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
+use Xinax\LaravelGettext\Exceptions\LocaleNotSupportedException;
+use Xinax\LaravelGettext\Exceptions\MissingPhpGettextModuleException;
 
 use Illuminate\Support\Facades\Session;
 
-class Gettext
+/**
+ * Class implemented by the php-gettext module translator
+ * @package Xinax\LaravelGettext\Translators
+ */
+class Gettext implements TranslatorInterface
 {
     /**
      * Config container
@@ -31,7 +38,7 @@ class Gettext
 
     /**
      * Framework adapter
-     * @type \Xinax\Adapters\LaravelAdapter
+     * @type \Xinax\LaravelGettext\Adapters\LaravelAdapter
      */
     protected $adapter;
 
@@ -42,16 +49,21 @@ class Gettext
     protected $fileSystem;
 
     /**
+     * Domain name
      * @var String
      */
     protected $domain;
 
     /**
+     * Initializes the gettext module translator
+     *
      * @param Config $config
      * @param SessionHandler $sessionHandler
      * @param AdapterInterface $adapter
      * @param FileSystem $fileSystem
-     * @throws Exceptions\LocaleNotSupportedException
+     *
+     * @throws \Xinax\LaravelGettext\Exceptions\LocaleNotSupportedException
+     * @throws \Xinax\LaravelGettext\Exceptions\MissingPhpGettextModuleException
      * @throws \Exception
      */
     public function __construct(
@@ -65,6 +77,12 @@ class Gettext
         $this->session = $sessionHandler;
         $this->adapter = $adapter;
         $this->fileSystem = $fileSystem;
+
+        if (!function_exists('gettext')) {
+            throw new MissingPhpGettextModuleException(
+                "You need to install the php-gettext module for this package."
+            );
+        }
 
         // General domain
         $this->domain = $this->configuration->getDomain();
@@ -84,7 +102,7 @@ class Gettext
     public function setLocale($locale)
     {
         if (!$this->isLocaleSupported($locale)) {
-            throw new Exceptions\LocaleNotSupportedException(
+            throw new LocaleNotSupportedException(
                 sprintf('Locale %s is not supported', $locale)
             );
         }

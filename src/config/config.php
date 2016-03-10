@@ -1,6 +1,17 @@
 <?php
 
 return [
+
+    /**
+     * Translation handlers, options are:
+     *
+     * - symfony: (recommended) uses the symfony translations component. Incompatible with php-gettext
+     * you must uninstall the php-gettext module before use this handler.
+     *
+     * - gettext: requires the php-gettext module installed. This handler has well-known cache issues
+     */
+    'handler' => 'symfony',
+
     /**
      * Session identifier: Key under which the current locale will be stored.
      */

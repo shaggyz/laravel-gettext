@@ -103,6 +103,11 @@ class Config
      */
     protected $keywordsList;
 
+    /**
+     * Core translation handler
+     */
+    protected $handler;
+
     public function __construct()
     {
         $this->encoding = 'UTF-8';
@@ -423,5 +428,36 @@ class Config
         $this->keywordsList = $keywordsList;
 
         return $this;
+    }
+
+    /**
+     * Sets the handler type. Also check for valid handler name
+     *
+     * @param $handler
+     * @return $this
+     *
+     * @throws \Exception
+     */
+    public function setHandler($handler)
+    {
+        if (!in_array($handler, [
+            'symfony',
+            'gettext'
+        ])) {
+            throw new \Exception("Handler '$handler' is not supported'");
+        };
+
+        $this->handler = $handler;
+        return $this;
+    }
+
+    /**
+     * Returns the handler name
+     *
+     * @return mixed
+     */
+    public function getHandler()
+    {
+        return !empty($this->handler) ? $this->handler : 'symfony';
     }
 }
