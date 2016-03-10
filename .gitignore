@@ -4,3 +4,5 @@ doc/poedit-fw.png
 tests/lang/*
 tests/storage/*
 doc/laravel5.txt
+composer.lock
+composer.phar
