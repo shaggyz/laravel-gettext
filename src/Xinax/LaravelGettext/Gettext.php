@@ -181,10 +181,12 @@ class Gettext
     public function setDomain($domain)
     {
         if (!in_array($domain, $this->configuration->getAllDomains())) {
-            throw new UndefinedDomainException("Domain '$domain' is not registerd.");
+            throw new UndefinedDomainException("Domain '$domain' is not registered.");
         }
 
         bindtextdomain($domain, $this->fileSystem->getDomainPath());
+        bind_textdomain_codeset($domain, $this->encoding);
+
         $this->domain = textdomain($domain);
 
         return $this;

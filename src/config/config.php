@@ -30,7 +30,7 @@ return array(
     /**
      * Base translation directory path (don't use trailing slash)
      */
-    'translations-path' => 'lang',
+    'translations-path' => '../resources/lang',
 
 	/**
 	 * Fallback locale: When default locale is not available
@@ -59,8 +59,9 @@ return array(
 	 * Remember to call artisan gettext:update after change this.
 	 */
 	'source-paths' => array(
-		'controllers',
-		'views',
+        'Http/Controllers',
+        '../resources/views',
+        'Commands'    
 	),
 
 	/**

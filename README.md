@@ -2,7 +2,7 @@
 
 [![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=1.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.3">Latest Laravel 4 stable release (1.0.3)</a>
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.0)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/2.0.0">Latest Laravel 5 stable release (2.0.0)</a>
+[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/2.0.3">Latest Laravel 5 stable release (2.0.3)</a>
 
 [![Dev build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=master)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/master">Development master</a> Unstable, only for development (dev-master)
 
@@ -51,6 +51,8 @@ In Laravel 5 you also need to register the LaravelGettext middleware in the app/
     ]
 ```
 
+Be sure to add the line after ```Illuminate\Session\Middleware\StartSession```, otherwise the locale won't be saved into the session.
+
 ### 3. Configuration
 
 At this time your application have full gettext support. Now you need to set some configuration values in *laravel-gettext.php*.
@@ -66,8 +68,7 @@ At this time your application have full gettext support. Now you need to set som
 
 ```php
     /**
-     * Default locale: this will be the default for your application. 
-     * Is to be supposed that all strings are written in this language.
+     * Supported locales: An array containing all allowed languages
      */
     'supported-locales' => array(
         'es_ES',
@@ -237,7 +238,7 @@ app/Http/Controllers/HomeController.php
 
 ```php
   <ul>
-      @foreach(Config::get('laravel-gettext::config.supported-locales') as $locale)
+      @foreach(Config::get('laravel-gettext.supported-locales') as $locale)
             <li><a href="/lang/{{$locale}}">{{$locale}}</a></li>
       @endforeach
   </ul>
@@ -300,7 +301,7 @@ To add a new domain just wrap your paths in the desired domain name, like this e
 
 This configuration generates three translation files by each language: **messages.po**, **frontend.po** and **backend.po**
 
-To change the current domain in runtime:
+To change the current domain in runtime (a route-middleware would be a nice place for do this):
 
 ```php
     LaravelGettext::setDomain("backend");

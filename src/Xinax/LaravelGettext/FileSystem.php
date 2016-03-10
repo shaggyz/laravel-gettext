@@ -78,13 +78,13 @@ class FileSystem {
             $path = $this->basePath . DIRECTORY_SEPARATOR . $path;
 
             $fs = new \Illuminate\Filesystem\Filesystem($path);
-            $glob = $fs->glob(realpath($path) . '/{,**/}*.php', GLOB_BRACE);
+            $files = $fs->allFiles(realpath($path));
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
-            foreach ($glob as $file) {
-
-                $compiler->setPath($file);
-                $contents = $compiler->compileString($fs->get($file));
+            foreach ($files as $file) {
+				$filePath = $file->getRealPath();
+                $compiler->setPath($filePath);
+                $contents = $compiler->compileString($fs->get($filePath));
                 $compiledPath = $compiler->getCompiledPath($compiler->getPath());
 
                 $fs->put($compiledPath . '.php', $contents);
@@ -383,11 +383,6 @@ class FileSystem {
 
         // Locale directories
         foreach ($this->configuration->getSupportedLocales() as $locale) {
-
-            // We don't want a locale folder for the default language
-            if ($locale == $this->configuration->getLocale()) {
-                continue;
-            }
 
             $localePath = $this->getDomainPath($locale);
 
