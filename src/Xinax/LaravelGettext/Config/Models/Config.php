@@ -88,13 +88,20 @@ class Config
      * @type Boolean
      */
     protected $customLocale;
-    
+
     /**
      * Default relative path
      *
      * @type string
      */
     protected $relativePath;
+
+    /**
+     * Poedit keywords list
+     *
+     * @type array
+     */
+    protected $keywordsList;
 
     public function __construct()
     {
@@ -105,11 +112,13 @@ class Config
         $this->relativePath = "../../../../../app";
     }
 
-    public function getRelativePath(){
+    public function getRelativePath()
+    {
         return $this->relativePath;
     }
 
-    public function setRelativePath($path){
+    public function setRelativePath($path)
+    {
         $this->relativePath = $path;
     }
 
@@ -379,7 +388,7 @@ class Config
     {
         return $this->customLocale;
     }
-    
+
     /**
      * Sets if will use C locale structure.
      *
@@ -389,6 +398,30 @@ class Config
     public function setCustomLocale($customLocale)
     {
         $this->customLocale = $customLocale;
+        return $this;
+    }
+
+    /**
+     * Gets the Poedit keywords list.
+     *
+     * @return mixed
+     */
+    public function getKeywordsList()
+    {
+        return !empty($this->keywordsList) ? $this->keywordsList : ['_'];
+    }
+
+    /**
+     * Sets the Poedit keywords list.
+     *
+     * @param mixed $keywordsList the keywords list
+     *
+     * @return self
+     */
+    public function setKeywordsList($keywordsList)
+    {
+        $this->keywordsList = $keywordsList;
+
         return $this;
     }
 }
