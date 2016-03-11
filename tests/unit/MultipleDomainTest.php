@@ -6,7 +6,7 @@ use \RecursiveIteratorIterator;
 use \RecursiveDirectoryIterator;
 use \Mockery as m;
 use \Xinax\LaravelGettext\LaravelGettext;
-use \Xinax\LaravelGettext\Gettext;
+use \Xinax\LaravelGettext\Translators\Gettext;
 use \Xinax\LaravelGettext\FileSystem;
 use \Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;

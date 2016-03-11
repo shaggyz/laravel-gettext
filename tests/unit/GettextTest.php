@@ -3,7 +3,7 @@
 namespace Xinax\LaravelGettext\Test;
 
 use \Mockery as m;
-use \Xinax\LaravelGettext\Gettext;
+use \Xinax\LaravelGettext\Translators\Gettext;
 use \Xinax\LaravelGettext\Config\ConfigManager;
 
 class GettextTest extends BaseTestCase
@@ -88,7 +88,7 @@ class GettextTest extends BaseTestCase
     {
         $response = $this->gettext->setEncoding('UTF-8');
         $this->assertNotEmpty($response);
-        $this->assertInstanceOf('Xinax\LaravelGettext\Gettext', $response);
+        $this->assertInstanceOf('Xinax\LaravelGettext\Translators\Gettext', $response);
     }
 
     public function tearDown()

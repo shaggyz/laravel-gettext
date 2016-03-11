@@ -19,7 +19,7 @@ class LaravelGettextTest extends BaseTestCase
     {
         parent::setUp();
 
-        $gettext = m::mock('Xinax\LaravelGettext\Gettext');
+        $gettext = m::mock('Xinax\LaravelGettext\Translators\Gettext');
 
         $gettext->shouldReceive('getEncoding')->andReturn('UTF-8');
         $gettext->shouldReceive('setEncoding')->with('UTF-8');
