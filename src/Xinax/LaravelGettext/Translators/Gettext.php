@@ -227,4 +227,14 @@ class Gettext implements TranslatorInterface
     {
         return $this->domain;
     }
+
+    /**
+     * Translates a message with gettext
+     *
+     * @param $message
+     */
+    public function translate($message)
+    {
+        return gettext($message);
+    }
 }

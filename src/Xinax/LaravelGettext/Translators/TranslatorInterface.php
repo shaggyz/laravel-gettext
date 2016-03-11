@@ -79,4 +79,12 @@ interface TranslatorInterface
      * @return String
      */
     public function getDomain();
+
+    /**
+     * Translates a single message
+     *
+     * @param $message
+     * @return string
+     */
+    public function translate($message);
 }

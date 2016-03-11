@@ -9,7 +9,8 @@ if (!function_exists('_')) {
      */
     function _($message)
     {
-        return gettext($message);
+        $translator = App::make('laravel-gettext');
+        return $translator->translate($message);
     }
 }
 
@@ -24,7 +25,9 @@ if (!function_exists('__')) {
      */
     function __($message, $args = null)
     {
-        $message = gettext($message);
+        $translator = App::make('laravel-gettext');
+        $message = $translator->translate($message);
+
         if (!empty($args) && !is_array($args)) {
             $args = array_slice(func_get_args(), 1);
         }
@@ -46,7 +49,9 @@ if (!function_exists('_n')) {
      */
     function _n($singular, $plural, $count, $args = null)
     {
+        $translator = App::make('laravel-gettext');
         $message = ngettext($singular, $plural, $count);
+
         if (!empty($args) && !is_array($args)) {
             $args = array_slice(func_get_args(), 3);
         }

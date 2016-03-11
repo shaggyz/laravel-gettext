@@ -8,12 +8,19 @@ use Xinax\LaravelGettext\Translators\TranslatorInterface;
 class LaravelGettext
 {
     /**
+     * Translator handler
+     *
+     * @var TranslatorInterface
+     */
+    protected $translator;
+    
+    /**
      * @param TranslatorInterface $gettext
      * @throws Exceptions\MissingPhpGettextModuleException
      */
     public function __construct(TranslatorInterface $gettext)
     {
-        $this->gettext = $gettext;
+        $this->translator = $gettext;
     }
 
     /**
@@ -23,7 +30,7 @@ class LaravelGettext
      */
     public function getEncoding()
     {
-        return $this->gettext->getEncoding();
+        return $this->translator->getEncoding();
     }
 
     /**
@@ -45,7 +52,7 @@ class LaravelGettext
      */
     public function getLocale()
     {
-        return $this->gettext->getLocale();
+        return $this->translator->getLocale();
     }
 
     /**
@@ -59,7 +66,7 @@ class LaravelGettext
     public function setLocale($locale)
     {
         if ($locale != $this->getLocale()) {
-            $this->gettext->setLocale($locale);
+            $this->translator->setLocale($locale);
         }
 
         return $this;
@@ -106,7 +113,7 @@ class LaravelGettext
      */
     public function setDomain($domain)
     {
-        $this->gettext->setDomain($domain);
+        $this->translator->setDomain($domain);
         return $this;
     }
 
@@ -117,7 +124,19 @@ class LaravelGettext
      */
     public function getDomain()
     {
-        return $this->gettext->getDomain();
+        return $this->translator->getDomain();
     }
+
+    /**
+     * Translates a message with the current handler
+     *
+     * @param $message
+     * @return string
+     */
+    public function translate($message)
+    {
+        return $this->translator->translate($message);
+    }
+
 
 }
