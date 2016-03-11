@@ -13,44 +13,8 @@ use Xinax\LaravelGettext\FileSystem;
  * Class implemented by Symfony translation component
  * @package Xinax\LaravelGettext\Translators
  */
-class Symfony implements TranslatorInterface
+class Symfony extends BaseTranslator implements TranslatorInterface
 {
-    /**
-     * Config container
-     * @type \Xinax\LaravelGettext\Config\Models\Config
-     */
-    protected $configuration;
-
-    /**
-     * Current encoding
-     * @type String
-     */
-    protected $encoding;
-
-    /**
-     * Current locale
-     * @type String
-     */
-    protected $locale;
-
-    /**
-     * Framework adapter
-     * @type \Xinax\LaravelGettext\Adapters\LaravelAdapter
-     */
-    protected $adapter;
-
-    /**
-     * File system helper
-     * @var \Xinax\LaravelGettext\FileSystem
-     */
-    protected $fileSystem;
-
-    /**
-     * Domain name
-     * @var String
-     */
-    protected $domain;
-
     /**
      * Symfony translator
      * @var SymfonyTranslator
@@ -98,91 +62,6 @@ class Symfony implements TranslatorInterface
     }
 
     /**
-     * Sets the current locale code
-     */
-    public function setLocale($locale)
-    {
-        $this->session->set($locale);
-        $this->locale = $locale;
-    }
-
-    /**
-     * Returns the current locale string identifier
-     *
-     * @return String
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * Returns a boolean that indicates if $locale
-     * is supported by configuration
-     *
-     * @return boolean
-     */
-    public function isLocaleSupported($locale)
-    {
-        return true;
-    }
-
-    /**
-     * Return the current locale
-     *
-     * @return mixed
-     */
-    public function __toString()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * Gets the Current encoding.
-     *
-     * @return mixed
-     */
-    public function getEncoding()
-    {
-        return $this->encoding;
-    }
-
-    /**
-     * Sets the Current encoding.
-     *
-     * @param mixed $encoding the encoding
-     * @return self
-     */
-    public function setEncoding($encoding)
-    {
-        $this->encoding = $encoding;
-        return $this;
-    }
-
-    /**
-     * Sets the current domain and updates gettext domain application
-     *
-     * @param   String $domain
-     * @throws  Exceptions\UndefinedDomainException If domain is not defined
-     * @return  self
-     */
-    public function setDomain($domain)
-    {
-        $this->domain = $domain;
-        return $this;
-    }
-
-    /**
-     * Returns the current domain
-     *
-     * @return String
-     */
-    public function getDomain()
-    {
-        return $this->domain;
-    }
-
-    /**
      * Translates a message using the Symfony translation component
      *
      * @param $message
@@ -193,31 +72,49 @@ class Symfony implements TranslatorInterface
         return $this->symfonyTranslator->trans($message, [], $this->domain, $this->locale);
     }
 
-
+    /**
+     * Returns the translator instance
+     *
+     * @return SymfonyTranslator
+     */
     protected function getTranslator()
     {
         if (config('app.debug') && !env('NEVER_FORGET_CACHE', false)) {
             Cache::forget('po_cache');
         }
 
-        return Cache::rememberForever('po_cache', function () {
-            $basePath = 'resources/lang/i18n';
-            $locales = $this->configuration->getSupportedLocales();
-
-            $translator = new SymfonyTranslator(config('app.locale'));
-            $translator->addLoader('po', new PoFileLoader());
-            $translator->setFallbackLocales([config('app.locale')]);
-
-            foreach ($locales as $locale) {
-                $path = base_path($basePath . DIRECTORY_SEPARATOR . $locale . DIRECTORY_SEPARATOR . 'LC_MESSAGES');
-                $file = $path . DIRECTORY_SEPARATOR . 'messages.po';
-
-                if (file_exists($file)) {
-                    $translator->addResource('po', $file, $locale);
-                    $translator->getCatalogue($locale);
-                }
-            }
-            return $translator;
+        return Cache::rememberForever('po_cache', function(){
+            return $this->createTranslator();
         });
     }
+
+    /**
+     * Creates a new translator instance
+     *
+     * @return SymfonyTranslator
+     */
+    protected function createTranslator()
+    {
+        $locales = $this->configuration->getSupportedLocales();
+
+        $translator = new SymfonyTranslator(config('app.locale'));
+        $translator->addLoader('po', new PoFileLoader());
+        $translator->setFallbackLocales([
+            $this->configuration->getFallbackLocale()
+        ]);
+
+        foreach ($locales as $locale) {
+
+            $file = $this->fileSystem->makePOFilePath($locale, $this->domain);
+
+            if (file_exists($file)) {
+                $translator->addResource('po', $file, $locale);
+                $translator->getCatalogue($locale);
+            }
+        }
+
+        return $translator;
+    }
+
+
 }

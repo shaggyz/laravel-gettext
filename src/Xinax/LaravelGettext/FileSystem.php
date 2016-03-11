@@ -596,4 +596,23 @@ class FileSystem
     {
         $this->folderName = $folderName;
     }
+
+    /**
+     * Returns the full path for a .po file from its domain and locale
+     *
+     * @param $locale
+     * @param $domain
+     *
+     * @return string
+     */
+    public function makePOFilePath($locale, $domain)
+    {
+        $filePath = implode(DIRECTORY_SEPARATOR, [
+            $locale,
+            'LC_MESSAGES',
+            $domain . ".po"
+        ]);
+
+        return $this->getDomainPath($filePath);
+    }
 }
