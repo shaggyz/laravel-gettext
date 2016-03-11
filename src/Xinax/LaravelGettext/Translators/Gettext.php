@@ -133,4 +133,18 @@ class Gettext extends BaseTranslator implements TranslatorInterface
     {
         return gettext($message);
     }
+
+    /**
+     * Translates a plural message with gettext
+     *
+     * @param $singular
+     * @param $plural
+     * @param $count
+     *
+     * @return string
+     */
+    public function translatePlural($singular, $plural, $count)
+    {
+        return ngettext($singular, $plural, $count);
+    }
 }

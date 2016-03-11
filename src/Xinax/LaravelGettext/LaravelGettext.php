@@ -138,5 +138,17 @@ class LaravelGettext
         return $this->translator->translate($message);
     }
 
+    /**
+     * Translates a plural string with the current handler
+     *
+     * @param $singular
+     * @param $plural
+     * @param $count
+     * @return string
+     */
+    public function translatePlural($singular, $plural, $count)
+    {
+        return $this->translator->translatePlural($singular, $plural, $count);
+    }
 
 }

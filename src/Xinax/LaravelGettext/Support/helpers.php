@@ -50,7 +50,7 @@ if (!function_exists('_n')) {
     function _n($singular, $plural, $count, $args = null)
     {
         $translator = App::make('laravel-gettext');
-        $message = ngettext($singular, $plural, $count);
+        $message = $translator->translatePlural($singular, $plural, $count);
 
         if (!empty($args) && !is_array($args)) {
             $args = array_slice(func_get_args(), 3);

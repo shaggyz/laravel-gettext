@@ -87,4 +87,15 @@ interface TranslatorInterface
      * @return string
      */
     public function translate($message);
+
+    /**
+     * Translates a plural string
+     *
+     * @param $singular
+     * @param $plural
+     * @param $count
+     *
+     * @return mixed
+     */
+    public function translatePlural($singular, $plural, $count);
 }
