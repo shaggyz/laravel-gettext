@@ -44,7 +44,7 @@ class Symfony extends BaseTranslator implements TranslatorInterface
         // Symfony component incompatible with php-gettext module
         if (function_exists('gettext')) {
             throw new \Exception(
-                "You must disable/uninstall 'php-gettext' in order to use the Symfony handler"
+                "LaravelGettext: You must disable/uninstall 'php-gettext' in order to use the Symfony handler"
             );
         }
 
