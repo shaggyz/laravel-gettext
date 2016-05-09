@@ -7,21 +7,41 @@ use \Xinax\LaravelGettext\LaravelGettext;
 use \Xinax\LaravelGettext\Config\ConfigManager;
 use \Xinax\LaravelGettext\Adapters\LaravelAdapter;
 use \Xinax\LaravelGettext\FileSystem;
-use Xinax\LaravelGettext\Translators\Symfony;
+use \Xinax\LaravelGettext\Translators\Symfony;
 
-class LaravelGettextTest extends BaseTestCase
+use Illuminate\Foundation\Testing\TestCase;
+
+class LaravelGettextTest extends TestCase
 {
     /**
-     * Gettext wrapper
-     * @var \Xinax\LaravelGettext\Gettext
+     * Boots the application.
+     *
+     * @return \Illuminate\Foundation\Application
      */
-    protected $gettext;
+    public function createApplication()
+    {
+        $app = require __DIR__.'/../../vendor/laravel/laravel/bootstrap/app.php';
+
+        $app->register('Xinax\LaravelGettext\LaravelGettextServiceProvider');
+
+        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+
+        return $app;
+    }
+
+    /**
+     * Gettext wrapper
+     * @var \Xinax\LaravelGettext\Translators\Symfony
+     */
+    protected $translator;
 
     public function setUp()
     {
         parent::setUp();
 
-        $config = ConfigManager::create();
+        $testConfig = include __DIR__ . '/../config/config.php';
+        $config = ConfigManager::create($testConfig);
+
         $adapter = new LaravelAdapter;
 
         $fileSystem = new FileSystem($config->get(), app_path(), storage_path());
@@ -32,7 +52,7 @@ class LaravelGettextTest extends BaseTestCase
             $fileSystem
         );
 
-        $this->gettext = $translator;
+        $this->translator = $translator;
     }
 
     /**
@@ -40,7 +60,7 @@ class LaravelGettextTest extends BaseTestCase
      */
     public function testSetLocale()
     {
-        $response = $this->gettext->setLocale('en_US');
+        $response = $this->translator->setLocale('en_US');
 
         $this->assertEquals('en_US', $response);
     }
@@ -51,14 +71,14 @@ class LaravelGettextTest extends BaseTestCase
      */
     public function testGetLocale()
     {
-        $response = $this->gettext->getLocale();
+        $response = $this->translator->getLocale();
 
         $this->assertEquals('en_US', $response);
     }
 
     public function testIsLocaleSupported()
     {
-        $this->assertTrue($this->gettext->isLocaleSupported('en_US'));
+        $this->assertTrue($this->translator->isLocaleSupported('en_US'));
     }
 
     /**
@@ -66,23 +86,23 @@ class LaravelGettextTest extends BaseTestCase
      */
     public function testToString()
     {
-        $response = $this->gettext->__toString();
+        $response = $this->translator->__toString();
 
         $this->assertEquals('en_US', $response);
     }
 
     public function testGetEncoding()
     {
-        $response = $this->gettext->getEncoding();
+        $response = $this->translator->getEncoding();
         $this->assertNotEmpty($response);
         $this->assertEquals('UTF-8', $response);
     }
 
     public function testSetEncoding()
     {
-        $response = $this->gettext->setEncoding('UTF-8');
+        $response = $this->translator->setEncoding('UTF-8');
         $this->assertNotEmpty($response);
-        $this->assertInstanceOf('Xinax\LaravelGettext\Gettext', $response);
+        $this->assertInstanceOf('Xinax\LaravelGettext\Translators\Symfony', $response);
     }
 
     public function tearDown()

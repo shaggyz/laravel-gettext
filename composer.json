@@ -26,7 +26,8 @@
     "require-dev": {
         "mockery/mockery": "dev-master",
         "phpunit/phpunit": "~4.0",
-        "squizlabs/php_codesniffer" : "1.5.*"
+        "squizlabs/php_codesniffer" : "1.5.*",
+        "laravel/laravel": "5.2.*"
     },
     "autoload": {
         "psr-0": {
