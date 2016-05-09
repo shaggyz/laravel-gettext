@@ -151,4 +151,26 @@ class LaravelGettext
         return $this->translator->translatePlural($singular, $plural, $count);
     }
 
+    /**
+     * Returns the translator.
+     *
+     * @return TranslatorInterface
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     * Sets the translator
+     *
+     * @param TranslatorInterface $translator
+     * @return $this
+     */
+    public function setTranslator(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+        return $this;
+    }
+
 }

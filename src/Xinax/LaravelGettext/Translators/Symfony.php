@@ -77,23 +77,12 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     protected function createTranslator()
     {
-        $locales = $this->configuration->getSupportedLocales();
-
         $translator = new SymfonyTranslator($this->getLocale());
         $translator->addLoader('po', new PoFileLoader());
-        $translator->setFallbackLocales([
-            $this->configuration->getFallbackLocale()
-        ]);
 
-        foreach ($locales as $locale) {
-
-            $file = $this->fileSystem->makePOFilePath($locale, $this->getDomain());
-
-            if (file_exists($file)) {
-                $translator->addResource('po', $file, $locale, $this->getDomain());
-                $translator->getCatalogue($locale);
-            }
-        }
+        $file = $this->fileSystem->makePOFilePath($this->getLocale(), $this->getDomain());
+        $translator->addResource('po', $file, $this->getLocale(), $this->getDomain());
+        $translator->getCatalogue($this->getLocale());
 
         return $translator;
     }
@@ -103,11 +92,20 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      *
      * @param $singular
      * @param $plural
-     * @param $count
+     * @param $amount
      */
-    public function translatePlural($singular, $plural, $count)
+    public function translatePlural($singular, $plural, $amount)
     {
-        return $this->symfonyTranslator->transChoice($singular . '|' . $plural, $count);
+        return $this->symfonyTranslator->transChoice(
+            // Symfony translator looks for 'singular|plural' message, and obviously doesn't exists in catalog
+            // @see https://github.com/symfony/symfony/issues/10152
+            $amount >1 ? $plural : $singular,
+            // $singular . '|' . $plural, <-- this just doesn't works, idk wtf is wrong.
+            $amount,
+            ['%count%' => $amount],
+            $this->getDomain(),
+            $this->getLocale()
+        );
     }
 
 }
