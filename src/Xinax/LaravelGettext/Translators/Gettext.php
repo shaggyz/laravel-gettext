@@ -43,11 +43,6 @@ class Gettext extends BaseTranslator implements TranslatorInterface
 
         // Encoding is set from configuration
         $this->encoding = $this->configuration->getEncoding();
-
-        // Sets defaults for boot
-        $locale = $this->session->get($this->configuration->getLocale());
-
-        $this->setLocale($locale);
     }
 
     /**
@@ -63,7 +58,7 @@ class Gettext extends BaseTranslator implements TranslatorInterface
 
         try {
             $customLocale = $this->configuration->getCustomLocale() ? "C." : $locale . ".";
-            $gettextLocale = $customLocale . $this->encoding;
+            $gettextLocale = $customLocale . $this->getEncoding();
 
             // All locale functions are updated: LC_COLLATE, LC_CTYPE,
             // LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
@@ -71,11 +66,7 @@ class Gettext extends BaseTranslator implements TranslatorInterface
             putenv("LANGUAGE=$gettextLocale");
             setlocale(LC_ALL, $gettextLocale);
 
-            $this->locale = $locale;
-            $this->session->set($locale);
-
-            // Domain
-            $this->setDomain($this->domain);
+            $this->sessionSet('locale', $locale);
 
             // Laravel built-in locale
             if ($this->configuration->isSyncLaravel()) {
@@ -104,10 +95,10 @@ class Gettext extends BaseTranslator implements TranslatorInterface
             throw new UndefinedDomainException("Domain '$domain' is not registered.");
         }
 
-        $customLocale = $this->configuration->getCustomLocale() ? "/" . $this->locale : "";
+        $customLocale = $this->configuration->getCustomLocale() ? "/" . $this->getLocale() : "";
         
         bindtextdomain($domain, $this->fileSystem->getDomainPath() . $customLocale);
-        bind_textdomain_codeset($domain, $this->encoding);
+        bind_textdomain_codeset($domain, $this->getEncoding());
 
         $this->domain = textdomain($domain);
 

@@ -102,7 +102,7 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      * Translates a plural string
      *
      * @param $singular
-     * @param $plura
+     * @param $plural
      * @param $count
      */
     public function translatePlural($singular, $plural, $count)

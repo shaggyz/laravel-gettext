@@ -132,7 +132,6 @@ class BaseTranslator
     protected function sessionGet($key, $default=null)
     {
         $token = $this->configuration->getSessionIdentifier() . "-" . $key;
-        //\Log::info('< Get from session: ' . $token . " with value: " . Session::get($token, $default));
         return Session::get($token, $default);
     }
 
@@ -147,13 +146,7 @@ class BaseTranslator
     protected function sessionSet($key, $value)
     {
         $token = $this->configuration->getSessionIdentifier() . "-" . $key;
-        //\Log::info('+++ Set on session: ' . $token . " with value: " . $value);
-
-        \Log::info('set:' . $value);
         Session::put($token, $value);
-        \Log::info('get:' . Session::get($token));
-
-
         return $this;
     }
 
