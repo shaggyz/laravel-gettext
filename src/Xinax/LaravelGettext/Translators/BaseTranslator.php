@@ -1,44 +1,30 @@
 <?php namespace Xinax\LaravelGettext\Translators;
 
 use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
+use Session;
 
 class BaseTranslator
 {
     /**
      * Config container
+     *
      * @type \Xinax\LaravelGettext\Config\Models\Config
      */
     protected $configuration;
 
     /**
-     * Current encoding
-     * @type String
-     */
-    protected $encoding;
-
-    /**
-     * Current locale
-     * @type String
-     */
-    protected $locale;
-
-    /**
      * Framework adapter
+     *
      * @type \Xinax\LaravelGettext\Adapters\LaravelAdapter
      */
     protected $adapter;
 
     /**
      * File system helper
+     *
      * @var \Xinax\LaravelGettext\FileSystem
      */
     protected $fileSystem;
-
-    /**
-     * Domain name
-     * @var String
-     */
-    protected $domain;
 
     /**
      * Returns the current locale string identifier
@@ -47,16 +33,18 @@ class BaseTranslator
      */
     public function getLocale()
     {
-        return $this->locale;
+        return $this->sessionGet('locale', $this->configuration->getLocale());
     }
 
     /**
      * Sets and stores on session the current locale code
+     *
+     * @return BaseTranslator
      */
     public function setLocale($locale)
     {
-        $this->session->set($locale);
-        $this->locale = $locale;
+        $this->sessionSet('locale', $locale);
+        return $this;
     }
 
     /**
@@ -91,7 +79,7 @@ class BaseTranslator
      */
     public function getEncoding()
     {
-        return $this->encoding;
+        return $this->sessionGet('encoding', $this->configuration->getEncoding());
     }
 
     /**
@@ -102,7 +90,7 @@ class BaseTranslator
      */
     public function setEncoding($encoding)
     {
-        $this->encoding = $encoding;
+        $this->sessionSet('encoding', $encoding);
         return $this;
     }
 
@@ -119,7 +107,7 @@ class BaseTranslator
             throw new UndefinedDomainException("Domain '$domain' is not registered.");
         }
 
-        $this->domain = $domain;
+        $this->sessionSet('domain', $domain);
         return $this;
     }
 
@@ -130,7 +118,43 @@ class BaseTranslator
      */
     public function getDomain()
     {
-        return $this->domain;
+        return $this->sessionGet('domain', $this->configuration->getDomain());
+    }
+
+    /**
+     * Return a value from session with an optional default
+     *
+     * @param $key
+     * @param null $default
+     *
+     * @return mixed
+     */
+    protected function sessionGet($key, $default=null)
+    {
+        $token = $this->configuration->getSessionIdentifier() . "-" . $key;
+        //\Log::info('< Get from session: ' . $token . " with value: " . Session::get($token, $default));
+        return Session::get($token, $default);
+    }
+
+    /**
+     * Sets a value in session session
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return mixed
+     */
+    protected function sessionSet($key, $value)
+    {
+        $token = $this->configuration->getSessionIdentifier() . "-" . $key;
+        //\Log::info('+++ Set on session: ' . $token . " with value: " . $value);
+
+        \Log::info('set:' . $value);
+        Session::put($token, $value);
+        \Log::info('get:' . Session::get($token));
+
+
+        return $this;
     }
 
 }

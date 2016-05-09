@@ -78,7 +78,7 @@ class GettextUpdate extends BaseCommand
 
                     $this->comment(
                         sprintf(
-                            "PO file for locale: %s/%s updated successfuly",
+                            "PO file for locale: %s/%s updated successfully",
                             $locale,
                             $domain
                         )

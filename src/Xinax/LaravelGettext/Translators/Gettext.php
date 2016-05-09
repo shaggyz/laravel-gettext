@@ -3,7 +3,6 @@
 namespace Xinax\LaravelGettext\Translators;
 
 use Xinax\LaravelGettext\FileSystem;
-use Xinax\LaravelGettext\Session\SessionHandler;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Exceptions\LocaleNotSupportedException;
@@ -22,7 +21,6 @@ class Gettext extends BaseTranslator implements TranslatorInterface
      * Initializes the gettext module translator
      *
      * @param Config $config
-     * @param SessionHandler $sessionHandler
      * @param AdapterInterface $adapter
      * @param FileSystem $fileSystem
      *
@@ -32,21 +30,13 @@ class Gettext extends BaseTranslator implements TranslatorInterface
      */
     public function __construct(
         Config $config,
-        SessionHandler $sessionHandler,
         AdapterInterface $adapter,
         FileSystem $fileSystem
     ) {
         // Sets the package configuration and session handler
         $this->configuration = $config;
-        $this->session = $sessionHandler;
         $this->adapter = $adapter;
         $this->fileSystem = $fileSystem;
-
-        if (!function_exists('gettext')) {
-            throw new MissingPhpGettextModuleException(
-                "You need to install the php-gettext module for this package."
-            );
-        }
 
         // General domain
         $this->domain = $this->configuration->getDomain();

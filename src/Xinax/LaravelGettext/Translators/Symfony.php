@@ -5,7 +5,6 @@ use Symfony\Component\Translation\Translator as SymfonyTranslator;
 use Cache;
 
 use Xinax\LaravelGettext\Config\Models\Config;
-use Xinax\LaravelGettext\Session\SessionHandler;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\FileSystem;
 
@@ -25,40 +24,23 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      * TranslatorInterface constructor.
      *
      * @param Config $config
-     * @param SessionHandler $sessionHandler
      * @param AdapterInterface $adapter
      * @param FileSystem $fileSystem
      */
     public function __construct(
         Config $config,
-        SessionHandler $sessionHandler,
         AdapterInterface $adapter,
         FileSystem $fileSystem
     ) {
         // Sets the package configuration and session handler
         $this->configuration = $config;
-        $this->session = $sessionHandler;
         $this->adapter = $adapter;
         $this->fileSystem = $fileSystem;
 
-        // Symfony component incompatible with php-gettext module
-        if (function_exists('gettext')) {
-            throw new \Exception(
-                "LaravelGettext: You must disable/uninstall 'php-gettext' in order to use the Symfony handler"
-            );
-        }
-
-        // General domain
-        $this->domain = $this->configuration->getDomain();
-
         // Encoding is set from configuration
         $this->encoding = $this->configuration->getEncoding();
-
-        // Sets defaults for boot
-        $locale = $this->session->get($this->configuration->getLocale());
-        $this->setLocale($locale);
-
         $this->symfonyTranslator = $this->getTranslator();
+
     }
 
     /**
@@ -69,7 +51,7 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     public function translate($message)
     {
-        return $this->symfonyTranslator->trans($message, [], $this->domain, $this->locale);
+        return $this->symfonyTranslator->trans($message, [], $this->getDomain(), $this->getLocale());
     }
 
     /**
@@ -79,7 +61,7 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     protected function getTranslator()
     {
-        if (config('app.debug') && !env('NEVER_FORGET_CACHE', false)) {
+        if (config('app.debug')) {
             Cache::forget('po_cache');
         }
 
@@ -97,7 +79,7 @@ class Symfony extends BaseTranslator implements TranslatorInterface
     {
         $locales = $this->configuration->getSupportedLocales();
 
-        $translator = new SymfonyTranslator(config('app.locale'));
+        $translator = new SymfonyTranslator($this->getLocale());
         $translator->addLoader('po', new PoFileLoader());
         $translator->setFallbackLocales([
             $this->configuration->getFallbackLocale()
@@ -105,10 +87,10 @@ class Symfony extends BaseTranslator implements TranslatorInterface
 
         foreach ($locales as $locale) {
 
-            $file = $this->fileSystem->makePOFilePath($locale, $this->domain);
+            $file = $this->fileSystem->makePOFilePath($locale, $this->getDomain());
 
             if (file_exists($file)) {
-                $translator->addResource('po', $file, $locale);
+                $translator->addResource('po', $file, $locale, $this->getDomain());
                 $translator->getCatalogue($locale);
             }
         }

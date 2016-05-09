@@ -64,7 +64,6 @@ class LaravelGettextServiceProvider extends ServiceProvider
             // symfony translator implementation
             $translator = new Translators\Symfony(
                 $configuration->get(),
-                new Session\SessionHandler($configuration->get()->getSessionIdentifier()),
                 new Adapters\LaravelAdapter,
                 $fileSystem
             );

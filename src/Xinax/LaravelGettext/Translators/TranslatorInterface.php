@@ -1,7 +1,6 @@
 <?php namespace Xinax\LaravelGettext\Translators;
 
 use Xinax\LaravelGettext\Config\Models\Config;
-use Xinax\LaravelGettext\Session\SessionHandler;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\FileSystem;
 
@@ -11,13 +10,11 @@ interface TranslatorInterface
      * TranslatorInterface constructor.
      *
      * @param Config $config
-     * @param SessionHandler $sessionHandler
      * @param AdapterInterface $adapter
      * @param FileSystem $fileSystem
      */
     public function __construct(
         Config $config,
-        SessionHandler $sessionHandler,
         AdapterInterface $adapter,
         FileSystem $fileSystem
     );
@@ -68,7 +65,7 @@ interface TranslatorInterface
      * Sets the current domain and updates gettext domain application
      *
      * @param   String $domain
-     * @throws  Exceptions\UndefinedDomainException If domain is not defined
+     * @throws  \Xinax\LaravelGettext\Exceptions\UndefinedDomainException If domain is not defined
      * @return  self
      */
     public function setDomain($domain);
