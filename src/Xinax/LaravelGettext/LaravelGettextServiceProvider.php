@@ -10,7 +10,6 @@ use Illuminate\Support\ServiceProvider;
  * Class LaravelGettextServiceProvider
  * @package Xinax\LaravelGettext
  *
- * TODO: Use providers
  */
 class LaravelGettextServiceProvider extends ServiceProvider
 {
@@ -53,20 +52,21 @@ class LaravelGettextServiceProvider extends ServiceProvider
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
 
-            // php-gettext mod implementation
-            /*$translator = new Translators\Gettext(
-                $configuration->get(),
-                new Session\SessionHandler($configuration->get()->getSessionIdentifier()),
-                new Adapters\LaravelAdapter,
-                $fileSystem
-            );*/
-
-            // symfony translator implementation
-            $translator = new Translators\Symfony(
-                $configuration->get(),
-                new Adapters\LaravelAdapter,
-                $fileSystem
-            );
+            if ('symfony' == $configuration->get()->getHandler()) {
+                // symfony translator implementation
+                $translator = new Translators\Symfony(
+                    $configuration->get(),
+                    new Adapters\LaravelAdapter,
+                    $fileSystem
+                );
+            } else {
+                // GNU/Gettext php extension
+                $translator = new Translators\Gettext(
+                    $configuration->get(),
+                    new Adapters\LaravelAdapter,
+                    $fileSystem
+                );
+            }
 
             return new LaravelGettext($translator);
         });
