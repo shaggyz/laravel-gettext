@@ -40,22 +40,23 @@ class LaravelGettextServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $configuration = Config\ConfigManager::create();
+
         $this->app->bind(
             'Adapters/AdapterInterface',
-            'Adapters/LaravelAdapter'
+            $configuration->get()->getAdapter()
         );
 
         // Main class register
-        $this->app['laravel-gettext'] = $this->app->share(function ($app) {
-
-            $configuration = Config\ConfigManager::create();
+        $this->app['laravel-gettext'] = $this->app->share(function ($app) use ($configuration) {
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
 
+            $adapter = $configuration->get()->getAdapter();
             $gettext = new Gettext(
                 $configuration->get(),
                 new Session\SessionHandler($configuration->get()->getSessionIdentifier()),
-                new Adapters\LaravelAdapter,
+                new $adapter,
                 $fileSystem
             );
 
