@@ -82,6 +82,13 @@ class Config
     protected $syncLaravel;
 
     /**
+     * The adapter class used to sync with laravel locale
+     *
+     * @var string
+     */
+    protected $adapter;
+
+    /**
      * Custom locale name
      * Used when needed locales are unavalilable
      *
@@ -327,6 +334,26 @@ class Config
     public function setSyncLaravel($syncLaravel)
     {
         $this->syncLaravel = $syncLaravel;
+        return $this;
+    }
+
+    /**
+     * Gets the adapter class.
+     *
+     * @return string
+     */
+    public function getAdapter()
+    {
+        return $this->adapter;
+    }
+
+    /**
+     * @param string $adapter
+     * @return $this
+     */
+    public function setAdapter($adapter)
+    {
+        $this->adapter = $adapter;
         return $this;
     }
 

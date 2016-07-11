@@ -99,6 +99,11 @@ return [
     'sync-laravel' => true,
 
     /**
+     * The adapter used to sync the laravel built-in locale
+     */
+    'adapter' => \Xinax\LaravelGettext\Adapters\LaravelAdapter::class,
+
+    /**
      * Use custom locale that is not supported by the system
      */
     'custom-locale' => false,
