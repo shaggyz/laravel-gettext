@@ -2,14 +2,13 @@
 
 namespace Xinax\LaravelGettext\Test;
 
-use \RecursiveIteratorIterator;
-use \RecursiveDirectoryIterator;
-use \Mockery as m;
-use \Xinax\LaravelGettext\LaravelGettext;
-use \Xinax\LaravelGettext\Gettext;
-use \Xinax\LaravelGettext\FileSystem;
-use \Xinax\LaravelGettext\Config\ConfigManager;
-use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
+use Mockery as m;
+use Xinax\LaravelGettext\Adapters\LaravelAdapter;
+use Xinax\LaravelGettext\Config\ConfigManager;
+use Xinax\LaravelGettext\FileSystem;
+use Xinax\LaravelGettext\Gettext;
+use Xinax\LaravelGettext\LaravelGettext;
+use Xinax\LaravelGettext\Session\SessionHandler;
 
 /**
  * Class MultipleDomainTest
@@ -80,25 +79,44 @@ class MultipleDomainTest extends BaseTestCase
             'backend',
         ];
 
-        $result = $this->configManager->get()->getAllDomains();
-        $this->assertTrue($result === $expected);
+        $actual = $this->configManager->get()->getAllDomains();
+        $this->assertEquals($expected, $actual);
+    }
 
-    }    
-
-    public function testDomainPaths()
+    public function testFrontendDomainPaths()
     {
-        $expected = [
+        $expectedPaths = [
             'controllers',
             'views/frontend'
         ];
 
-        $result = $this->configManager->get()->getSourcesFromDomain('frontend');
-        $this->assertTrue($result === $expected);
+        $actualPaths = $this->configManager->get()->getSourcesFromDomain('frontend');
+        $this->assertEquals($expectedPaths, $actualPaths);
+    }
 
-        $expected = [ 'views/misc' ];
-        $result = $this->configManager->get()->getSourcesFromDomain('messages');
-        $this->assertTrue($result === $expected);
+    public function testBackendDomainPaths()
+    {
+        $expectedPaths = [
+            'views/backend'
+        ];
 
+        $actualPaths = $this->configManager->get()->getSourcesFromDomain('backend');
+        $this->assertEquals($expectedPaths, $actualPaths);
+    }
+
+    public function testDefaultDomainPaths()
+    {
+        $expectedPaths = [
+            'views/misc'
+        ];
+
+        $actualPaths = $this->configManager->get()->getSourcesFromDomain('messages');
+        $this->assertEquals($expectedPaths, $actualPaths);
+    }
+
+    public function testNoMissingDomainPaths()
+    {
+        // config/config.php doesn't contain a domain named `missing`, and should return no records
         $this->assertCount(0, $this->configManager->get()->getSourcesFromDomain('missing'));
     }
 
@@ -163,14 +181,14 @@ class MultipleDomainTest extends BaseTestCase
     public function testTranslations()
     {
         /** @var \Xinax\LaravelGettext\Session\SessionHandler|\Mockery\MockInterface $session */
-        $session = m::mock('Xinax\LaravelGettext\Session\SessionHandler');
+        $session = m::mock(SessionHandler::class);
         $session->shouldReceive('get')
             ->andReturn('es_AR');
 
         $session->shouldReceive('set');
 
         /** @var \Xinax\LaravelGettext\Adapters\LaravelAdapter|\Mockery\MockInterface $adapter */
-        $adapter = m::mock('Xinax\LaravelGettext\Adapters\LaravelAdapter');
+        $adapter = m::mock(LaravelAdapter::class);
 
         $adapter->shouldReceive('setLocale');
         $adapter->shouldReceive('getApplicationPath')

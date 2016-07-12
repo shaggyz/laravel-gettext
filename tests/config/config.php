@@ -88,18 +88,18 @@ return array(
      */
     'source-paths' => array(
 
-        // Frontend example domain
+        // frontend domain
         'frontend' => array(
             'controllers',
             'views/frontend'
         ),
 
-        // Backend example domain
+        // backend domain
         'backend' => array(
             'views/backend'
         ),
 
-        // Default domain
+        // default domain (messages)
         'views/misc'
     ),
 
