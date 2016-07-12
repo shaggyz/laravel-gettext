@@ -76,18 +76,23 @@ return [
     /**
      * Multi-domain directory paths. If you want the translations in
      * different files, just wrap your paths into a domain name.
-     * Paths on top-level will be associated to the default domain file,
      * for example:
      */
     /*
     'source-paths' => [
-		'frontend' => [
+
+        // 'frontend' domain
+        'frontend' => [
 			'controllers',
 			'views/frontend',
 		],
+
+        // 'backend' domain
 		'backend' => [
 			'views/backend',
 		],
+
+        // 'messages' domain (matches default domain)
 		'storage/views',
 	],
     */
