@@ -364,19 +364,15 @@ class Config
      */
     public function getAllDomains()
     {
-        $domains = [
-            $this->domain
-        ];
-
-        $userDomains = [];
+        $domains = [$this->domain]; // add the default domain
 
         foreach ($this->sourcePaths as $domain => $paths) {
             if (is_array($paths)) {
-                array_push($userDomains, $domain);
+                array_push($domains, $domain);
             }
         }
 
-        return array_merge($domains, $userDomains);
+        return array_unique($domains);
     }
 
     /**
@@ -387,23 +383,27 @@ class Config
      */
     public function getSourcesFromDomain($domain)
     {
-        if ($domain == $this->domain) {
-            $rootPaths = [];
+        // grab any paths wrapped in $domain
+        $explicitPaths = array_key_exists($domain, $this->sourcePaths) ? $this->sourcePaths[$domain] : [];
 
-            foreach ($this->sourcePaths as $domain => $path) {
+        // if we're not including the default domain, return what we have so far
+        if ($this->domain != $domain) {
+            return $explicitPaths;
+        }
+
+        // otherwise, grab all the default domain paths
+        // and merge them with paths wrapped in $domain
+        return array_reduce(
+            $this->sourcePaths,
+            function ($carry, $path) {
                 if (!is_array($path)) {
-                    array_push($rootPaths, $path);
+                    $carry[] = $path;
                 }
-            }
 
-            return $rootPaths;
-        }
-
-        if (array_key_exists($domain, $this->sourcePaths)) {
-            return $this->sourcePaths[$domain];
-        }
-
-        return [];
+                return $carry;
+            },
+            $explicitPaths
+        );
     }
 
     /**
