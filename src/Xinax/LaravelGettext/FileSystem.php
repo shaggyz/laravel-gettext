@@ -93,7 +93,7 @@ class FileSystem
         foreach ($viewPaths as $path) {
             $path = $this->basePath . DIRECTORY_SEPARATOR . $path;
 
-            if ($realPath = realPath($path) == false) {
+            if (!$realPath = realPath($path)) {
                 throw new Exceptions\DirectoryNotFoundException("Failed to resolve $path, please check that it exists");
             }
 
