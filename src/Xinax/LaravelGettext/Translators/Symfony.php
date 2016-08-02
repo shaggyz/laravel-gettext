@@ -61,13 +61,7 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     protected function getTranslator()
     {
-        if (config('app.debug')) {
-            Cache::forget('po_cache');
-        }
-
-        return Cache::rememberForever('po_cache', function(){
-            return $this->createTranslator();
-        });
+        return $this->createTranslator();
     }
 
     /**
