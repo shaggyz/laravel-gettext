@@ -101,23 +101,42 @@ class MultipleDomainTest extends TestCase
 
         $result = $this->configManager->get()->getAllDomains();
         $this->assertTrue($result === $expected);
-
     }
 
-    public function testDomainPaths()
+    public function testFrontendDomainPaths()
     {
-        $expected = [
+        $expectedPaths = [
             'controllers',
             'views/frontend'
         ];
 
-        $result = $this->configManager->get()->getSourcesFromDomain('frontend');
-        $this->assertTrue($result === $expected);
+        $actualPaths = $this->configManager->get()->getSourcesFromDomain('frontend');
+        $this->assertEquals($expectedPaths, $actualPaths);
+    }
 
-        $expected = [ 'views/misc' ];
-        $result = $this->configManager->get()->getSourcesFromDomain('messages');
-        $this->assertTrue($result === $expected);
+    public function testBackendDomainPaths()
+    {
+        $expectedPaths = [
+            'views/backend'
+        ];
 
+        $actualPaths = $this->configManager->get()->getSourcesFromDomain('backend');
+        $this->assertEquals($expectedPaths, $actualPaths);
+    }
+
+    public function testDefaultDomainPaths()
+    {
+        $expectedPaths = [
+            'views/misc'
+        ];
+
+        $actualPaths = $this->configManager->get()->getSourcesFromDomain('messages');
+        $this->assertEquals($expectedPaths, $actualPaths);
+    }
+
+    public function testNoMissingDomainPaths()
+    {
+        // config/config.php doesn't contain a domain named `missing`, and should return no records
         $this->assertCount(0, $this->configManager->get()->getSourcesFromDomain('missing'));
     }
 

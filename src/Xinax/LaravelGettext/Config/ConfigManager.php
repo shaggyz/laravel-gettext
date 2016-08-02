@@ -90,6 +90,8 @@ class ConfigManager
 
         $id = isset($config['session-identifier']) ? $config['session-identifier'] : 'laravel-gettext-locale';
 
+        $adapter = isset($config['adapter']) ? $config['adapter'] : \Xinax\LaravelGettext\Adapters\LaravelAdapter::class;
+
         $container->setLocale($config['locale'])
             ->setSessionIdentifier($id)
             ->setEncoding($config['encoding'])
@@ -100,7 +102,8 @@ class ConfigManager
             ->setProject($config['project'])
             ->setTranslator($config['translator'])
             ->setSourcePaths($config['source-paths'])
-            ->setSyncLaravel($config['sync-laravel']);
+            ->setSyncLaravel($config['sync-laravel'])
+            ->setAdapter($adapter);
 
         if (array_key_exists('relative-path', $config)) {
             $container->setRelativePath($config['relative-path']);

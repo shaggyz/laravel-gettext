@@ -87,18 +87,23 @@ return [
     /**
      * Multi-domain directory paths. If you want the translations in
      * different files, just wrap your paths into a domain name.
-     * Paths on top-level will be associated to the default domain file,
      * for example:
      */
     /*
     'source-paths' => [
-		'frontend' => [
+
+        // 'frontend' domain
+        'frontend' => [
 			'controllers',
 			'views/frontend',
 		],
+
+        // 'backend' domain
 		'backend' => [
 			'views/backend',
 		],
+
+        // 'messages' domain (matches default domain)
 		'storage/views',
 	],
     */
@@ -110,6 +115,11 @@ return [
     'sync-laravel' => true,
 
     /**
+     * The adapter used to sync the laravel built-in locale
+     */
+    'adapter' => \Xinax\LaravelGettext\Adapters\LaravelAdapter::class,
+
+    /**
      * Use custom locale that is not supported by the system
      */
     'custom-locale' => false,
@@ -119,8 +129,9 @@ return [
      *
      * The "_", "__" and "gettext" are singular translation functions
      * The "_n" and "ngettext" are plural translation functions
+     * The "dgettext" function allows a translation domain to be explicitly specified
      *
      * "__" and "_n" are helpers functions @see \Xinax\LaravelGettext\Support\helpers.php
      */
-    'keywords-list' => ['_', '__', 'gettext', '_n:1,2', 'ngettext:1,2'],
+    'keywords-list' => ['_', '__', 'gettext', '_n:1,2', 'ngettext:1,2', 'dgettext:2'],
 ];

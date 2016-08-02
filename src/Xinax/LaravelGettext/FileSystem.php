@@ -3,9 +3,9 @@
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Xinax\LaravelGettext\Config\Models\Config;
-use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
 use Xinax\LaravelGettext\Exceptions\DirectoryNotFoundException;
 use Xinax\LaravelGettext\Exceptions\FileCreationException;
+use Xinax\LaravelGettext\Exceptions\LocaleFileNotFoundException;
 
 class FileSystem
 {
@@ -93,15 +93,12 @@ class FileSystem
         foreach ($viewPaths as $path) {
             $path = $this->basePath . DIRECTORY_SEPARATOR . $path;
 
-            if (empty(realpath($path))) {
-                throw new Exceptions\DirectoryNotFoundException(sprintf(
-                        'The source-path: %s, is not found, please check that it exists, and update your config with the right path.',
-                        $path
-                    ));
+            if (!$realPath = realPath($path)) {
+                throw new Exceptions\DirectoryNotFoundException("Failed to resolve $path, please check that it exists");
             }
 
             $fs = new \Illuminate\Filesystem\Filesystem($path);
-            $files = $fs->allFiles(realpath($path));
+            $files = $fs->allFiles($realPath);
 
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 

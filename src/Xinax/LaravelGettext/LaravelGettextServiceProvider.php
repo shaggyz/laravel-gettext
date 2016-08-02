@@ -40,15 +40,15 @@ class LaravelGettextServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $configuration = Config\ConfigManager::create();
+
         $this->app->bind(
             'Adapters/AdapterInterface',
-            'Adapters/LaravelAdapter'
+            $configuration->get()->getAdapter()
         );
 
         // Main class register
-        $this->app['laravel-gettext'] = $this->app->share(function ($app) {
-
-            $configuration = Config\ConfigManager::create();
+        $this->app['laravel-gettext'] = $this->app->share(function ($app) use ($configuration) {
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
 
@@ -69,6 +69,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
             }
 
             return new LaravelGettext($translator);
+
         });
 
         include_once __DIR__ . '/Support/helpers.php';
