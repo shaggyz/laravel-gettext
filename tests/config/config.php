@@ -99,8 +99,13 @@ return array(
             'views/backend'
         ),
 
+        // messages domain
+        'messages' => [
+            'views/messages'
+        ],
+
         // default domain (messages)
-        'views/misc'
+        'views/misc',
     ),
 
     /**

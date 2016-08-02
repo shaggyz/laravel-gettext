@@ -107,6 +107,7 @@ class MultipleDomainTest extends BaseTestCase
     public function testDefaultDomainPaths()
     {
         $expectedPaths = [
+            'views/messages',
             'views/misc'
         ];
 
