@@ -124,4 +124,24 @@ class LaravelGettext
     {
         return $this->gettext->getDomain();
     }
+
+    /**
+     * Returns supported locales
+     *
+     * @return array
+     */
+    public function getSupportedLocales()
+    {
+        return $this->gettext->supportedLocales();
+    }
+
+    /**
+     * Indicates if given locale is supported
+     *
+     * @return bool
+     */
+    public function isLocaleSupported($locale)
+    {
+        return $this->gettext->isLocaleSupported($locale);
+    }
 }

@@ -138,10 +138,20 @@ class Gettext
     public function isLocaleSupported($locale)
     {
         if ($locale) {
-            return in_array($locale, $this->configuration->getSupportedLocales());
+            return in_array($locale, $this->supportedLocales());
         }
 
         return false;
+    }
+
+    /**
+     * Returns supported locales
+     *
+     * @return array
+     */
+    public function supportedLocales()
+    {
+        return $this->configuration->getSupportedLocales();
     }
 
     /**
