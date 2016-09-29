@@ -30,6 +30,12 @@ class Gettext
     protected $locale;
 
     /**
+     * Locale categories
+     * @type array
+     */
+    protected $categories;
+
+    /**
      * Framework adapter
      * @type \Xinax\Adapters\LaravelAdapter
      */
@@ -72,6 +78,9 @@ class Gettext
         // Encoding is set from configuration
         $this->encoding = $this->configuration->getEncoding();
 
+        // Categories are set from configuration
+        $this->categories = $this->configuration->getCategories();
+
         // Sets defaults for boot
         $locale = $this->session->get($this->configuration->getLocale());
 
@@ -93,11 +102,11 @@ class Gettext
             $customLocale = $this->configuration->getCustomLocale() ? "C." : $locale . ".";
             $gettextLocale = $customLocale . $this->encoding;
 
-            // All locale functions are updated: LC_COLLATE, LC_CTYPE,
-            // LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
-            putenv("LC_ALL=$gettextLocale");
-            putenv("LANGUAGE=$gettextLocale");
-            setlocale(LC_ALL, $gettextLocale);
+            // Update all categories set in config
+            foreach($this->categories as $category) {
+                putenv("$category=$gettextLocale");
+                setlocale(constant($category), $gettextLocale);
+            }
 
             $this->locale = $locale;
             $this->session->set($locale);

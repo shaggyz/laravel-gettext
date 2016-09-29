@@ -26,6 +26,13 @@ class Config
     protected $locale;
 
     /**
+     * Locale categories
+     *
+     * @type array
+     */
+    protected $categories;
+
+    /**
      * Fallback locale
      *
      * @var string
@@ -180,6 +187,28 @@ class Config
     public function setLocale($locale)
     {
         $this->locale = $locale;
+        return $this;
+    }
+
+    /**
+     * Gets categories
+     *
+     * @return array
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Sets categories
+     *
+     * @param array $categories
+     * @return self
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
         return $this;
     }
 
