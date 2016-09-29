@@ -93,6 +93,7 @@ class ConfigManager
         $container->setLocale($config['locale'])
             ->setSessionIdentifier($id)
             ->setEncoding($config['encoding'])
+            ->setCategories($config['categories'])
             ->setFallbackLocale($config['fallback-locale'])
             ->setSupportedLocales($config['supported-locales'])
             ->setDomain($config['domain'])

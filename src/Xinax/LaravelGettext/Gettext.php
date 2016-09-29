@@ -102,11 +102,10 @@ class Gettext
             $customLocale = $this->configuration->getCustomLocale() ? "C." : $locale . ".";
             $gettextLocale = $customLocale . $this->encoding;
 
-            // All locale functions are updated: LC_COLLATE, LC_CTYPE,
-            // LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
+            // Update all categories set in config
             foreach($this->categories as $category) {
                 putenv("$category=$gettextLocale");
-                setlocale($category, $gettextLocale);
+                setlocale(constant($category), $gettextLocale);
             }
 
             $this->locale = $locale;
