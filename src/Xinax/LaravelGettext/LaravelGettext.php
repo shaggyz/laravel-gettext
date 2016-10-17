@@ -180,7 +180,7 @@ class LaravelGettext
      */
     public function getSupportedLocales()
     {
-        return $this->gettext->supportedLocales();
+        return $this->translator->supportedLocales();
     }
 
     /**
@@ -190,6 +190,6 @@ class LaravelGettext
      */
     public function isLocaleSupported($locale)
     {
-        return $this->gettext->isLocaleSupported($locale);
+        return $this->translator->isLocaleSupported($locale);
     }
 }

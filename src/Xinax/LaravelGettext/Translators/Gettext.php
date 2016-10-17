@@ -43,7 +43,7 @@ class Gettext extends BaseTranslator implements TranslatorInterface
 
     /**
      * Framework adapter
-     * @type \Xinax\Adapters\LaravelAdapter
+     * @type \Xinax\LaravelGettext\Adapters\LaravelAdapter
      */
     protected $adapter;
 
@@ -154,16 +154,6 @@ class Gettext extends BaseTranslator implements TranslatorInterface
         }
 
         return false;
-    }
-
-    /**
-     * Returns supported locales
-     *
-     * @return array
-     */
-    public function supportedLocales()
-    {
-        return $this->configuration->getSupportedLocales();
     }
 
     /**

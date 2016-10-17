@@ -40,6 +40,13 @@ interface TranslatorInterface
     public function isLocaleSupported($locale);
 
     /**
+     * Returns supported locales
+     *
+     * @return array
+     */
+    public function supportedLocales();
+
+    /**
      * Return the current locale
      *
      * @return mixed

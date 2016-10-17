@@ -150,4 +150,14 @@ class BaseTranslator
         return $this;
     }
 
+    /**
+     * Returns supported locales
+     *
+     * @return array
+     */
+    public function supportedLocales()
+    {
+        return $this->configuration->getSupportedLocales();
+    }
+
 }
