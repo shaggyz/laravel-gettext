@@ -60,10 +60,12 @@ This command creates the package configuration file in: ```config/laravel-gettex
 You also need to register the LaravelGettext middleware in the ```app/Http/Kernel.php``` file:
 
 ```php
-    protected $middleware = [
-        // ...
-        \Xinax\LaravelGettext\Middleware\GettextMiddleware::class,
-        // ...
+    protected $middlewareGroups = [
+        'web' => [
+            // ...
+            \Xinax\LaravelGettext\Middleware\GettextMiddleware::class,
+        ],
+        ...
     ]
 ```
 
