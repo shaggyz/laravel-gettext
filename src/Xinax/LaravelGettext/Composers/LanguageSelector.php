@@ -1,7 +1,6 @@
 <?php namespace Xinax\LaravelGettext\Composers;
 
 use Xinax\LaravelGettext\LaravelGettext;
-use Illuminate\Support\Facades\Config;
 
 /**
  * Simple language selector generator.
@@ -47,15 +46,12 @@ class LanguageSelector
      */
     public function render()
     {
-        /** @var array $locales */
-        $locales = Config::get('laravel-gettext.supported-locales');
-
         /** @var string $currentLocale */
         $currentLocale = $this->gettext->getLocale();
 
         $html = '<ul class="language-selector">';
 
-        foreach ($locales as $locale) {
+        foreach ($this->gettext->getSupportedLocales() as $locale) {
             $localeLabel = $locale;
 
             // Check if label exists
