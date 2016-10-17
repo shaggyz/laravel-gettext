@@ -75,7 +75,7 @@ return array(
     'translator' => 'James Translator <james@translations.colm>',
 
     /**
-     * Paths where PoEdit will search recursively for strings to translate.
+     * Paths where Poedit will search recursively for strings to translate.
      * All paths are relative to "base-path option" (don't use trailing slash).
      *
      * If you have already .po files with translations and the need to add

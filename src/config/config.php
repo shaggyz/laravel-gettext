@@ -80,7 +80,7 @@ return [
     'translator' => 'James Translator <james@translations.colm>',
 
     /**
-     * Paths where PoEdit will search recursively for strings to translate.
+     * Paths where Poedit will search recursively for strings to translate.
      * All paths are relative to app/ (don't use trailing slash).
      *
      * Remember to call artisan gettext:update after change this.
