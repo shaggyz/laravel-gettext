@@ -25,9 +25,14 @@ class ConfigManager
      * @param array $config
      * @throws RequiredConfigurationKeyException
      */
-    public function __construct(array $config)
+    public function __construct($config = null)
     {
-        $this->config = $this->generateFromArray($config);
+        if ($config) {
+            $this->config = $this->generateFromArray($config);
+        } else {
+            // In Laravel 5.3 we need empty config model
+            $this->config = new ConfigModel;
+        }
     }
 
     /**
@@ -42,12 +47,6 @@ class ConfigManager
         if (is_null($config)) {
             // Default package configuration file (published)
             $config = Config::get(static::DEFAULT_PACKAGE_CONFIG);
-        }
-
-        if (!is_array($config)) {
-            throw new RequiredConfigurationFileException(
-                "You need to publish the package configuration file"
-            );
         }
 
         return new static($config);
