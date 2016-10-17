@@ -29,7 +29,7 @@ Optional requirements if you want to use the native php-gettext extension:
 - php-gettext - http://www.php.net/manual/en/book.gettext.php
 - GNU gettext on system (and production server!) - https://www.gnu.org/software/gettext/
 
-> You will need to update the 'handled' option to 'gettext' in order to use the native php-gettext module.
+> You will need to update the 'handler' option to 'gettext' in order to use the native php-gettext module.
 
 ### 2. Install
 
