@@ -294,7 +294,11 @@ app/Http/Controllers/HomeController.php
 You can use the built-in language selector in your views:
 
 ```php
+    // Plain php:
     LaravelGettext::getSelector()->render();
+
+    // Blade views:
+    {!! LaravelGettext::getSelector()->render() !!}
 ```
 
 It also supports custom labels:

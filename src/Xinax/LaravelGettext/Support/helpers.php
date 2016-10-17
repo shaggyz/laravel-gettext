@@ -1,19 +1,5 @@
 <?php
 
-if (!function_exists('_')) {
-    /**
-     * Generic translation function
-     *
-     * @param $message
-     * @return mixed
-     */
-    function _($message)
-    {
-        $translator = App::make('laravel-gettext');
-        return $translator->translate($message);
-    }
-}
-
 if (!function_exists('__')) {
     /**
      * Translate a formatted string based on printf formats
@@ -26,13 +12,35 @@ if (!function_exists('__')) {
     function __($message, $args = null)
     {
         $translator = App::make('laravel-gettext');
-        $message = $translator->translate($message);
+        $translation = $translator->translate($message);
 
-        if (!empty($args) && !is_array($args)) {
-            $args = array_slice(func_get_args(), 1);
+        if (strlen($translation)) {
+            if (!empty($args) && !is_array($args)) {
+                $args = array_slice(func_get_args(), 1);
+            }
+            $translation = vsprintf($translation, $args);
+            return $translation;    
         }
-        $message = vsprintf($message, $args);
+
+        /**
+         * If translations are missing returns
+         * the original message.
+         * @see https://github.com/symfony/symfony/issues/13483
+         */
         return $message;
+    }
+}
+
+if (!function_exists('_')) {
+    /**
+     * Generic translation function
+     *
+     * @param $message
+     * @return mixed
+     */
+    function _($message, $args = null)
+    {
+        return __($message, $args);
     }
 }
 

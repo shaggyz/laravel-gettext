@@ -79,9 +79,9 @@ return [
      * Remember to call artisan gettext:update after change this.
      */
     'source-paths' => [
-        'Http/Controllers',
+        'Http',
         '../resources/views',
-        'Console/Commands',
+        'Console',
     ],
 
     /**
