@@ -132,6 +132,74 @@ class Gettext extends BaseTranslator implements TranslatorInterface
     }
 
     /**
+     * Returns the current locale string identifier
+     *
+     * @return String
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Returns a boolean that indicates if $locale
+     * is supported by configuration
+     *
+     * @return boolean
+     */
+    public function isLocaleSupported($locale)
+    {
+        if ($locale) {
+            return in_array($locale, $this->supportedLocales());
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns supported locales
+     *
+     * @return array
+     */
+    public function supportedLocales()
+    {
+        return $this->configuration->getSupportedLocales();
+    }
+
+    /**
+     * Return the current locale
+     *
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return $this->getLocale();
+    }
+
+
+    /**
+     * Gets the Current encoding.
+     *
+     * @return mixed
+     */
+    public function getEncoding()
+    {
+        return $this->encoding;
+    }
+
+    /**
+     * Sets the Current encoding.
+     *
+     * @param mixed $encoding the encoding
+     * @return self
+     */
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
+        return $this;
+    }
+
+    /**
      * Sets the current domain and updates gettext domain application
      *
      * @param   String                      $domain
