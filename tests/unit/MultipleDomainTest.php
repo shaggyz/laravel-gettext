@@ -1,24 +1,28 @@
 <?php
 
-namespace Xinax\LaravelGettext\Test;
-
-use \RecursiveIteratorIterator;
-use \RecursiveDirectoryIterator;
 use \Mockery as m;
-use \Xinax\LaravelGettext\LaravelGettext;
-use \Xinax\LaravelGettext\Translators\Gettext;
-use \Xinax\LaravelGettext\FileSystem;
-use \Xinax\LaravelGettext\Config\ConfigManager;
-use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
-use Illuminate\Foundation\Testing\TestCase;
+
+use Xinax\LaravelGettext\Testing\BaseTestCase;
+use Xinax\LaravelGettext\Config\ConfigManager;
+use Xinax\LaravelGettext\Adapters\LaravelAdapter;
+use Xinax\LaravelGettext\FileSystem;
 use Xinax\LaravelGettext\Translators\Symfony;
 
 /**
- * Class MultipleDomainTest
- * @package Xinax\LaravelGettext\Test
+ * Created by PhpStorm.
+ * User: shaggyz
+ * Date: 17/10/16
+ * Time: 15:08
  */
-class MultipleDomainTest extends TestCase
+class MultipleDomainTest extends BaseTestCase
 {
+    /**
+     * Base app path
+     *
+     * @var string
+     */
+    protected $appPath = __DIR__.'/../../vendor/laravel/laravel/bootstrap/app.php';
+
     /**
      * FileSystem helper
      * @var FileSystem
@@ -50,26 +54,6 @@ class MultipleDomainTest extends TestCase
         $this->clearFiles();
     }
 
-    /**
-     * Boots the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
-    {
-        $app = require __DIR__.'/../../vendor/laravel/laravel/bootstrap/app.php';
-
-        $app->register('Xinax\LaravelGettext\LaravelGettextServiceProvider');
-
-        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-
-        return $app;
-    }
-
-
-    /**
-     * @inheritdoc
-     */
     public function setUp()
     {
         parent::setUp();
@@ -85,7 +69,6 @@ class MultipleDomainTest extends TestCase
             $this->basePath,
             $this->storagePath
         );
-
     }
 
     /**

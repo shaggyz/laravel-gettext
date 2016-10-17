@@ -2,9 +2,9 @@
 
 *Laravel Gettext* is a package compatible with the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU Gettext* and *PoEdit*. Former versions of this package (before 4.x) works with the native php-gettext module. Current versions uses the Symfony translation package by default instead of native php extension.
 
-> Note: This documentation applies to laravel 5.3.x and 4.x branch. For older versions of laravel check the following links:
-
 [![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=4.0.0)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/4.0.0">Latest Laravel 5.3.x stable release (4.0.0)</a>
+
+> Note: This documentation applies to laravel 5.3.x and 4.x branch. For older versions of laravel check the following links:
 
 ### Older versions
 
