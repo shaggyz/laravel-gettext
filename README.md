@@ -1,6 +1,6 @@
 # Laravel Gettext
 
-*Laravel Gettext* is a package compatible with the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU Gettext* and *PoEdit*.
+*Laravel Gettext* is a package compatible with the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU Gettext* and *PoEdit*. Former versions of this package (before 4.x) work with the native php-gettext module. Current versions use the Symfony translation package by default instead of native php extension.
 
 > Note: This documentation applies to laravel 5.3.x and 4.x branch. For older versions of laravel check the following links:
 
@@ -370,7 +370,7 @@ You can update only the files of a single domain with the same command:
     php artisan gettext:update --domain backend
 ```
 
-#### E. About gettext cache
+#### E. About gettext cache (only applies to php-gettext native module)
 
 Sometimes when you edit/add translations on PO files the changes does not appear instantly. This is because the gettext cache system holds content. The most quick fix is restart your web server.
 
