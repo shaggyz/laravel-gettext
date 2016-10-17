@@ -18,8 +18,49 @@ use Illuminate\Support\Facades\Session;
 class Gettext extends BaseTranslator implements TranslatorInterface
 {
     /**
+     * Config container
+     * @type \Xinax\LaravelGettext\Config\Models\Config
+     */
+    protected $configuration;
+
+    /**
+     * Current encoding
+     * @type String
+     */
+    protected $encoding;
+
+    /**
+     * Current locale
+     * @type String
+     */
+    protected $locale;
+
+    /**
+     * Locale categories
+     * @type array
+     */
+    protected $categories;
+
+    /**
+     * Framework adapter
+     * @type \Xinax\Adapters\LaravelAdapter
+     */
+    protected $adapter;
+
+    /**
+     * File system helper
+     * @var FileSystem
+     */
+    protected $fileSystem;
+
+    /**
+     * @var String
+     */
+    protected $domain;
+
+    /**
      * Initializes the gettext module translator
-     *
+     * 
      * @param Config $config
      * @param AdapterInterface $adapter
      * @param FileSystem $fileSystem
@@ -43,6 +84,14 @@ class Gettext extends BaseTranslator implements TranslatorInterface
 
         // Encoding is set from configuration
         $this->encoding = $this->configuration->getEncoding();
+
+        // Categories are set from configuration
+        $this->categories = $this->configuration->getCategories();
+
+        // Sets defaults for boot
+        $locale = $this->session->get($this->configuration->getLocale());
+
+        $this->setLocale($locale);
     }
 
     /**
@@ -60,11 +109,11 @@ class Gettext extends BaseTranslator implements TranslatorInterface
             $customLocale = $this->configuration->getCustomLocale() ? "C." : $locale . ".";
             $gettextLocale = $customLocale . $this->getEncoding();
 
-            // All locale functions are updated: LC_COLLATE, LC_CTYPE,
-            // LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES
-            putenv("LC_ALL=$gettextLocale");
-            putenv("LANGUAGE=$gettextLocale");
-            setlocale(LC_ALL, $gettextLocale);
+            // Update all categories set in config
+            foreach($this->categories as $category) {
+                putenv("$category=$gettextLocale");
+                setlocale(constant($category), $gettextLocale);
+            }
 
             $this->sessionSet('locale', $locale);
 

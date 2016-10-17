@@ -37,6 +37,13 @@ return array(
      **/
 
     /**
+     * Locale categories to set
+     */
+    'categories' => [
+        'LC_ALL',
+    ],
+
+    /**
      * Base translation directory path relative to base-path
      * (don't use trailing slash)
      */

@@ -43,6 +43,13 @@ return [
      **/
 
     /**
+     * Locale categories to set
+     */
+    'categories' => [
+        'LC_ALL',
+    ],
+
+    /**
      * Base translation directory path (don't use trailing slash)
      */
     'translations-path' => '../resources/lang',
