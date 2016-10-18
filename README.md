@@ -73,7 +73,7 @@ You also need to register the LaravelGettext middleware in the ```app/Http/Kerne
 
 ### 3. Configuration
 
-At this time your application have full gettext support. Now you need to set some configuration values in ```laravel-gettext.php```.
+At this time your application has full gettext support. Now you need to set some configuration values in ```config/laravel-gettext.php```.
 
 ```php
     /**
@@ -103,9 +103,9 @@ At this time your application have full gettext support. Now you need to set som
     'encoding' => 'UTF-8',
 ```
 
-Ok, now is configured. It's time to generate the directory structure and translation files for first time.
+Ok, now it's configured. It's time to generate the directory structure and translation files for the first time.
 
-> Make sure you have write permissions on ```storage/``` before run this command
+> Make sure you have write permissions on ```resources/``` before you run this command
 
 ```bash
     php artisan gettext:create
