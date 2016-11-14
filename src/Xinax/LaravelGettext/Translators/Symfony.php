@@ -80,6 +80,21 @@ class Symfony extends BaseTranslator implements TranslatorInterface
     }
 
     /**
+     * Set domain overload.
+     * Needed to re-build the catalogue when domain changes.
+     *
+     * @param $locale
+     * @return $this
+     */
+    public function setDomain($domain)
+    {
+        parent::setDomain($domain);
+
+        $this->symfonyTranslator = $this->createTranslator();
+        return $this;
+    }
+
+    /**
      * Creates a new translator instance
      *
      * @return SymfonyTranslator
