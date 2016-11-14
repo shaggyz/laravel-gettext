@@ -65,6 +65,21 @@ class Symfony extends BaseTranslator implements TranslatorInterface
     }
 
     /**
+     * Set locale overload.
+     * Needed to re-build the catalogue when locale changes.
+     *
+     * @param $locale
+     * @return $this
+     */
+    public function setLocale($locale)
+    {
+        parent::setLocale($locale);
+
+        $this->symfonyTranslator = $this->createTranslator();
+        return $this;
+    }
+
+    /**
      * Creates a new translator instance
      *
      * @return SymfonyTranslator
