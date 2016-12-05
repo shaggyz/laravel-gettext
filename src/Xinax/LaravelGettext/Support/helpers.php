@@ -15,11 +15,14 @@ if (!function_exists('__')) {
         $translation = $translator->translate($message);
 
         if (strlen($translation)) {
-            if (!empty($args) && !is_array($args)) {
-                $args = array_slice(func_get_args(), 1);
+            if (!empty($args)) {
+                if(!is_array($args)) {
+                    $args = array_slice(func_get_args(), 1);
+                }
+                $translation = vsprintf($translation, $args);
             }
-            $translation = vsprintf($translation, $args);
-            return $translation;    
+
+            return $translation;
         }
 
         /**
