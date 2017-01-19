@@ -94,7 +94,7 @@ class ConfigManager
         $container->setLocale($config['locale'])
             ->setSessionIdentifier($id)
             ->setEncoding($config['encoding'])
-            ->setCategories(array_get('categories', $config, ['LC_ALL']))
+            ->setCategories(array_get($config, 'categories', ['LC_ALL']))
             ->setFallbackLocale($config['fallback-locale'])
             ->setSupportedLocales($config['supported-locales'])
             ->setDomain($config['domain'])
