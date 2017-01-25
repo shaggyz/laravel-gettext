@@ -47,8 +47,8 @@ class LaravelGettextServiceProvider extends ServiceProvider
             $configuration->get()->getAdapter()
         );
 
-        // Main class register
-        $this->app['laravel-gettext'] = $this->app->singleton(function ($app) use ($configuration) {
+         // Main class register
+        $this->app->singleton('laravel-gettext', function ($app) {
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
 
