@@ -117,6 +117,8 @@ With this command the needed directories and files are created on **resources/la
 
 ##### A. Write strings :D
 
+###### (Laravel < 5.4)
+
 By default *LaravelGettext* looks on app/Http/Controllers and resources/views recursively searching for translations. Translations are all texts printed with the **__()** function. Let's look a simple view example:
 
 ```php
@@ -137,6 +139,30 @@ By default *LaravelGettext* looks on app/Http/Controllers and resources/views re
 ```
 
 > Poedit doesn't "understand" blade syntax. When using blade views you must run ```php artisan gettext:update``` in order to compile all blade views to plain php before update the translations in Poedit
+
+###### (Laravel >= 5.4)
+
+By default *LaravelGettext* looks on app/Http/Controllers and resources/views recursively searching for translations. Translations are all texts printed with the **_i()** function. Let's look a simple view example:
+
+```php
+    // an example view file
+    echo 'Non translated string';
+    echo _i('Translated string');
+    echo _i('Another translated string');
+    // with parameter
+    $str = 'parameter';
+    $n = 2;
+    echo _i('Translated string with %s', $str);
+    echo _i('%dnd translated string with %s', [$n, $str]);
+```
+
+```php
+    // an example view in blade
+    {{ _i('Translated string') }}
+```
+
+> Poedit doesn't "understand" blade syntax. When using blade views you must run ```php artisan gettext:update``` in order to compile all blade views to plain php before update the translations in Poedit
+
 
 ##### B. Plural strings
 
