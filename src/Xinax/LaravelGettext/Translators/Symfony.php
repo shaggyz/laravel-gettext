@@ -1,5 +1,6 @@
 <?php namespace Xinax\LaravelGettext\Translators;
 
+use Symfony\Component\Translation\Loader\MoFileLoader;
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Translator as SymfonyTranslator;
 use Cache;
@@ -102,10 +103,16 @@ class Symfony extends BaseTranslator implements TranslatorInterface
     protected function createTranslator()
     {
         $translator = new SymfonyTranslator($this->getLocale());
-        $translator->addLoader('po', new PoFileLoader());
 
-        $file = $this->fileSystem->makePOFilePath($this->getLocale(), $this->getDomain());
-        $translator->addResource('po', $file, $this->getLocale(), $this->getDomain());
+        $fileMo = $this->fileSystem->makeFilePath($this->getLocale(), $this->getDomain(), 'mo');
+        if(file_exists($fileMo)) {
+            $translator->addLoader('mo', new MoFileLoader());
+            $translator->addResource('mo', $fileMo, $this->getLocale(), $this->getDomain());
+        } else {
+            $translator->addLoader('po', new PoFileLoader());
+            $file = $this->fileSystem->makeFilePath($this->getLocale(), $this->getDomain());
+            $translator->addResource('po', $file, $this->getLocale(), $this->getDomain());
+        }
         $translator->getCatalogue($this->getLocale());
 
         return $translator;
