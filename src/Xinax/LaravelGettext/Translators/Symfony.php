@@ -31,6 +31,7 @@ class Symfony extends BaseTranslator
     public function __construct(Config $config, AdapterInterface $adapter, FileSystem $fileSystem, Storage $storage)
     {
         parent::__construct($config, $adapter, $fileSystem, $storage);
+        $this->setLocale($this->storage->getLocale());
         $this->loadLocaleFile();
     }
 

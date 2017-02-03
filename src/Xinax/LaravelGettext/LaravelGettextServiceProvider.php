@@ -2,7 +2,10 @@
 
 namespace Xinax\LaravelGettext;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Xinax\LaravelGettext\Config\ConfigManager;
+use Xinax\LaravelGettext\Config\Models\Config;
 
 /**
  * Main service provider
@@ -40,31 +43,38 @@ class LaravelGettextServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $configuration = Config\ConfigManager::create();
+        $configuration = ConfigManager::create();
 
         $this->app->bind(
             'Adapters/AdapterInterface',
             $configuration->get()->getAdapter()
         );
 
+        $this->app->singleton(Config::class, function($app) use ($configuration){
+           return $configuration->get();
+        });
+
          // Main class register
-        $this->app->singleton('laravel-gettext', function ($app) use ($configuration) {
+        $this->app->singleton('laravel-gettext', function (Application $app) use ($configuration) {
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
+            $storage = $app->make($configuration->get()->getStorage());
 
             if ('symfony' == $configuration->get()->getHandler()) {
                 // symfony translator implementation
                 $translator = new Translators\Symfony(
                     $configuration->get(),
                     new Adapters\LaravelAdapter,
-                    $fileSystem
+                    $fileSystem,
+                    $storage
                 );
             } else {
                 // GNU/Gettext php extension
                 $translator = new Translators\Gettext(
                     $configuration->get(),
                     new Adapters\LaravelAdapter,
-                    $fileSystem
+                    $fileSystem,
+                    $storage
                 );
             }
 
