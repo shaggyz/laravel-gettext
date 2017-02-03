@@ -1,23 +1,24 @@
 <?php namespace Xinax\LaravelGettext\Translators;
 
-use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
+use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\FileSystem;
+use Xinax\LaravelGettext\Storages\Storage;
 
 interface TranslatorInterface
 {
+
     /**
-     * TranslatorInterface constructor.
+     * Initializes the module translator
      *
-     * @param Config $config
+     * @param Config           $config
      * @param AdapterInterface $adapter
-     * @param FileSystem $fileSystem
+     * @param FileSystem       $fileSystem
+     *
+     * @param Storage          $storage
      */
     public function __construct(
-        Config $config,
-        AdapterInterface $adapter,
-        FileSystem $fileSystem
-    );
+        Config $config, AdapterInterface $adapter, FileSystem $fileSystem, Storage $storage);
 
     /**
      * Sets the current locale code
@@ -64,6 +65,7 @@ interface TranslatorInterface
      * Sets the Current encoding.
      *
      * @param mixed $encoding the encoding
+     *
      * @return self
      */
     public function setEncoding($encoding);
@@ -72,6 +74,7 @@ interface TranslatorInterface
      * Sets the current domain and updates gettext domain application
      *
      * @param   String $domain
+     *
      * @throws  \Xinax\LaravelGettext\Exceptions\UndefinedDomainException If domain is not defined
      * @return  self
      */
@@ -88,6 +91,7 @@ interface TranslatorInterface
      * Translates a single message
      *
      * @param $message
+     *
      * @return string
      */
     public function translate($message);

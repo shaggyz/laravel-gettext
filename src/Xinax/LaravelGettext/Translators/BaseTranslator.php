@@ -1,9 +1,12 @@
 <?php namespace Xinax\LaravelGettext\Translators;
 
+use Xinax\LaravelGettext\Adapters\AdapterInterface;
+use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
-use Session;
+use Xinax\LaravelGettext\FileSystem;
+use Xinax\LaravelGettext\Storages\Storage;
 
-class BaseTranslator
+abstract class BaseTranslator implements TranslatorInterface
 {
     /**
      * Config container
@@ -27,13 +30,38 @@ class BaseTranslator
     protected $fileSystem;
 
     /**
+     * @var Storage
+     */
+    protected $storage;
+
+
+    /**
+     * Initializes the module translator
+     *
+     * @param Config           $config
+     * @param AdapterInterface $adapter
+     * @param FileSystem       $fileSystem
+     *
+     * @param Storage          $storage
+     */
+    public function __construct(
+        Config $config, AdapterInterface $adapter, FileSystem $fileSystem, Storage $storage)
+    {
+        // Sets the package configuration and session handler
+        $this->configuration = $config;
+        $this->adapter       = $adapter;
+        $this->fileSystem    = $fileSystem;
+        $this->storage       = $storage;
+    }
+
+    /**
      * Returns the current locale string identifier
      *
      * @return String
      */
     public function getLocale()
     {
-        return $this->sessionGet('locale', $this->configuration->getLocale());
+        return $this->storage->getLocale();
     }
 
     /**
@@ -43,7 +71,8 @@ class BaseTranslator
      */
     public function setLocale($locale)
     {
-        $this->sessionSet('locale', $locale);
+        $this->storage->setLocale($locale);
+
         return $this;
     }
 
@@ -79,25 +108,28 @@ class BaseTranslator
      */
     public function getEncoding()
     {
-        return $this->sessionGet('encoding', $this->configuration->getEncoding());
+        return $this->storage->getEncoding();
     }
 
     /**
      * Sets the Current encoding.
      *
      * @param mixed $encoding the encoding
+     *
      * @return self
      */
     public function setEncoding($encoding)
     {
-        $this->sessionSet('encoding', $encoding);
+        $this->storage->setEncoding($encoding);
+
         return $this;
     }
 
     /**
      * Sets the current domain and updates gettext domain application
      *
-     * @param   String                      $domain
+     * @param   String $domain
+     *
      * @throws  UndefinedDomainException    If domain is not defined
      * @return  self
      */
@@ -107,7 +139,8 @@ class BaseTranslator
             throw new UndefinedDomainException("Domain '$domain' is not registered.");
         }
 
-        $this->sessionSet('domain', $domain);
+        $this->storage->setDomain($domain);
+
         return $this;
     }
 
@@ -118,37 +151,9 @@ class BaseTranslator
      */
     public function getDomain()
     {
-        return $this->sessionGet('domain', $this->configuration->getDomain());
+        $this->storage->getDomain();
     }
 
-    /**
-     * Return a value from session with an optional default
-     *
-     * @param $key
-     * @param null $default
-     *
-     * @return mixed
-     */
-    protected function sessionGet($key, $default=null)
-    {
-        $token = $this->configuration->getSessionIdentifier() . "-" . $key;
-        return Session::get($token, $default);
-    }
-
-    /**
-     * Sets a value in session session
-     *
-     * @param $key
-     * @param $value
-     *
-     * @return mixed
-     */
-    protected function sessionSet($key, $value)
-    {
-        $token = $this->configuration->getSessionIdentifier() . "-" . $key;
-        Session::put($token, $value);
-        return $this;
-    }
 
     /**
      * Returns supported locales

@@ -6,26 +6,15 @@ use Symfony\Component\Translation\Translator as SymfonyTranslator;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\FileSystem;
+use Xinax\LaravelGettext\Storages\Storage;
 
 /**
  * Class implemented by Symfony translation component
  *
  * @package Xinax\LaravelGettext\Translators
  */
-class Symfony implements TranslatorInterface
+class Symfony extends BaseTranslator
 {
-
-    /**
-     * Current encoding
-     *
-     * @type String
-     */
-    protected $encoding;
-
-    /**
-     * @var String
-     */
-    protected $domain;
 
     /**
      * Symfony translator
@@ -34,55 +23,17 @@ class Symfony implements TranslatorInterface
      */
     protected $symfonyTranslator;
 
-
-    /**
-     * Config container
-     *
-     * @type \Xinax\LaravelGettext\Config\Models\Config
-     */
-    protected $configuration;
-
-    /**
-     * Framework adapter
-     *
-     * @type \Xinax\LaravelGettext\Adapters\LaravelAdapter
-     */
-    protected $adapter;
-
-    /**
-     * File system helper
-     *
-     * @var \Xinax\LaravelGettext\FileSystem
-     */
-    protected $fileSystem;
-
     /**
      * @var array[]
      */
     protected $loadedResources = [];
 
-    /**
-     * TranslatorInterface constructor.
-     *
-     * @param Config           $config
-     * @param AdapterInterface $adapter
-     * @param FileSystem       $fileSystem
-     */
-    public function __construct(
-        Config $config,
-        AdapterInterface $adapter,
-        FileSystem $fileSystem
-    ) {
-        // Sets the package configuration and session handler
-        $this->configuration = $config;
-        $this->adapter       = $adapter;
-        $this->fileSystem    = $fileSystem;
-
-        // Encoding is set from configuration
-        $this->encoding = $this->configuration->getEncoding();
+    public function __construct(Config $config, AdapterInterface $adapter, FileSystem $fileSystem, Storage $storage)
+    {
+        parent::__construct($config, $adapter, $fileSystem, $storage);
         $this->loadLocaleFile();
-
     }
+
 
     /**
      * Translates a message using the Symfony translation component
@@ -120,6 +71,7 @@ class Symfony implements TranslatorInterface
      */
     public function setLocale($locale)
     {
+        parent::setLocale($locale);
         $this->getTranslator()->setLocale($locale);
         $this->loadLocaleFile();
 
@@ -141,7 +93,7 @@ class Symfony implements TranslatorInterface
      */
     public function setDomain($domain)
     {
-        $this->domain = $domain;
+        parent::setDomain($domain);
 
         $this->loadLocaleFile();
 
@@ -254,39 +206,5 @@ class Symfony implements TranslatorInterface
     public function supportedLocales()
     {
         return $this->configuration->getSupportedLocales();
-    }
-
-    /**
-     * Getter for encoding
-     *
-     * @return String
-     */
-    public function getEncoding()
-    {
-        return $this->encoding;
-    }
-
-    /**
-     *
-     * @param mixed $encoding
-     *
-     * @return TranslatorInterface
-     */
-    public function setEncoding($encoding)
-    {
-        $this->encoding = $encoding;
-
-        return $this;
-    }
-
-
-    /**
-     * Returns the current domain
-     *
-     * @return String
-     */
-    public function getDomain()
-    {
-        return $this->domain;
     }
 }
