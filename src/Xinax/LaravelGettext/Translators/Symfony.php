@@ -1,10 +1,10 @@
 <?php namespace Xinax\LaravelGettext\Translators;
 
-use Symfony\Component\Translation\Loader\MoFileLoader;
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Translator as SymfonyTranslator;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Config\Models\Config;
+use Xinax\LaravelGettext\FileLoader\MoFileLoader;
 use Xinax\LaravelGettext\FileSystem;
 use Xinax\LaravelGettext\Storages\Storage;
 
@@ -133,7 +133,7 @@ class Symfony extends BaseTranslator
                 ? $plural
                 : $singular,
             $amount,
-            ['%count%' => $amount],
+            [],
             $this->getDomain(),
             $this->getLocale()
         );
