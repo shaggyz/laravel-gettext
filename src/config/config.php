@@ -149,7 +149,7 @@ return [
      * The "_n" and "ngettext" are plural translation functions
      * The "dgettext" function allows a translation domain to be explicitly specified
      *
-     * "__" and "_n" are helpers functions @see \Xinax\LaravelGettext\Support\helpers.php
+     * "__" and "_n" and "_i" and "_s" are helpers functions @see \Xinax\LaravelGettext\Support\helpers.php
      */
-    'keywords-list' => ['_', '__', '_i', 'gettext', '_n:1,2', 'ngettext:1,2', 'dgettext:2'],
+    'keywords-list' => ['_', '__', '_i', '_s', 'gettext', '_n:1,2', 'ngettext:1,2', 'dgettext:2'],
 ];

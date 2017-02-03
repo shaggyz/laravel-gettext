@@ -106,4 +106,14 @@ interface TranslatorInterface
      * @return mixed
      */
     public function translatePlural($singular, $plural, $count);
+
+    /**
+     * Translate a plural string that is only on one line separated with pipes
+     *
+     * @param $message
+     * @param $amount
+     *
+     * @return string
+     */
+    public function translatePluralInline($message, $amount);
 }

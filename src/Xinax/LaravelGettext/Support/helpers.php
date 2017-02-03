@@ -1,5 +1,7 @@
 <?php
 
+use Xinax\LaravelGettext\LaravelGettext;
+
 if (!function_exists('_i')) {
     /**
      * Translate a formatted string based on printf formats
@@ -12,6 +14,9 @@ if (!function_exists('_i')) {
      */
     function _i($message, $args = null)
     {
+        /**
+         * @var $translator LaravelGettext
+         */
         $translator  = App::make('laravel-gettext');
         $translation = $translator->translate($message);
 
@@ -80,8 +85,42 @@ if (!function_exists('_n')) {
      */
     function _n($singular, $plural, $count, $args = null)
     {
+        /**
+         * @var $translator LaravelGettext
+         */
         $translator = App::make('laravel-gettext');
         $message    = $translator->translatePlural($singular, $plural, $count);
+
+        if (!empty($args) && !is_array($args)) {
+            $args = array_slice(func_get_args(), 3);
+        }
+        $message = vsprintf($message, $args);
+
+        return $message;
+    }
+}
+
+if (!function_exists('_s')) {
+    /**
+     * Translate a formatted pluralized string based on printf formats mixed with the Symfony format
+     * Can be use an array on args or use the number of the arguments
+     *
+     * <b>Only works if Symfony is the used backend</b>
+     *
+     * @param  string      $message  The one line message containing the different pluralization separated by pipes
+     *                               See Symfony translation documentation
+     * @param  int         $count    the number of occurrence to be used to pluralize the $singular
+     * @param  array|mixed $args     the tokens values used inside $singular or $plural
+     *
+     * @return string the message translated, pluralized and formatted
+     */
+    function _s($message, $count, $args = null)
+    {
+        /**
+         * @var $translator LaravelGettext
+         */
+        $translator = App::make('laravel-gettext');
+        $message    = $translator->getTranslator()->translatePluralInline($message, $count);
 
         if (!empty($args) && !is_array($args)) {
             $args = array_slice(func_get_args(), 3);

@@ -76,7 +76,7 @@ class Symfony extends BaseTranslator
         $this->getTranslator()->setLocale($locale);
         $this->loadLocaleFile();
 
-        if($locale != $this->adapter->getLocale()) {
+        if ($locale != $this->adapter->getLocale()) {
             $this->adapter->setLocale($locale);
         }
 
@@ -122,6 +122,8 @@ class Symfony extends BaseTranslator
      * @param $singular
      * @param $plural
      * @param $amount
+     *
+     * @return string
      */
     public function translatePlural($singular, $plural, $amount)
     {
@@ -132,6 +134,25 @@ class Symfony extends BaseTranslator
             $amount > 1
                 ? $plural
                 : $singular,
+            $amount,
+            [],
+            $this->getDomain(),
+            $this->getLocale()
+        );
+    }
+
+    /**
+     * Translate a plural string that is only on one line separated with pipes
+     *
+     * @param $message
+     * @param $amount
+     *
+     * @return string
+     */
+    public function translatePluralInline($message, $amount)
+    {
+        return $this->symfonyTranslator->transChoice(
+            $message,
             $amount,
             [],
             $this->getDomain(),

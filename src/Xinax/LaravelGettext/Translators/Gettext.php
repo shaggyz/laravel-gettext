@@ -221,4 +221,9 @@ class Gettext extends BaseTranslator implements TranslatorInterface
     {
         return ngettext($singular, $plural, $count);
     }
+
+    public function translatePluralInline($message, $amount)
+    {
+        throw new \RuntimeException('Not supported by gettext, please use Symfony');
+    }
 }
