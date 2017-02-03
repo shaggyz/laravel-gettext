@@ -151,7 +151,7 @@ abstract class BaseTranslator implements TranslatorInterface
      */
     public function getDomain()
     {
-        $this->storage->getDomain();
+        return $this->storage->getDomain();
     }
 
 
