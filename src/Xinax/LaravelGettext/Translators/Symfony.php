@@ -12,14 +12,49 @@ use Xinax\LaravelGettext\FileSystem;
  *
  * @package Xinax\LaravelGettext\Translators
  */
-class Symfony extends BaseTranslator implements TranslatorInterface
+class Symfony implements TranslatorInterface
 {
+
+    /**
+     * Current encoding
+     *
+     * @type String
+     */
+    protected $encoding;
+
+    /**
+     * @var String
+     */
+    protected $domain;
+
     /**
      * Symfony translator
      *
      * @var SymfonyTranslator
      */
     protected $symfonyTranslator;
+
+
+    /**
+     * Config container
+     *
+     * @type \Xinax\LaravelGettext\Config\Models\Config
+     */
+    protected $configuration;
+
+    /**
+     * Framework adapter
+     *
+     * @type \Xinax\LaravelGettext\Adapters\LaravelAdapter
+     */
+    protected $adapter;
+
+    /**
+     * File system helper
+     *
+     * @var \Xinax\LaravelGettext\FileSystem
+     */
+    protected $fileSystem;
 
     /**
      * @var array[]
@@ -44,8 +79,8 @@ class Symfony extends BaseTranslator implements TranslatorInterface
         $this->fileSystem    = $fileSystem;
 
         // Encoding is set from configuration
-        $this->encoding          = $this->configuration->getEncoding();
-        $this->loadLocaleFile($this->getTranslator());
+        $this->encoding = $this->configuration->getEncoding();
+        $this->loadLocaleFile();
 
     }
 
@@ -85,9 +120,12 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     public function setLocale($locale)
     {
-        parent::setLocale($locale);
+        $this->getTranslator()->setLocale($locale);
+        $this->loadLocaleFile();
 
-        $this->loadLocaleFile($this->getTranslator());
+        if($locale != $this->adapter->getLocale()) {
+            $this->adapter->setLocale($locale);
+        }
 
         return $this;
     }
@@ -96,15 +134,16 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      * Set domain overload.
      * Needed to re-build the catalogue when domain changes.
      *
-     * @param $locale
+     *
+     * @param String $domain
      *
      * @return $this
      */
     public function setDomain($domain)
     {
-        parent::setDomain($domain);
+        $this->domain = $domain;
 
-        $this->loadLocaleFile($this->getTranslator());
+        $this->loadLocaleFile();
 
         return $this;
     }
@@ -116,7 +155,7 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     protected function createTranslator()
     {
-        $translator = new SymfonyTranslator($this->getLocale());
+        $translator = new SymfonyTranslator($this->configuration->getLocale());
         $translator->setFallbackLocales([$this->configuration->getFallbackLocale()]);
         $translator->addLoader('mo', new MoFileLoader());
         $translator->addLoader('po', new PoFileLoader());
@@ -148,15 +187,16 @@ class Symfony extends BaseTranslator implements TranslatorInterface
     }
 
     /**
-     * @param $translator
+     * @internal param $translator
      */
-    protected function loadLocaleFile(SymfonyTranslator $translator)
+    protected function loadLocaleFile()
     {
         if (isset($this->loadedResources[$this->getDomain()])
             && isset($this->loadedResources[$this->getDomain()][$this->getLocale()])
         ) {
             return;
         }
+        $translator = $this->getTranslator();
 
         $fileMo = $this->fileSystem->makeFilePath($this->getLocale(), $this->getDomain(), 'mo');
         if (file_exists($fileMo)) {
@@ -169,4 +209,84 @@ class Symfony extends BaseTranslator implements TranslatorInterface
         $this->loadedResources[$this->getDomain()][$this->getLocale()] = true;
     }
 
+    /**
+     * Returns the current locale string identifier
+     *
+     * @return String
+     */
+    public function getLocale()
+    {
+        return $this->getTranslator()->getLocale();
+    }
+
+    /**
+     * Returns a boolean that indicates if $locale
+     * is supported by configuration
+     *
+     * @param $locale
+     *
+     * @return bool
+     */
+    public function isLocaleSupported($locale)
+    {
+        if ($locale) {
+            return in_array($locale, $this->configuration->getSupportedLocales());
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the current locale
+     *
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return $this->getLocale();
+    }
+
+    /**
+     * Returns supported locales
+     *
+     * @return array
+     */
+    public function supportedLocales()
+    {
+        return $this->configuration->getSupportedLocales();
+    }
+
+    /**
+     * Getter for encoding
+     *
+     * @return String
+     */
+    public function getEncoding()
+    {
+        return $this->encoding;
+    }
+
+    /**
+     *
+     * @param mixed $encoding
+     *
+     * @return TranslatorInterface
+     */
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
+
+        return $this;
+    }
+
+
+    /**
+     * Returns the current domain
+     *
+     * @return String
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
 }
