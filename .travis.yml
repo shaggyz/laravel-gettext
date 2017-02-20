@@ -18,4 +18,4 @@ addons:
 
 script: 
   - composer install --prefer-source --no-interaction
-  - phpunit
+  - vendor/bin/phpunit --configuration phpunit.xml
