@@ -2,26 +2,27 @@
 
 *Laravel Gettext* is a package compatible with the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU gettext* and *Poedit*. Former versions of this package (before 4.x) works with the native php-gettext module. Current versions uses the Symfony translation package by default instead of native php extension.
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=4.0.4)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/4.0.4">Latest Laravel 5.3.x stable release (4.0.4)</a>
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=5.0.0)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/5.0.0">Latest Laravel 5.4.x stable release (5.0.0)</a>
 
 > Note: This documentation applies to laravel 5.3.x and 4.x branch. For older versions of laravel check the following links:
 
 ### Older versions
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=4.0.4)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/4.0.4">Latest Laravel 5.3.x stable release (4.0.4)</a>
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=3.1.0)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/3.1.0">Latest Laravel 5.2.x stable release (3.1.0)</a>
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=3.1.0)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/3.1.0">Latest Laravel 5.2.x stable release (3.1.0)</a>
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=3.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/3.0.3">Latest Laravel 5.1.x stable release (3.0.3)</a>
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=3.0.3)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/3.0.3">Latest Laravel 5.1.x stable release (3.0.3)</a>
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=2.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/2.0.3">Latest Laravel 5.0 stable release (2.0.3)</a>
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=2.0.3)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/2.0.3">Latest Laravel 5.0 stable release (2.0.3)</a>
 
-[![Stable build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=1.0.3)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/1.0.3">Latest Laravel 4.x stable release (1.0.3)</a>
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=1.0.3)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/1.0.3">Latest Laravel 4.x stable release (1.0.3)</a>
 
-[![Dev build Status](https://travis-ci.org/xinax/laravel-gettext.png?branch=master)](https://travis-ci.org/xinax/laravel-gettext) <a href="https://github.com/xinax/laravel-gettext/tree/master">Development master</a> Unstable, only for development (dev-master)
+[![Dev build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=master)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/master">Development master</a> Unstable, only for development (dev-master)
 
 ### 1. Requirements
 
 - Composer - http://www.getcomposer.org
-- Laravel 5.3.* - http://www.laravel.com
+- Laravel 5.4.* - http://www.laravel.com
 - Poedit - https://poedit.net/
 
 Optional requirements if you want to use the native php-gettext extension:
@@ -36,7 +37,7 @@ Optional requirements if you want to use the native php-gettext extension:
 Add the composer repository to your *composer.json* file:
 
 ```json
-    "xinax/laravel-gettext": "4.x"
+    "Belphemur/laravel-gettext": "5.x"
 ```
 
 And run composer update. Once it's installed, you can register the service provider in config/app.php in the providers array:
@@ -117,31 +118,6 @@ With this command the needed directories and files are created on **resources/la
 
 ##### A. Write strings :D
 
-###### (Laravel < 5.4)
-
-By default *LaravelGettext* looks on app/Http/Controllers and resources/views recursively searching for translations. Translations are all texts printed with the **__()** function. Let's look a simple view example:
-
-```php
-    // an example view file
-    echo 'Non translated string';
-    echo __('Translated string');
-    echo __('Another translated string');
-    // with parameter
-    $str = 'parameter';
-    $n = 2;
-    echo __('Translated string with %s', $str);
-    echo __('%dnd translated string with %s', [$n, $str]);
-```
-
-```php
-    // an example view in blade
-    {{ __('Translated string') }}
-```
-
-> Poedit doesn't "understand" blade syntax. When using blade views you must run ```php artisan gettext:update``` in order to compile all blade views to plain php before update the translations in Poedit
-
-###### (Laravel >= 5.4)
-
 By default *LaravelGettext* looks on app/Http/Controllers and resources/views recursively searching for translations. Translations are all texts printed with the **_i()** function. Let's look a simple view example:
 
 ```php
@@ -189,11 +165,32 @@ The plural translations follow the same pattern above. Plural translations are a
 ```
 See <a href="http://docs.translatehouse.org/projects/localization-guide/en/latest/l10n/pluralforms.html?id=l10n/pluralforms">Plural forms</a> used by Poedit to configure for your language.
 
+###### With Symfony
+
+If you're using [Symfony](http://symfony.com/doc/current/translation.html) as your translation backend, you have access to their plurals syntax with the ``_s`` method. In Poedit it will be considered as a single line instead of a plural.
+```php
+    // an example view file
+    $n = 2;
+    echo ($n > 1) ? 'Non translated plural string' : 'Non translated string';
+    echo _s('Translated string|Translated plural string', $n);
+    // with parameter
+    $str = 'parameter';
+    echo _n('Translated string %s|Translated plural string %s', 2, $str);
+```
+With symfony complex syntax:
+```php
+    echo _s('{0} There are no apples|{1} There is one apple|]1,Inf[ There are %count% apples', $n);
+    // with parameter
+    $str = 'red';
+    echo _s('{0} There are no %s apples|{1} There is one %s apple|]1,Inf[ There are %count% %s apples', 2, $str);
+```
+
+
 ##### C. Translate with Poedit
 
 Open the PO file for the language that you want to translate with Poedit. The PO files are located by default in **resources/lang/i18n/[locale]/LC_MESSAGES/[domain].po**. If you have multiple gettext domains, one file is generated by each domain.
 
-<img src="https://raw.github.com/xinax/laravel-gettext/master/doc/poedit.png" />
+<img src="https://raw.github.com/Belphemur/laravel-gettext/master/doc/poedit.png" />
 
 Once Poedit is loaded press the Update button to load all localized strings. You can repeat this step anytime you add a new localized string.
 
@@ -415,3 +412,24 @@ If you want to help with the development of this package, you can:
 - Fix my disastrous English in the documentation/comments ;-)
 - Make a fork and create your own version of laravel-gettext
 - Give a star!
+
+
+### 7. Upgrade from 4.*
+If you're upgrading from the 4.*, the one for Laravel 5.3.*, you need to refactor your usage of the ``__`` method.
+
+Laravel now use this method for their own translation. You now need to use ``_i`` instead and add this keyword in the configuration file of Laravel-Gettext:
+
+Also, if you're using Symfony as your backend, you can add the `_s` method. It's made to use the full feature set of Symfony plurals syntax. 
+
+```php
+  /**
+     * The keywords list used by poedit to search the strings to be translated
+     *
+     * The "_", "__" and "gettext" are singular translation functions
+     * The "_n" and "ngettext" are plural translation functions
+     * The "dgettext" function allows a translation domain to be explicitly specified
+     *
+     * "__" and "_n" and "_i" and "_s" are helpers functions @see \Xinax\LaravelGettext\Support\helpers.php
+     */
+    'keywords-list' => ['_', '__', '_i', '_s', 'gettext', '_n:1,2', 'ngettext:1,2', 'dgettext:2'],;
+```
