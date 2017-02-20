@@ -1,5 +1,5 @@
 {
-    "name": "zerospam/laravel-gettext",
+    "name": "belphemur/laravel-gettext",
     "description": "Adds localization support to laravel applications in an easy way using Poedit and GNU gettext.",
     "homepage": "https://github.com/Belphemur/laravel-gettext",
     "keywords": [
