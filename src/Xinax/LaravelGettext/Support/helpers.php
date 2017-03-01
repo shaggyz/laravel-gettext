@@ -14,10 +14,8 @@ if (!function_exists('_i')) {
      */
     function _i($message, $args = null)
     {
-        /**
-         * @var $translator LaravelGettext
-         */
-        $translator  = App::make('laravel-gettext');
+
+        $translator  = app(LaravelGettext::class);
         $translation = $translator->translate($message);
 
         if (strlen($translation)) {
@@ -85,10 +83,8 @@ if (!function_exists('_n')) {
      */
     function _n($singular, $plural, $count, $args = null)
     {
-        /**
-         * @var $translator LaravelGettext
-         */
-        $translator = App::make('laravel-gettext');
+
+        $translator = app(LaravelGettext::class);
         $message    = $translator->translatePlural($singular, $plural, $count);
 
         if (!empty($args) && !is_array($args)) {
@@ -116,10 +112,7 @@ if (!function_exists('_s')) {
      */
     function _s($message, $count, $args = null)
     {
-        /**
-         * @var $translator LaravelGettext
-         */
-        $translator = App::make('laravel-gettext');
+        $translator = app(LaravelGettext::class);
         $message    = $translator->getTranslator()->translatePluralInline($message, $count);
 
         if (!empty($args) && !is_array($args)) {

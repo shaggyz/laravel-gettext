@@ -3,6 +3,7 @@
 namespace Xinax\LaravelGettext;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Config\Models\Config;
@@ -51,11 +52,11 @@ class LaravelGettextServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(Config::class, function($app) use ($configuration){
-           return $configuration->get();
+            return $configuration->get();
         });
 
-         // Main class register
-        $this->app->singleton('laravel-gettext', function (Application $app) use ($configuration) {
+        // Main class register
+        $this->app->singleton(LaravelGettext::class, function (Application $app) use ($configuration) {
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
             $storage = $app->make($configuration->get()->getStorage());
@@ -81,17 +82,12 @@ class LaravelGettextServiceProvider extends ServiceProvider
             return new LaravelGettext($translator);
 
         });
-
-        include_once __DIR__ . '/Support/helpers.php';
+        $this->app->alias(LaravelGettext::class, 'laravel-gettext');
 
         // Alias
         $this->app->booting(function () {
-            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-
-            $loader->alias(
-                'LaravelGettext',
-                'Xinax\LaravelGettext\Facades\LaravelGettext'
-            );
+            $aliasLoader = AliasLoader::getInstance();
+            $aliasLoader->alias('LaravelGettext', \Xinax\LaravelGettext\Facades\LaravelGettext::class);
         });
 
         $this->registerCommands();
