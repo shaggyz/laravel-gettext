@@ -2,6 +2,7 @@
 
 use \Mockery as m;
 
+use Xinax\LaravelGettext\Storages\MemoryStorage;
 use Xinax\LaravelGettext\Testing\BaseTestCase;
 use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Adapters\LaravelAdapter;
@@ -34,7 +35,8 @@ class LaravelGettextTest extends BaseTestCase
         $translator = new Symfony(
             $config->get(),
             $adapter,
-            $fileSystem
+            $fileSystem,
+            new MemoryStorage($config->get())
         );
 
         $this->translator = $translator;

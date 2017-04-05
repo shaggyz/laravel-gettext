@@ -1,7 +1,7 @@
 {
-    "name": "xinax/laravel-gettext",
+    "name": "belphemur/laravel-gettext",
     "description": "Adds localization support to laravel applications in an easy way using Poedit and GNU gettext.",
-    "homepage": "https://github.com/xinax/laravel-gettext",
+    "homepage": "https://github.com/Belphemur/laravel-gettext",
     "keywords": [
         "gettext",
         "localization",
@@ -14,10 +14,14 @@
         {
             "name": "Nicolás Daniel Palumbo",
             "email": "n@xinax.net"
+        },
+        {
+            "name": "Antoine Aflalo",
+            "email": "antoine.aflalo@zerospam.ca"
         }
     ],
     "support": {
-        "issues": "https://github.com/xinax/laravel-gettext/issues"
+        "issues": "https://github.com/Belphemur/laravel-gettext/issues"
     },
     "require": {
         "php": ">=5.6.0",
@@ -25,7 +29,7 @@
     },
     "require-dev": {
         "mockery/mockery": "dev-master",
-        "phpunit/phpunit": "~4.0",
+        "phpunit/phpunit": "~5.6",
         "squizlabs/php_codesniffer" : "1.5.*",
         "laravel/laravel": "5.*"
     },

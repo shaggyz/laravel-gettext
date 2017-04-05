@@ -6,6 +6,7 @@ use \Xinax\LaravelGettext\Config\Models\Config as ConfigModel;
 use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationFileException;
 use \Xinax\LaravelGettext\Exceptions\RequiredConfigurationKeyException;
 use \Illuminate\Support\Facades\Config;
+use Xinax\LaravelGettext\Storages\SessionStorage;
 
 class ConfigManager
 {
@@ -91,6 +92,8 @@ class ConfigManager
 
         $adapter = isset($config['adapter']) ? $config['adapter'] : \Xinax\LaravelGettext\Adapters\LaravelAdapter::class;
 
+        $storage = isset($config['storage']) ? $config['storage'] : SessionStorage::class;
+
         $container->setLocale($config['locale'])
             ->setSessionIdentifier($id)
             ->setEncoding($config['encoding'])
@@ -103,7 +106,8 @@ class ConfigManager
             ->setTranslator($config['translator'])
             ->setSourcePaths($config['source-paths'])
             ->setSyncLaravel($config['sync-laravel'])
-            ->setAdapter($adapter);
+            ->setAdapter($adapter)
+            ->setStorage($storage);
 
         if (array_key_exists('relative-path', $config)) {
             $container->setRelativePath($config['relative-path']);
