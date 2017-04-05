@@ -184,16 +184,6 @@ class Symfony extends BaseTranslator
     }
 
     /**
-     * Returns the current locale string identifier
-     *
-     * @return String
-     */
-    public function getLocale()
-    {
-        return $this->getTranslator()->getLocale();
-    }
-
-    /**
      * Returns a boolean that indicates if $locale
      * is supported by configuration
      *

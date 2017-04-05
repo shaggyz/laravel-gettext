@@ -101,7 +101,7 @@ class Gettext extends BaseTranslator implements TranslatorInterface
                 setlocale(constant($category), $gettextLocale);
             }
 
-            $this->sessionSet('locale', $locale);
+            parent::setLocale($locale);
 
             // Laravel built-in locale
             if ($this->configuration->isSyncLaravel()) {
@@ -115,16 +115,6 @@ class Gettext extends BaseTranslator implements TranslatorInterface
             throw new \Exception($exceptionPosition . $e->getMessage());
 
         }
-    }
-
-    /**
-     * Returns the current locale string identifier
-     *
-     * @return String
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**
@@ -184,9 +174,7 @@ class Gettext extends BaseTranslator implements TranslatorInterface
      */
     public function setDomain($domain)
     {
-        if (!in_array($domain, $this->configuration->getAllDomains())) {
-            throw new UndefinedDomainException("Domain '$domain' is not registered.");
-        }
+        parent::setDomain($domain);
 
         $customLocale = $this->configuration->getCustomLocale() ? "/" . $this->getLocale() : "";
         
@@ -194,6 +182,8 @@ class Gettext extends BaseTranslator implements TranslatorInterface
         bind_textdomain_codeset($domain, $this->getEncoding());
 
         $this->domain = textdomain($domain);
+
+
 
         return $this;
     }

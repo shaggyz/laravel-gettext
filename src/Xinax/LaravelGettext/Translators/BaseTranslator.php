@@ -67,10 +67,16 @@ abstract class BaseTranslator implements TranslatorInterface
     /**
      * Sets and stores on session the current locale code
      *
+     * @param $locale
+     *
      * @return BaseTranslator
      */
     public function setLocale($locale)
     {
+        if ($locale == $this->storage->getLocale()) {
+            return $this;
+        }
+
         $this->storage->setLocale($locale);
 
         return $this;
@@ -80,7 +86,9 @@ abstract class BaseTranslator implements TranslatorInterface
      * Returns a boolean that indicates if $locale
      * is supported by configuration
      *
-     * @return boolean
+     * @param $locale
+     *
+     * @return bool
      */
     public function isLocaleSupported($locale)
     {
