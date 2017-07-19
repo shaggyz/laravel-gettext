@@ -1,5 +1,5 @@
 {
-    "name": "creativelittledots/laravel-gettext",
+    "name": "xinax/laravel-gettext",
     "description": "Adds localization support to laravel applications in an easy way using Poedit and GNU gettext.",
     "homepage": "https://github.com/xinax/laravel-gettext",
     "keywords": [
