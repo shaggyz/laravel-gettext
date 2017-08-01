@@ -24,14 +24,14 @@
         "issues": "https://github.com/Belphemur/laravel-gettext/issues"
     },
     "require": {
-        "php": ">=5.6.0",
-        "laravel/framework": "5.*"
+        "php": ">=7.0",
+        "laravel/framework": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "dev-master",
         "phpunit/phpunit": "~5.6",
         "squizlabs/php_codesniffer" : "1.5.*",
-        "laravel/laravel": "5.*"
+        "laravel/laravel": "dev-develop"
     },
     "autoload": {
         "psr-0": {
