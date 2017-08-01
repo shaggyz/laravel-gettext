@@ -20,3 +20,6 @@ addons:
 script: 
   - composer install --prefer-source --no-interaction
   - vendor/bin/phpunit --configuration phpunit.xml
+
+after_success:
+  - travis_retry php vendor/bin/coveralls
