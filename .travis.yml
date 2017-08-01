@@ -3,8 +3,8 @@ language: php
 sudo: false
 
 php:
-  - 5.6
   - 7.0
+  - 7.1
 
 cache:
   directories:
@@ -15,6 +15,7 @@ addons:
     packages:
     - language-pack-en
     - language-pack-es
+    - language-pack-fr
 
 script: 
   - composer install --prefer-source --no-interaction
