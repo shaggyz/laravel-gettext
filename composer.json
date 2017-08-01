@@ -31,7 +31,8 @@
         "mockery/mockery": "dev-master",
         "phpunit/phpunit": "~5.6",
         "squizlabs/php_codesniffer" : "1.5.*",
-        "laravel/laravel": "dev-develop"
+        "laravel/laravel": "dev-develop",
+        "satooshi/php-coveralls" : "^1.0"
     },
     "autoload": {
         "psr-0": {
