@@ -22,4 +22,4 @@ script:
   - vendor/bin/phpunit --configuration phpunit.xml
 
 after_success:
-  - travis_retry php vendor/bin/coveralls
+  - travis_retry php vendor/bin/coveralls -v
