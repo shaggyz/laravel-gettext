@@ -18,7 +18,7 @@ addons:
     - language-pack-fr
 
 script: 
-  - composer install --prefer-source --no-interaction
+  - composer install --prefer-dist --no-interaction --optimize-autoloader
   - vendor/bin/phpunit --configuration phpunit.xml
 
 after_success:
