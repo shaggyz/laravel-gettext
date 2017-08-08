@@ -42,5 +42,12 @@
             "src/Xinax/LaravelGettext/Support/helpers.php"
         ]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+          "providers": [
+            "Xinax\\LaravelGettext\\LaravelGettextServiceProvider"
+          ]
+       }
+    }
 }
