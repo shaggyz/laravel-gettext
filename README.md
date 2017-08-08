@@ -2,11 +2,13 @@
 
 *Laravel Gettext* is a package compatible with the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU gettext* and *Poedit*. Former versions of this package (before 4.x) works with the native php-gettext module. Current versions uses the Symfony translation package by default instead of native php extension.
 
-[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=5.0.2)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/5.0.2">Latest Laravel 5.4.x stable release (5.0.2)</a>
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=laravel-5.5)](https://travis-ci.org/Belphemur/laravel-gettext) [Latest Laravel 5.5.x stable release (6.0.0)](https://github.com/Belphemur/laravel-gettext/tree/6.0.0)
 
-> Note: This documentation applies to laravel 5.4.x and master branch. For older versions of laravel check the following links:
+> Note: This documentation applies to laravel 5.5.x and master branch. For older versions of laravel check the following links:
 
 ### Older versions
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=5.0.2)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/5.0.2">Latest Laravel 5.4.x stable release (5.0.2)</a>
+
 [![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=4.0.4)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/4.0.4">Latest Laravel 5.3.x stable release (4.0.4)</a>
 
 [![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=3.1.0)](https://travis-ci.org/Belphemur/laravel-gettext) <a href="https://github.com/Belphemur/laravel-gettext/tree/3.1.0">Latest Laravel 5.2.x stable release (3.1.0)</a>
@@ -22,7 +24,7 @@
 ### 1. Requirements
 
 - Composer - http://www.getcomposer.org
-- Laravel 5.4.* - http://www.laravel.com
+- Laravel 5.5.* - http://www.laravel.com
 - Poedit - https://poedit.net/
 
 Optional requirements if you want to use the native php-gettext extension:
@@ -37,18 +39,10 @@ Optional requirements if you want to use the native php-gettext extension:
 Add the composer repository to your *composer.json* file:
 
 ```json
-    "Belphemur/laravel-gettext": "5.x"
+    "Belphemur/laravel-gettext": "6.x"
 ```
 
-And run composer update. Once it's installed, you can register the service provider in config/app.php in the providers array:
-
-```php
-    'providers' = [
-        // ...
-        Xinax\LaravelGettext\LaravelGettextServiceProvider::class,
-        // ...
-    ]
-```
+And run composer update. Once it's installed, laravel will discover automatically the provider and load it. (Only for 5.5)
 
 Now you need to publish the configuration file in order to set your own application values:
 
