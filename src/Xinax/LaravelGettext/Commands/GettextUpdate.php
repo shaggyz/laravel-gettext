@@ -28,7 +28,7 @@ class GettextUpdate extends BaseCommand
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $this->prepare();
 
