@@ -13,9 +13,9 @@ cache:
 addons:
   apt:
     packages:
-    - language-pack-en
-    - language-pack-es
-    - language-pack-fr
+      - language-pack-en
+      - language-pack-es
+      - language-pack-fr
 
 script: 
   - composer install --prefer-dist --no-interaction --optimize-autoloader
@@ -23,6 +23,3 @@ script:
 
 after_success:
   - travis_retry php vendor/bin/coveralls -v
-
-cache:
-  - $HOME/.composer/cache
