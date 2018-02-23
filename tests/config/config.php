@@ -2,6 +2,7 @@
 
 // Used for testing
 // return array(
+
 return array(
 
     /**
@@ -130,7 +131,7 @@ return array(
     /**
      * The adapter used to sync the laravel built-in locale
      */
-    'adapter' => \Xinax\LaravelGettext\Adapters\LaravelAdapter::class,
+    'adapter' => \Xinax\LaravelGettext\Testing\Adapter\TestAdapter::class,
 
     /**
      * Where to store the current locale/domain

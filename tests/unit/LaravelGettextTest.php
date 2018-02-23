@@ -4,6 +4,7 @@ use \Mockery as m;
 
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Storages\MemoryStorage;
+use Xinax\LaravelGettext\Testing\Adapter\TestAdapter;
 use Xinax\LaravelGettext\Testing\BaseTestCase;
 use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Adapters\LaravelAdapter;
@@ -48,7 +49,7 @@ class LaravelGettextTest extends BaseTestCase
         $config = ConfigManager::create($testConfig);
         $adapter = app($config->get()->getAdapter());
         $this->assertInstanceOf(AdapterInterface::class, $adapter);
-        $this->assertInstanceOf(LaravelAdapter::class, $adapter);
+        $this->assertInstanceOf(TestAdapter::class, $adapter);
     }
 
     /**
