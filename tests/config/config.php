@@ -125,4 +125,20 @@ return array(
      * Use custom locale that is not supported by the system
      */
     'custom-locale' => false,
+
+
+    /**
+     * The adapter used to sync the laravel built-in locale
+     */
+    'adapter' => \Xinax\LaravelGettext\Adapters\LaravelAdapter::class,
+
+    /**
+     * Where to store the current locale/domain
+     *
+     * By default, in the session.
+     * Can be changed for only memory or your own storage mechanism
+     *
+     * @see \Xinax\LaravelGettext\Storages\Storage
+     */
+    'storage' => \Xinax\LaravelGettext\Storages\SessionStorage::class,
 );

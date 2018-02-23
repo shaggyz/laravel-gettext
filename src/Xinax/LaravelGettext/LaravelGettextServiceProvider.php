@@ -5,6 +5,7 @@ namespace Xinax\LaravelGettext;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Config\ConfigManager;
 use Xinax\LaravelGettext\Config\Models\Config;
 
@@ -47,7 +48,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
         $configuration = ConfigManager::create();
 
         $this->app->bind(
-            'Adapters/AdapterInterface',
+            AdapterInterface::class,
             $configuration->get()->getAdapter()
         );
 
@@ -65,7 +66,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
                 // symfony translator implementation
                 $translator = new Translators\Symfony(
                     $configuration->get(),
-                    $this->app->make('Adapters/AdapterInterface'),
+                    $this->app->make(AdapterInterface::class),
                     $fileSystem,
                     $storage
                 );
@@ -73,7 +74,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
                 // GNU/Gettext php extension
                 $translator = new Translators\Gettext(
                     $configuration->get(),
-                    $this->app->make('Adapters/AdapterInterface'),
+                    $this->app->make(AdapterInterface::class),
                     $fileSystem,
                     $storage
                 );
