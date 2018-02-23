@@ -65,7 +65,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
                 // symfony translator implementation
                 $translator = new Translators\Symfony(
                     $configuration->get(),
-                    new Adapters\LaravelAdapter,
+                    $this->app->make('Adapters/AdapterInterface'),
                     $fileSystem,
                     $storage
                 );
@@ -73,7 +73,7 @@ class LaravelGettextServiceProvider extends ServiceProvider
                 // GNU/Gettext php extension
                 $translator = new Translators\Gettext(
                     $configuration->get(),
-                    new Adapters\LaravelAdapter,
+                    $this->app->make('Adapters/AdapterInterface'),
                     $fileSystem,
                     $storage
                 );
