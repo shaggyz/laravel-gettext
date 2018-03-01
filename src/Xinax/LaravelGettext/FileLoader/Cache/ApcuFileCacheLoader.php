@@ -55,7 +55,7 @@ class ApcuFileCacheLoader extends FileLoader
      */
     private function checksum($resource)
     {
-        return md5_file($resource);
+        return filemtime($resource) . '-' . filesize($resource);
     }
 
     /**
