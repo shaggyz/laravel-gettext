@@ -2,7 +2,7 @@
 
 *Laravel Gettext* is a package compatible with the great Laravel PHP Framework. It provides a simple way to add localization support to Laravel applications. It is designed to work with *GNU gettext* and *Poedit*. Former versions of this package (before 4.x) works with the native php-gettext module. Current versions uses the Symfony translation package by default instead of native php extension.
 
-[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=7.0.0)](https://travis-ci.org/Belphemur/laravel-gettext) [Latest Laravel 5.6.x stable release (7.0.0)](https://github.com/Belphemur/laravel-gettext/tree/7.0.0)
+[![Stable build Status](https://travis-ci.org/Belphemur/laravel-gettext.png?branch=7.1.0)](https://travis-ci.org/Belphemur/laravel-gettext) [Latest Laravel 5.6.x stable release (7.1.0)](https://github.com/Belphemur/laravel-gettext/tree/7.0.0)
 
 > Note: This documentation applies to laravel 5.5.x and master branch. For older versions of laravel check the following links:
 
@@ -28,6 +28,19 @@
 - Composer - http://www.getcomposer.org
 - Laravel 5.5.* - http://www.laravel.com
 - Poedit - https://poedit.net/
+
+#### 1.1 Optional
+
+##### 1.1.1 APCU
+
+APCU extension installed  - http://php.net/manual/en/book.apcu.php
+
+If the APCU php extension is installed, the library will use the memory to cache the loaded translation to avoid having to parse the translation file (mo/po) at each request.
+
+The cache is automatically invalidated when there is a change in the translation file.
+
+
+##### 1.1.2 gettext
 
 Optional requirements if you want to use the native php-gettext extension:
 
