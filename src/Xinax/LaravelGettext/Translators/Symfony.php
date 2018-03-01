@@ -4,6 +4,7 @@ use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Translator as SymfonyTranslator;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
 use Xinax\LaravelGettext\Config\Models\Config;
+use Xinax\LaravelGettext\FileLoader\Cache\ApcuFileCacheLoader;
 use Xinax\LaravelGettext\FileLoader\MoFileLoader;
 use Xinax\LaravelGettext\FileSystem;
 use Xinax\LaravelGettext\Storages\Storage;
@@ -110,8 +111,8 @@ class Symfony extends BaseTranslator
     {
         $translator = new SymfonyTranslator($this->configuration->getLocale());
         $translator->setFallbackLocales([$this->configuration->getFallbackLocale()]);
-        $translator->addLoader('mo', new MoFileLoader());
-        $translator->addLoader('po', new PoFileLoader());
+        $translator->addLoader('mo', new ApcuFileCacheLoader(new MoFileLoader()));
+        $translator->addLoader('po', new ApcuFileCacheLoader(new PoFileLoader()));
 
         return $translator;
     }
