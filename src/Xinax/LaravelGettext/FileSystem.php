@@ -63,20 +63,13 @@ class FileSystem
     /**
      * Build views in order to parse php files
      *
-     * @param Array $viewPaths
-     * @param String $domain
-     *
-     * @return Boolean status
-     */
-    /**
-     * Build views in order to parse php files
-     *
      * @param array $viewPaths
+     * @param array $exceptionPaths
      * @param string $domain
      * @return bool
      * @throws FileCreationException
      */
-    public function compileViews(array $viewPaths, $domain)
+    public function compileViews(array $viewPaths, array $exceptionPaths, $domain)
     {
         // Check the output directory
         $targetDir = $this->storagePath . DIRECTORY_SEPARATOR . $this->storageContainer;
@@ -103,6 +96,9 @@ class FileSystem
             $compiler = new \Illuminate\View\Compilers\BladeCompiler($fs, $domainDir);
 
             foreach ($files as $file) {
+                if (in_array($file, $exceptionPaths)) {
+                    continue;
+                }
                 $filePath = $file->getRealPath();
                 $compiler->setPath($filePath);
 
@@ -179,18 +175,32 @@ class FileSystem
 
         // Source paths
         $sourcePaths = $this->configuration->getSourcesFromDomain($domain);
+        // Exception Source paths
+        $exceptionPaths = $this->configuration->getSourcesExceptionsFromDomain($domain);
 
         // Compiled views on paths
         if (count($sourcePaths)) {
 
             // View compilation
-            $this->compileViews($sourcePaths, $domain);
+            $this->compileViews($sourcePaths, $exceptionPaths, $domain);
             array_push($sourcePaths, $this->getStorageForDomain($domain));
 
             $i = 0;
 
             foreach ($sourcePaths as $sourcePath) {
                 $template .= '"X-Poedit-SearchPath-' . $i . ': ' . $sourcePath . '\n' . "\"\n";
+                $i++;
+            }
+
+        }
+
+        // Compiled views on paths
+        if (count($exceptionPaths)) {
+
+            $i = 0;
+
+            foreach ($exceptionPaths as $exceptionPath) {
+                $template .= '"X-Poedit-SearchPathExcluded-' . $i . ': ' . $exceptionPath . '\n' . "\"\n";
                 $i++;
             }
 
@@ -595,21 +605,24 @@ class FileSystem
     }
 
     /**
-     * Returns the full path for a .po file from its domain and locale
+     * Returns the full path for a .po/.mo file from its domain and locale
      *
-     * @param $locale
-     * @param $domain
+     * @param        $locale
+     * @param        $domain
+     *
+     * @param string $type
      *
      * @return string
      */
-    public function makePOFilePath($locale, $domain)
+    public function makeFilePath($locale, $domain, $type = 'po')
     {
         $filePath = implode(DIRECTORY_SEPARATOR, [
             $locale,
             'LC_MESSAGES',
-            $domain . ".po"
+            $domain . "." . $type
         ]);
 
         return $this->getDomainPath($filePath);
     }
+
 }

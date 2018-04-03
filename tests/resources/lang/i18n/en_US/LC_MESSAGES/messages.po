@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MultilanguageLaravelApplication\n"
+"POT-Creation-Date: 2017-08-01 10:56-0400\n"
+"PO-Revision-Date: 2017-08-01 10:56-0400\n"
+"Last-Translator: James Translator <james@translations.colm>\n"
+"Language-Team: James Translator <james@translations.colm>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.1\n"
+"X-Poedit-KeywordsList: _;__;_i;_s;__s;gettext;_n:1,2;ngettext:1,2;___;"
+"__n:1,2\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../../../..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: views\n"
+"X-Poedit-SearchPath-1: controllers\n"
+"X-Poedit-SearchPath-2: storage/framework/messages\n"
+
+#: controllers/ExampleController.php:7
+msgid "Controller string"
+msgstr ""
+
+#: controllers/ExampleController.php:8
+msgid ""
+" {0} There are no apples|{1} There is one apple|]1,Inf[ There are %count% "
+"apples"
+msgstr ""
+
+#: storage/framework/messages/186dc5a7d466faee58b488c2cf0f7879cda9ba76.php.php:9
+#, php-format
+msgid "Hello %s, how are you ?"
+msgstr ""
+
+#: storage/framework/messages/186dc5a7d466faee58b488c2cf0f7879cda9ba76.php.php:13
+#: views/backend/hello.blade.php:12
+msgid "Are you having a good day ?"
+msgstr ""
+
+#: storage/framework/messages/5c321425552518709a79fd825ea60bc0e0bd1988.php.php:9
+msgid "general string with balde"
+msgstr ""
+
+#: storage/framework/messages/5c321425552518709a79fd825ea60bc0e0bd1988.php.php:13
+#: views/misc/misc.blade.php:12
+msgid "general string with php echo"
+msgstr ""
+
+#: storage/framework/messages/7ba456312e96f77d3022e42d02ad63812775f6af.php.php:9
+msgid "Backend string with balde"
+msgstr ""
+
+#: storage/framework/messages/7ba456312e96f77d3022e42d02ad63812775f6af.php.php:12
+#: views/backend/backend.blade.php:12
+msgid "Backend string with php echo"
+msgstr ""
+
+#: storage/framework/messages/87cc549a0545cdfd2df66045cedc5f8f1120a7ca.php.php:9
+msgid "Frontend string with balde"
+msgstr ""
+
+#: storage/framework/messages/87cc549a0545cdfd2df66045cedc5f8f1120a7ca.php.php:12
+#: views/frontend/frontend.blade.php:12
+msgid "Frontend string with php echo"
+msgstr ""

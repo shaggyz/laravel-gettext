@@ -13,6 +13,6 @@ class LaravelGettext extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'laravel-gettext';
+        return  \Xinax\LaravelGettext\LaravelGettext::class;
     }
 }

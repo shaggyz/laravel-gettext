@@ -23,7 +23,7 @@ class GettextCreate extends BaseCommand
     /**
      * Execute the console command
      */
-    public function fire()
+    public function handle()
     {
         $this->prepare();
 

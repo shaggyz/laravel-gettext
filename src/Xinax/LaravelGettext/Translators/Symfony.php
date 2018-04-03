@@ -2,51 +2,46 @@
 
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Translator as SymfonyTranslator;
-use Cache;
-
-use Xinax\LaravelGettext\Config\Models\Config;
 use Xinax\LaravelGettext\Adapters\AdapterInterface;
+use Xinax\LaravelGettext\Config\Models\Config;
+use Xinax\LaravelGettext\FileLoader\Cache\ApcuFileCacheLoader;
+use Xinax\LaravelGettext\FileLoader\MoFileLoader;
 use Xinax\LaravelGettext\FileSystem;
+use Xinax\LaravelGettext\Storages\Storage;
 
 /**
  * Class implemented by Symfony translation component
+ *
  * @package Xinax\LaravelGettext\Translators
  */
-class Symfony extends BaseTranslator implements TranslatorInterface
+class Symfony extends BaseTranslator
 {
+
     /**
      * Symfony translator
+     *
      * @var SymfonyTranslator
      */
     protected $symfonyTranslator;
 
     /**
-     * TranslatorInterface constructor.
-     *
-     * @param Config $config
-     * @param AdapterInterface $adapter
-     * @param FileSystem $fileSystem
+     * @var array[]
      */
-    public function __construct(
-        Config $config,
-        AdapterInterface $adapter,
-        FileSystem $fileSystem
-    ) {
-        // Sets the package configuration and session handler
-        $this->configuration = $config;
-        $this->adapter = $adapter;
-        $this->fileSystem = $fileSystem;
+    protected $loadedResources = [];
 
-        // Encoding is set from configuration
-        $this->encoding = $this->configuration->getEncoding();
-        $this->symfonyTranslator = $this->getTranslator();
-
+    public function __construct(Config $config, AdapterInterface $adapter, FileSystem $fileSystem, Storage $storage)
+    {
+        parent::__construct($config, $adapter, $fileSystem, $storage);
+        $this->setLocale($this->storage->getLocale());
+        $this->loadLocaleFile();
     }
+
 
     /**
      * Translates a message using the Symfony translation component
      *
      * @param $message
+     *
      * @return string
      */
     public function translate($message)
@@ -61,7 +56,11 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     protected function getTranslator()
     {
-        return $this->createTranslator();
+        if (isset($this->symfonyTranslator)) {
+            return $this->symfonyTranslator;
+        }
+
+        return $this->symfonyTranslator = $this->createTranslator();
     }
 
     /**
@@ -69,13 +68,19 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      * Needed to re-build the catalogue when locale changes.
      *
      * @param $locale
+     *
      * @return $this
      */
     public function setLocale($locale)
     {
         parent::setLocale($locale);
+        $this->getTranslator()->setLocale($locale);
+        $this->loadLocaleFile();
 
-        $this->symfonyTranslator = $this->createTranslator();
+        if ($locale != $this->adapter->getLocale()) {
+            $this->adapter->setLocale($locale);
+        }
+
         return $this;
     }
 
@@ -83,14 +88,17 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      * Set domain overload.
      * Needed to re-build the catalogue when domain changes.
      *
-     * @param $locale
+     *
+     * @param String $domain
+     *
      * @return $this
      */
     public function setDomain($domain)
     {
         parent::setDomain($domain);
 
-        $this->symfonyTranslator = $this->createTranslator();
+        $this->loadLocaleFile();
+
         return $this;
     }
 
@@ -101,12 +109,10 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      */
     protected function createTranslator()
     {
-        $translator = new SymfonyTranslator($this->getLocale());
-        $translator->addLoader('po', new PoFileLoader());
-
-        $file = $this->fileSystem->makePOFilePath($this->getLocale(), $this->getDomain());
-        $translator->addResource('po', $file, $this->getLocale(), $this->getDomain());
-        $translator->getCatalogue($this->getLocale());
+        $translator = new SymfonyTranslator($this->configuration->getLocale());
+        $translator->setFallbackLocales([$this->configuration->getFallbackLocale()]);
+        $translator->addLoader('mo', new ApcuFileCacheLoader(new MoFileLoader()));
+        $translator->addLoader('po', new ApcuFileCacheLoader(new PoFileLoader()));
 
         return $translator;
     }
@@ -117,19 +123,101 @@ class Symfony extends BaseTranslator implements TranslatorInterface
      * @param $singular
      * @param $plural
      * @param $amount
+     *
+     * @return string
      */
     public function translatePlural($singular, $plural, $amount)
     {
         return $this->symfonyTranslator->transChoice(
-            // Symfony translator looks for 'singular|plural' message id in catalog,
-            // and obviously doesn't exists, so always the fallback string will be returned.
-            // $singular . '|' . $plural, //<-- this just doesn't works, idk wtf is wrong.
-            $amount >1 ? $plural : $singular,
+        // Symfony translator looks for 'singular|plural' message id in catalog,
+        // and obviously doesn't exists, so always the fallback string will be returned.
+        // $singular . '|' . $plural, //<-- this just doesn't works, idk wtf is wrong.
+            $amount > 1
+                ? $plural
+                : $singular,
             $amount,
-            ['%count%' => $amount],
+            [],
             $this->getDomain(),
             $this->getLocale()
         );
     }
 
+    /**
+     * Translate a plural string that is only on one line separated with pipes
+     *
+     * @param $message
+     * @param $amount
+     *
+     * @return string
+     */
+    public function translatePluralInline($message, $amount)
+    {
+        return $this->symfonyTranslator->transChoice(
+            $message,
+            $amount,
+            [],
+            $this->getDomain(),
+            $this->getLocale()
+        );
+    }
+
+    /**
+     * @internal param $translator
+     */
+    protected function loadLocaleFile()
+    {
+        if (isset($this->loadedResources[$this->getDomain()])
+            && isset($this->loadedResources[$this->getDomain()][$this->getLocale()])
+        ) {
+            return;
+        }
+        $translator = $this->getTranslator();
+
+        $fileMo = $this->fileSystem->makeFilePath($this->getLocale(), $this->getDomain(), 'mo');
+        if (file_exists($fileMo)) {
+            $translator->addResource('mo', $fileMo, $this->getLocale(), $this->getDomain());
+        } else {
+            $file = $this->fileSystem->makeFilePath($this->getLocale(), $this->getDomain());
+            $translator->addResource('po', $file, $this->getLocale(), $this->getDomain());
+        }
+
+        $this->loadedResources[$this->getDomain()][$this->getLocale()] = true;
+    }
+
+    /**
+     * Returns a boolean that indicates if $locale
+     * is supported by configuration
+     *
+     * @param $locale
+     *
+     * @return bool
+     */
+    public function isLocaleSupported($locale)
+    {
+        if ($locale) {
+            return in_array($locale, $this->configuration->getSupportedLocales());
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the current locale
+     *
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return $this->getLocale();
+    }
+
+    /**
+     * Returns supported locales
+     *
+     * @return array
+     */
+    public function supportedLocales()
+    {
+        return $this->configuration->getSupportedLocales();
+    }
 }

@@ -10,6 +10,7 @@ use Xinax\LaravelGettext\Exceptions\MissingPhpGettextModuleException;
 use Xinax\LaravelGettext\Exceptions\UndefinedDomainException;
 
 use Illuminate\Support\Facades\Session;
+use Xinax\LaravelGettext\Storages\Storage;
 
 /**
  * Class implemented by the php-gettext module translator
@@ -58,41 +59,26 @@ class Gettext extends BaseTranslator implements TranslatorInterface
      */
     protected $domain;
 
-    /**
-     * Initializes the gettext module translator
-     * 
-     * @param Config $config
-     * @param AdapterInterface $adapter
-     * @param FileSystem $fileSystem
-     *
-     * @throws \Xinax\LaravelGettext\Exceptions\LocaleNotSupportedException
-     * @throws \Xinax\LaravelGettext\Exceptions\MissingPhpGettextModuleException
-     * @throws \Exception
-     */
-    public function __construct(
-        Config $config,
-        AdapterInterface $adapter,
-        FileSystem $fileSystem
-    ) {
-        // Sets the package configuration and session handler
-        $this->configuration = $config;
-        $this->adapter = $adapter;
-        $this->fileSystem = $fileSystem;
+    public function __construct(Config $config, AdapterInterface $adapter, FileSystem $fileSystem,
+                                Storage $storage)
+    {
+        parent::__construct($config, $adapter, $fileSystem, $storage);
 
         // General domain
-        $this->domain = $this->configuration->getDomain();
+        $this->domain = $this->storage->getDomain();
 
         // Encoding is set from configuration
-        $this->encoding = $this->configuration->getEncoding();
+        $this->encoding = $this->storage->getEncoding();
 
         // Categories are set from configuration
         $this->categories = $this->configuration->getCategories();
 
         // Sets defaults for boot
-        $locale = $this->session->get($this->configuration->getLocale());
+        $locale = $this->storage->getLocale();
 
         $this->setLocale($locale);
     }
+
 
     /**
      * Sets the current locale code
@@ -115,7 +101,7 @@ class Gettext extends BaseTranslator implements TranslatorInterface
                 setlocale(constant($category), $gettextLocale);
             }
 
-            $this->sessionSet('locale', $locale);
+            parent::setLocale($locale);
 
             // Laravel built-in locale
             if ($this->configuration->isSyncLaravel()) {
@@ -129,16 +115,6 @@ class Gettext extends BaseTranslator implements TranslatorInterface
             throw new \Exception($exceptionPosition . $e->getMessage());
 
         }
-    }
-
-    /**
-     * Returns the current locale string identifier
-     *
-     * @return String
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**
@@ -198,9 +174,7 @@ class Gettext extends BaseTranslator implements TranslatorInterface
      */
     public function setDomain($domain)
     {
-        if (!in_array($domain, $this->configuration->getAllDomains())) {
-            throw new UndefinedDomainException("Domain '$domain' is not registered.");
-        }
+        parent::setDomain($domain);
 
         $customLocale = $this->configuration->getCustomLocale() ? "/" . $this->getLocale() : "";
         
@@ -208,6 +182,8 @@ class Gettext extends BaseTranslator implements TranslatorInterface
         bind_textdomain_codeset($domain, $this->getEncoding());
 
         $this->domain = textdomain($domain);
+
+
 
         return $this;
     }
@@ -234,5 +210,10 @@ class Gettext extends BaseTranslator implements TranslatorInterface
     public function translatePlural($singular, $plural, $count)
     {
         return ngettext($singular, $plural, $count);
+    }
+
+    public function translatePluralInline($message, $amount)
+    {
+        throw new \RuntimeException('Not supported by gettext, please use Symfony');
     }
 }

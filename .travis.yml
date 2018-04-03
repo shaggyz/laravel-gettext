@@ -3,8 +3,8 @@ language: php
 sudo: false
 
 php:
-  - 5.6
-  - 7.0
+  - 7.1
+  - 7.2
 
 cache:
   directories:
@@ -13,9 +13,13 @@ cache:
 addons:
   apt:
     packages:
-    - language-pack-en
-    - language-pack-es
+      - language-pack-en
+      - language-pack-es
+      - language-pack-fr
 
 script: 
-  - composer install --prefer-source --no-interaction
-  - phpunit
+  - composer install --prefer-dist --no-interaction --optimize-autoloader
+  - vendor/bin/phpunit --configuration phpunit.xml
+
+after_success:
+  - travis_retry php vendor/bin/coveralls -v

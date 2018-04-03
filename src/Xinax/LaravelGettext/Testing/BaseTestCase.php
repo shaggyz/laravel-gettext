@@ -1,6 +1,7 @@
 <?php namespace Xinax\LaravelGettext\Testing;
 
 use \Illuminate\Foundation\Testing\TestCase;
+use Xinax\LaravelGettext\LaravelGettextServiceProvider;
 
 /**
  * Created by PhpStorm.
@@ -32,7 +33,7 @@ class BaseTestCase extends TestCase
         $app = require $this->appPath;
         $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-        $app->register('Xinax\LaravelGettext\LaravelGettextServiceProvider');
+        $app->register(LaravelGettextServiceProvider::class);
 
         return $app;
     }

@@ -2,7 +2,12 @@
 
 namespace Xinax\LaravelGettext;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Xinax\LaravelGettext\Adapters\AdapterInterface;
+use Xinax\LaravelGettext\Config\ConfigManager;
+use Xinax\LaravelGettext\Config\Models\Config;
 
 /**
  * Main service provider
@@ -40,48 +45,50 @@ class LaravelGettextServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $configuration = Config\ConfigManager::create();
+        $configuration = ConfigManager::create();
 
         $this->app->bind(
-            'Adapters/AdapterInterface',
+            AdapterInterface::class,
             $configuration->get()->getAdapter()
         );
 
+        $this->app->singleton(Config::class, function($app) use ($configuration){
+            return $configuration->get();
+        });
+
         // Main class register
-        $this->app['laravel-gettext'] = $this->app->share(function ($app) use ($configuration) {
+        $this->app->singleton(LaravelGettext::class, function (Application $app) use ($configuration) {
 
             $fileSystem = new FileSystem($configuration->get(), app_path(), storage_path());
+            $storage = $app->make($configuration->get()->getStorage());
 
             if ('symfony' == $configuration->get()->getHandler()) {
                 // symfony translator implementation
                 $translator = new Translators\Symfony(
                     $configuration->get(),
-                    new Adapters\LaravelAdapter,
-                    $fileSystem
+                    $this->app->make(AdapterInterface::class),
+                    $fileSystem,
+                    $storage
                 );
             } else {
                 // GNU/Gettext php extension
                 $translator = new Translators\Gettext(
                     $configuration->get(),
-                    new Adapters\LaravelAdapter,
-                    $fileSystem
+                    $this->app->make(AdapterInterface::class),
+                    $fileSystem,
+                    $storage
                 );
             }
 
             return new LaravelGettext($translator);
 
         });
-
-        include_once __DIR__ . '/Support/helpers.php';
+        $this->app->alias(LaravelGettext::class, 'laravel-gettext');
 
         // Alias
         $this->app->booting(function () {
-            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-
-            $loader->alias(
-                'LaravelGettext',
-                'Xinax\LaravelGettext\Facades\LaravelGettext'
-            );
+            $aliasLoader = AliasLoader::getInstance();
+            $aliasLoader->alias('LaravelGettext', \Xinax\LaravelGettext\Facades\LaravelGettext::class);
         });
 
         $this->registerCommands();
