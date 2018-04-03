@@ -82,6 +82,13 @@ class Config
     protected $sourcePaths;
 
     /**
+     * Source exception paths
+     *
+     * @var array
+     */
+    protected $sourceExceptions;
+
+    /**
      * Sync with laravel locale
      *
      * @type Boolean
@@ -135,6 +142,7 @@ class Config
         $this->encoding         = 'UTF-8';
         $this->supportedLocales = [];
         $this->sourcePaths      = [];
+        $this->sourceExceptions = [];
         $this->customLocale     = false;
         $this->relativePath     = "../../../../../app";
     }
@@ -374,6 +382,26 @@ class Config
     }
 
     /**
+     * @return array
+     */
+    public function getSourceExceptions()
+    {
+        return $this->sourceExceptions;
+    }
+
+    /**
+     * @param array $sourceExceptions
+     *
+     * @return $this
+     */
+    public function setSourceExceptions($sourceExceptions)
+    {
+        $this->sourceExceptions = $sourceExceptions;
+
+        return $this;
+    }
+
+    /**
      * @return boolean
      */
     public function isSyncLaravel()
@@ -490,6 +518,40 @@ class Config
         // and merge them with paths wrapped in $domain
         return array_reduce(
             $this->sourcePaths,
+            function ($carry, $path) {
+                if (!is_array($path)) {
+                    $carry[] = $path;
+                }
+
+                return $carry;
+            },
+            $explicitPaths
+        );
+    }
+
+    /**
+     * Return all routes to exclude for a single domain
+     *
+     * @param $domain
+     *
+     * @return array
+     */
+    public function getSourcesExceptionsFromDomain($domain)
+    {
+        // grab any paths wrapped in $domain
+        $explicitPaths = array_key_exists($domain, $this->sourceExceptions)
+            ? $this->sourceExceptions[$domain]
+            : [];
+
+        // if we're not including the default domain, return what we have so far
+        if ($this->domain != $domain) {
+            return $explicitPaths;
+        }
+
+        // otherwise, grab all the default domain paths
+        // and merge them with paths wrapped in $domain
+        return array_reduce(
+            $this->sourceExceptions,
             function ($carry, $path) {
                 if (!is_array($path)) {
                     $carry[] = $path;

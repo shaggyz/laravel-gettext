@@ -93,6 +93,15 @@ return [
     ],
 
     /**
+     * Paths where Poedit exclude the search.
+     * All paths are relative to app/ (don't use trailing slash).
+     *
+     * Remember to call artisan gettext:update after change this.
+     */
+    'source-paths-exceptions' => [
+    ],
+
+    /**
      * Multi-domain directory paths. If you want the translations in
      * different files, just wrap your paths into a domain name.
      * for example:

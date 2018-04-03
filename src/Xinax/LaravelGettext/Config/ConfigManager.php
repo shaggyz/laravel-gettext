@@ -105,6 +105,7 @@ class ConfigManager
             ->setProject($config['project'])
             ->setTranslator($config['translator'])
             ->setSourcePaths($config['source-paths'])
+            ->setSourceExceptions($config['source-paths-exceptions'])
             ->setSyncLaravel($config['sync-laravel'])
             ->setAdapter($adapter)
             ->setStorage($storage);
